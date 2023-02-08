@@ -1,2 +1,2 @@
-# IVIS-23-GroupP
+# IVIS-23-FlixViz
 Visualizing Geo-blocked Netflix content
