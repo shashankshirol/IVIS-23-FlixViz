@@ -3,3 +3,4 @@ streamlit==1.18.0
 pandas
 jupyter
 numpy
+st-clickable-images
