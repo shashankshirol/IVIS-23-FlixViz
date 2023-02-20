@@ -4,3 +4,4 @@ pandas
 jupyter
 numpy
 st-clickable-images
+plotly
