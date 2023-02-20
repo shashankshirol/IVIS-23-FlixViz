@@ -1,298 +1,187 @@
-[
-    {
-        "id": 21,
-        "country": "Argentina ",
-        "countrycode": "AR",
+{
+    "AR": {
         "tvids": 6188,
         "tseries": 2248,
         "tmovs": 3940
     },
-    {
-        "id": 23,
-        "country": "Australia ",
-        "countrycode": "AU",
+    "AU": {
         "tvids": 6266,
         "tseries": 2370,
         "tmovs": 3896
     },
-    {
-        "id": 26,
-        "country": "Belgium ",
-        "countrycode": "BE",
+    "BE": {
         "tvids": 6544,
         "tseries": 2317,
         "tmovs": 4227
     },
-    {
-        "id": 29,
-        "country": "Brazil ",
-        "countrycode": "BR",
+    "BR": {
         "tvids": 6323,
         "tseries": 2246,
         "tmovs": 4077
     },
-    {
-        "id": 33,
-        "country": "Canada ",
-        "countrycode": "CA",
+    "CA": {
         "tvids": 6165,
         "tseries": 2281,
         "tmovs": 3884
     },
-    {
-        "id": 36,
-        "country": "Colombia ",
-        "countrycode": "CO",
+    "CO": {
         "tvids": 5977,
         "tseries": 2240,
         "tmovs": 3737
     },
-    {
-        "id": 307,
-        "country": "Czech Republic ",
-        "countrycode": "CZ",
+    "CZ": {
         "tvids": 8552,
         "tseries": 2307,
         "tmovs": 6245
     },
-    {
-        "id": 45,
-        "country": "France ",
-        "countrycode": "FR",
+    "FR": {
         "tvids": 6537,
         "tseries": 2309,
         "tmovs": 4228
     },
-    {
-        "id": 39,
-        "country": "Germany ",
-        "countrycode": "DE",
+    "DE": {
         "tvids": 7615,
         "tseries": 2354,
         "tmovs": 5261
     },
-    {
-        "id": 327,
-        "country": "Greece ",
-        "countrycode": "GR",
+    "GR": {
         "tvids": 6963,
         "tseries": 2245,
         "tmovs": 4718
     },
-    {
-        "id": 331,
-        "country": "Hong Kong ",
-        "countrycode": "HK",
+    "HK": {
         "tvids": 6291,
         "tseries": 2399,
         "tmovs": 3892
     },
-    {
-        "id": 334,
-        "country": "Hungary ",
-        "countrycode": "HU",
+    "HU": {
         "tvids": 6873,
         "tseries": 2297,
         "tmovs": 4576
     },
-    {
-        "id": 265,
-        "country": "Iceland ",
-        "countrycode": "IS",
+    "IS": {
         "tvids": 7074,
         "tseries": 2282,
         "tmovs": 4792
     },
-    {
-        "id": 337,
-        "country": "India ",
-        "countrycode": "IN",
+    "IN": {
         "tvids": 6071,
         "tseries": 2483,
         "tmovs": 3588
     },
-    {
-        "id": 336,
-        "country": "Israel ",
-        "countrycode": "IL",
+    "IL": {
         "tvids": 6128,
         "tseries": 2292,
         "tmovs": 3836
     },
-    {
-        "id": 269,
-        "country": "Italy ",
-        "countrycode": "IT",
+    "IT": {
         "tvids": 6737,
         "tseries": 2277,
         "tmovs": 4460
     },
-    {
-        "id": 267,
-        "country": "Japan ",
-        "countrycode": "JP",
+    "JP": {
         "tvids": 6567,
         "tseries": 2521,
         "tmovs": 4046
     },
-    {
-        "id": 357,
-        "country": "Lithuania ",
-        "countrycode": "LT",
+    "LT": {
         "tvids": 7128,
         "tseries": 2305,
         "tmovs": 4823
     },
-    {
-        "id": 378,
-        "country": "Malaysia ",
-        "countrycode": "MY",
+    "MY": {
         "tvids": 6427,
         "tseries": 2622,
         "tmovs": 3805
     },
-    {
-        "id": 65,
-        "country": "Mexico ",
-        "countrycode": "MX",
+    "MX": {
         "tvids": 6286,
         "tseries": 2246,
         "tmovs": 4040
     },
-    {
-        "id": 67,
-        "country": "Netherlands ",
-        "countrycode": "NL",
+    "NL": {
         "tvids": 6563,
         "tseries": 2270,
         "tmovs": 4293
     },
-    {
-        "id": 390,
-        "country": "Philippines ",
-        "countrycode": "PH",
+    "PH": {
         "tvids": 6317,
         "tseries": 2608,
         "tmovs": 3709
     },
-    {
-        "id": 392,
-        "country": "Poland ",
-        "countrycode": "PL",
+    "PL": {
         "tvids": 6474,
         "tseries": 2241,
         "tmovs": 4233
     },
-    {
-        "id": 268,
-        "country": "Portugal ",
-        "countrycode": "PT",
+    "PT": {
         "tvids": 6739,
         "tseries": 2256,
         "tmovs": 4483
     },
-    {
-        "id": 400,
-        "country": "Romania ",
-        "countrycode": "RO",
+    "RO": {
         "tvids": 6590,
         "tseries": 2260,
         "tmovs": 4330
     },
-    {
-        "id": 408,
-        "country": "Singapore ",
-        "countrycode": "SG",
+    "SG": {
         "tvids": 6754,
         "tseries": 2620,
         "tmovs": 4134
     },
-    {
-        "id": 412,
-        "country": "Slovakia ",
-        "countrycode": "SK",
+    "SK": {
         "tvids": 6707,
         "tseries": 2306,
         "tmovs": 4401
     },
-    {
-        "id": 447,
-        "country": "South Africa",
-        "countrycode": "ZA",
+    "ZA": {
         "tvids": 5893,
         "tseries": 2389,
         "tmovs": 3504
     },
-    {
-        "id": 348,
-        "country": "South Korea",
-        "countrycode": "KR",
+    "KR": {
         "tvids": 5792,
         "tseries": 2262,
         "tmovs": 3530
     },
-    {
-        "id": 270,
-        "country": "Spain ",
-        "countrycode": "ES",
+    "ES": {
         "tvids": 6988,
         "tseries": 2279,
         "tmovs": 4709
     },
-    {
-        "id": 73,
-        "country": "Sweden ",
-        "countrycode": "SE",
+    "SE": {
         "tvids": 6587,
         "tseries": 2215,
         "tmovs": 4372
     },
-    {
-        "id": 34,
-        "country": "Switzerland ",
-        "countrycode": "CH",
+    "CH": {
         "tvids": 6369,
         "tseries": 2399,
         "tmovs": 3970
     },
-    {
-        "id": 425,
-        "country": "Thailand ",
-        "countrycode": "TH",
+    "TH": {
         "tvids": 6774,
         "tseries": 2586,
         "tmovs": 4188
     },
-    {
-        "id": 432,
-        "country": "Turkey ",
-        "countrycode": "TR",
+    "TR": {
         "tvids": 6004,
         "tseries": 2245,
         "tmovs": 3759
     },
-    {
-        "id": 436,
-        "country": "Ukraine ",
-        "countrycode": "UA",
+    "UA": {
         "tvids": 5647,
         "tseries": 2288,
         "tmovs": 3359
     },
-    {
-        "id": 46,
-        "country": "United Kingdom",
-        "countrycode": "GB",
+    "GB": {
         "tvids": 6420,
         "tseries": 2448,
         "tmovs": 3972
     },
-    {
-        "id": 78,
-        "country": "United States",
-        "countrycode": "US",
+    "US": {
         "tvids": 6019,
         "tseries": 2314,
         "tmovs": 3705
     }
-]
+}
