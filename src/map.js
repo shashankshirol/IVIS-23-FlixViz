@@ -1,7 +1,9 @@
 new svgMap({
     targetElementID: 'svgMap',
     minZoom: 1,
-    maxZoom: 1,
+    maxZoom: 8,
+    colorMax: "#E50914",
+    colorMin: "#EAC7C7",
     data: {
       data: {
         tvids: {
