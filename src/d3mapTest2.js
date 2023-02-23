@@ -43,8 +43,9 @@ svg.call(zoom)
 svg.on("click", reset);
 
 function zoomed() {
-    g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-    g.attr("transform", d3.event.transform); // updated for d3 v4
+    const {transform} = d3.event;
+    g.attr("transform", transform);
+    g.attr("stroke-width", 1 / transform.k);
 }
 
 function stopped() {
@@ -114,28 +115,24 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
 
             //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
             function clicked(d) {
-                if (active.node() === this) return reset();
-                active.classed("active", false);
-                active = d3.select(this).classed("active", true);
-              
-                let bounds = path.bounds(d),
-                    dx = bounds[1][0] - bounds[0][0],
-                    dy = bounds[1][1] - bounds[0][1],
-                    x = (bounds[0][0] + bounds[1][0]) / 2,
-                    y = (bounds[0][1] + bounds[1][1]) / 2,
-                    scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-                    translate = [width / 2 - scale * x, height / 2 - scale * y];
-              
-
-                svg.transition()
-                    .duration(750)
-                    .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+                const [[x0, y0], [x1, y1]] = path.bounds(d);
+                d3.event.stopPropagation();
+                svg.transition().duration(750).call(
+                  zoom.transform,
+                  d3.zoomIdentity
+                    .translate(width / 2, height / 2)
+                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                    .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                  d3.mouse(d3.event.target, svg.node())
+                  
+                );
+                console.log(d3.event)
               }
 
             //Need to find min len and max len of the netflixData
             let min = 100000
             let max = 0
-            
+
             for(let country in netflixData){
                 if(netflixData[country].length > max){
                     max = netflixData[country].length
