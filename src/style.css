@@ -1,0 +1,20 @@
+.country {
+    fill: #ccc;
+    stroke: #999;
+}
+
+body{
+    background-color: #fff;
+    margin: 0%;
+    padding: 0%;
+    height: 100%;
+}
+
+.map {
+    margin: 0%;
+    padding: 0%;
+}
+
+.tooltip {
+    position: absolute;
+}
