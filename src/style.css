@@ -18,3 +18,8 @@ body{
 .tooltip {
     position: absolute;
 }
+
+.tooltip > p{
+    fill: red;
+    stroke: #999;
+}
