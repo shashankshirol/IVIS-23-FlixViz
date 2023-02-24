@@ -23,3 +23,18 @@ body{
     fill: red;
     stroke: #999;
 }
+
+.logo{
+    background-image: url("res/imgs/logo.png");
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.logo > img {
+    width: 30%;
+}

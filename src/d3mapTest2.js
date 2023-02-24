@@ -6,7 +6,50 @@ let currentCountry = null
 
 const width = window.innerWidth
 const height = window.innerHeight
+//make an array of colors out of colorOrdinalScale for the map, but colors should be strings, please help
 
+
+let colorOrdinalScale = ["#295026",
+    "#2A5428",
+    "#2B582A",
+    "#2C5C2D",
+    "#2F6030",
+    "#316433",
+    "#336837",
+    "#356C3A",
+    "#38703E",
+    "#3A7442",
+    "#3C7746",
+    "#3E7B4A",
+    "#417F4E",
+    "#438352",
+    "#458756",
+    "#488B5A",
+    "#4A8F5F",
+    "#4C9263",
+    "#4F9668",
+    "#519A6C",
+    "#589F6E",
+    "#5FA370",
+    "#66A873",
+    "#6DAC76",
+    "#74B179",
+    "#7BB57C",
+    "#85BA82",
+    "#8FBE8A",
+    "#99C291",
+    "#A2C798",
+    "#ABCB9F",
+    "#B4CFA7",
+    "#BDD4AE",
+    "#C5D8B5",
+    "#CDDCBD",
+    "#D4E0C4",
+    "#DBE4CC",
+    "#E2E8D3",
+    "#E8ECDB"]
+
+colorOrdinalScale = colorOrdinalScale.reverse()
 
 let tooltip = d3.select("body")
                 .append("div")
@@ -52,53 +95,65 @@ svg.call(zoom)
 svg.on("click", reset);
 
 function generatePieChartInTooltip(data) {
-    let width = 100
-    let height = 100
-    let margin = 2
-    let radius = Math.min(width,height)/2 - margin
+    let width = 200
+    let height = 200
+    let radius = 70
 
-    let color = d3.scaleOrdinal()
-    .domain(data)
-    .range(["#E50914", "#FF9900"])
+    tooltip.selectAll("svg").remove()
 
-    let pie = d3.pie()
-        .value(function(d) {return d.value; })
+    let svg = tooltip.append("svg")
+        .attr("width",width)
+        .attr("height",height)
+        .attr("radius", radius)
 
-    let arcGenerator = d3.arc()
-        .innerRadius(0)
+    let gr = svg.append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    let ordScale = d3.scaleOrdinal()
+        .domain(data)
+        .range(['#ffd384','#fa7f72']);
+
+    let pie = d3.pie().value(function(d) { 
+            return d.value; 
+        });
+
+    let arc = gr.selectAll("arc")
+               .data(pie(data))
+               .enter();
+
+    let path = d3.arc()
+               .outerRadius(radius)
+               .innerRadius(0);
+
+    arc.append("path")
+        .attr("d", path)
+        .attr("fill", function(d) { return ordScale(d.data.type); });
+
+    let label = d3.arc()
         .outerRadius(radius)
+        .innerRadius(0);
 
-    let data_ready = pie(d3.entries(data))
-
-    let tipSVG = d3.select("#tipDiv")
-        .append("svg")
-        .attr("width", 100)
-        .attr("height", height);
-
-    tipSVG.append("path")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + width/2 + "," + height/2 + ")")
-        .selectAll("path")
-        .data(data_ready)
-        .enter()
-        .append("path")
-        .attr("d", arcGenerator)
-        .attr("fill", function(d,i){
-            return color(i)
+    arc.append("text")
+        .attr("transform", function(d) { 
+            return "translate(" + label.centroid(d) + ")"; 
         })
+        .text(function(d) { return d.data.type + ": " + d.data.value; })
+        .attr("text-anchor", "middle")
+        .style("font-family", "babasneue")
+        .style("font-size", "11px");
+}
 
-    tooltip.select("svg")
-        .data(data_ready)
-        .enter()
-        .append("text")
-        .text(d => d.data.key + ": " + d.data.value)
-        .attr("transform", d => "translate(" + arcGenerator.centroid(d) + ")")
-        .style("text-anchor", "middle")
-         .style("font-size", 8)
-
+function unselectCountry() {
+    if(currentCountry != null){
+        currentCountry
+        .transition()
+        .duration(150)
+        .style("z-index", 0)
+        .style("opacity", .8)
+        .style("stroke", "grey")
+        .style("stroke-width", .7)
     }
+}
 
 function zoomed() {
     const {transform} = d3.event;
@@ -111,10 +166,12 @@ function stopped() {
 }
 
 function reset() {
-   
+    console.log("reset")
     svg.transition()
         .duration(750)
         .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+
+    unselectCountry()
 }
 
 let alreadyOver = false
@@ -127,8 +184,8 @@ const g = svg.append("g")
 
 //now I need to get the data from the json file, please help me with this
 
-getJSON("../Data/country_to_content.json").then(netflixData => {
 
+getJSON("../Data/country_to_content.json").then(netflixData => {
     getJSON("../Data/countriesCodesParsed.json").then(countriesData => {
         getJSON("../Data/code_to_movie_data.json").then(fromCodeToContent => {
             getJSON("https://unpkg.com/world-atlas@1/world/110m.json").then(data => {
@@ -151,10 +208,12 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                                         series++
                                     }
                                 }
-                                resolve({"movies": movies, "series": series})
+                                resolve([{"type": "movies", "value": movies}, {"type": "series", "value": series}])
                             }).then((contentInfo) => {
-                                //generatePieChartInTooltip(contentInfo)
+                                generatePieChartInTooltip(contentInfo)
                             })
+                        }else{
+                            tooltip.selectAll("svg").remove()
                         }
                     }
 
@@ -199,7 +258,7 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
 
                 //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
                 function clicked(d) {
-                    
+
                     const [[x0, y0], [x1, y1]] = path.bounds(d);
                     d3.event.stopPropagation();
                     svg.transition().duration(750).call(
@@ -237,13 +296,11 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                         min = netflixData[country].length
                     }
                 }
-
+                
                 const domain = [min, max]
-                //const labels = ["< 100 M", "100 M - 500 M", "> 500 M"]
-                const range = ["#ff0a16","#a00a11", "#850b11"]
                 const colorScaler = d3.scaleOrdinal()
                     .domain(domain)
-                    .range(range);
+                    .range(colorOrdinalScale);
 
                 const countries = topojson.feature(data, data.objects.countries)
                 
