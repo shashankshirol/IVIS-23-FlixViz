@@ -121,26 +121,7 @@ var legend = d3.legendColor()
 svg.select(".legend")
    .call(legend);
 
-const annotations = [
-    {
-    note: {
-      label: "Netflix's content is not evenly distributed across the world",
-      title: "Netlifx content by country",
-      wrap: 150,  // try something smaller to see text split in several lines
-      padding: 10   // More = text lower
-      
-    },
-    color: ["#852170"],
-    x: projection([150.916672,-31.083332])[0],
-    y: projection([150.916672,-31.083332])[1],
-    dy: -30,
-    dx: 10
-  }
-]
 
-// Add annotation to the chart
-const makeAnnotations = d3.annotation()
-  .annotations(annotations)
 
 svg.append("g")
   .style("opacity", 1)

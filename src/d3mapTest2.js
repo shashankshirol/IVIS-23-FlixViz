@@ -146,13 +146,12 @@ function generatePieChartInTooltip(data) {
 function unselectCountry() {
     if(currentCountry != null){
         currentCountry
-        .transition()
-        .duration(150)
         .style("z-index", 0)
         .style("opacity", .8)
         .style("stroke", "grey")
         .style("stroke-width", .7)
     }
+    currentCountry = null
 }
 
 function zoomed() {
@@ -272,9 +271,9 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                     //I want to edit the style of the country that I clicked on
                     if(currentCountry != null){
                         currentCountry
-                            .style("opacity", .8)
+                            .style("opacity", 0.8)
                             .style("stroke", "grey")
-                            .style("stroke-width", .7)
+                            .style("stroke-width", 0.7)
                     }
 
                     d3.select(this)
