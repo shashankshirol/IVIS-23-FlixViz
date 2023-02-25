@@ -254,6 +254,7 @@ $(document).ready(function () {
                 element: document.getElementById(evt.target.id)
             });
             $(".svgMap-map-image").css("pointer-events", "none")
+            $("#" + evt.target.id).css("stroke", "black")
         }
     });
     $("#search-cnt").click(function () {
@@ -265,6 +266,7 @@ $(document).ready(function () {
                 element: document.getElementById(id)
             });
             $(".svgMap-map-image").css("pointer-events", "none")
+            $("#" + evt.target.id).css("stroke", "black")
         }
     });
 });
