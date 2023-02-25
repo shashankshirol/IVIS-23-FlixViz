@@ -219,6 +219,13 @@ new svgMap({
     }
 });
 document.getElementsByClassName("svgMap-map-image")[0].style.backgroundColor = "rgb(14, 17, 23)";
+var country_codes = {}
+$.getJSON("country_to_code.json", function (data) { 
+    $.each(data, function (key, val) {
+        country_codes[key.trim()] = val
+    });
+});
+console.log(country_codes)
 
 $(document).ready(function () { 
     $(".svgMap-map-image").click(function (evt) {
@@ -232,6 +239,14 @@ $(document).ready(function () {
         }
     });
     $("#search-cnt").click(function () {
-        console.log($("#search-field").val())
+        id = "svgMap-map-country-"+country_codes[$("#search-field").val().toLowerCase()]
+        elem_path = document.getElementById(id)
+        if (elem_path) {
+            $(".svgMap-tooltip").css("visibility", "hidden")
+            zoom.to({
+                element: document.getElementById(id)
+            });
+            $(".svgMap-map-image").css("pointer-events", "none")
+        }
     });
 });
