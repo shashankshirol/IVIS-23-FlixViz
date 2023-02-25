@@ -113,13 +113,11 @@ const svg = d3.select("body")
 
 
 const zoom = d3.zoom()
-  .translateExtent([[0, 0], [width, height]])
   .scaleExtent([1, 8])
   .on("zoom", zoomed);
 
           
 svg.call(zoom)
-svg.on("click", reset);
 
 function generatePieChartInTooltip(data) {
     let width = 200
@@ -301,6 +299,7 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                     if(netflixData[countriesData[d.id]["alpha-2"]] != undefined){
                         tooltip.style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
                         tooltipVisibilityStatusComparedToClik = false
+                        
                         const [[x0, y0], [x1, y1]] = path.bounds(d);
                         d3.event.stopPropagation();
                         svg.transition().duration(750).call(
@@ -311,6 +310,7 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                             .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                         d3.mouse(d3.event.target, svg.node())
                         );
+
                         //I want to edit the style of the country that I clicked on
                         if(currentCountry != null){
                             currentCountry
