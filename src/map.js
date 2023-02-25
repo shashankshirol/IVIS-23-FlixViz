@@ -1,7 +1,7 @@
 new svgMap({
     targetElementID: 'svgMap',
     minZoom: 1,
-    maxZoom: 8,
+    maxZoom: 1,
     colorMax: "#E50914",
     colorMin: "#EAC7C7",
     data: {
@@ -219,3 +219,19 @@ new svgMap({
     }
 });
 document.getElementsByClassName("svgMap-map-image")[0].style.backgroundColor = "rgb(14, 17, 23)";
+
+$(document).ready(function () { 
+    $(".svgMap-map-image").click(function (evt) {
+        console.log(evt.target.id);
+        if (evt.target.id.startsWith("svgMap-map-country")) {
+            $(".svgMap-tooltip").css("visibility", "hidden")
+            zoom.to({
+                element: document.getElementById(evt.target.id)
+            });
+            $(".svgMap-map-image").css("pointer-events", "none")
+        }
+    });
+    $("#search-cnt").click(function () {
+        console.log($("#search-field").val())
+    });
+});
