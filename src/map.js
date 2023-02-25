@@ -219,8 +219,23 @@ new svgMap({
     }
 });
 
+// Prevent default form behaviour
+$("#country-form").submit(function (e) {
+    e.preventDefault();
+});
+
+// Change color of the water
 document.getElementsByClassName("svgMap-map-image")[0].style.backgroundColor = "rgb(14, 17, 23)";
 
+// Add possibility to press enter to search for a country
+const search_field = document.getElementById("search-field")
+search_field.addEventListener("keydown", (event) => {
+    if (event.key == "Enter") {
+        document.getElementById("search-cnt").click()
+    }
+});
+
+// Mapping country to country codes (ISO-2)
 var country_codes = {}
 $.getJSON("../Data/country_to_code.json", function (data) { 
     $.each(data, function (key, val) {
@@ -228,6 +243,7 @@ $.getJSON("../Data/country_to_code.json", function (data) {
     });
 });
 
+// Zoom functionality for when you select a country
 $(document).ready(function () { 
     $(".svgMap-map-image").click(function (evt) {
         console.log(evt.target.id);
