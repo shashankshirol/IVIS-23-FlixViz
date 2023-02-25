@@ -4,6 +4,7 @@ new svgMap({
     maxZoom: 1,
     colorMax: "#E50914",
     colorMin: "#EAC7C7",
+    mouseWheelZoomEnabled: false,
     data: {
       data: {
         tvids: {
@@ -267,3 +268,6 @@ $(document).ready(function () {
         }
     });
 });
+
+
+//Legend for the Map
