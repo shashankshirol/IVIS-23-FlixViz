@@ -1,9 +1,10 @@
 new svgMap({
     targetElementID: 'svgMap',
     minZoom: 1,
-    maxZoom: 8,
+    maxZoom: 1,
     colorMax: "#E50914",
     colorMin: "#EAC7C7",
+    mouseWheelZoomEnabled: false,
     data: {
       data: {
         tvids: {
@@ -218,4 +219,57 @@ new svgMap({
       }
     }
 });
+
+// Prevent default form behaviour
+$("#country-form").submit(function (e) {
+    e.preventDefault();
+});
+
+// Change color of the water
 document.getElementsByClassName("svgMap-map-image")[0].style.backgroundColor = "rgb(14, 17, 23)";
+
+// Add possibility to press enter to search for a country
+const search_field = document.getElementById("search-field")
+search_field.addEventListener("keydown", (event) => {
+    if (event.key == "Enter") {
+        document.getElementById("search-cnt").click()
+    }
+});
+
+// Mapping country to country codes (ISO-2)
+var country_codes = {}
+$.getJSON("../Data/country_to_code.json", function (data) { 
+    $.each(data, function (key, val) {
+        country_codes[key.trim()] = val
+    });
+});
+
+// Zoom functionality for when you select a country
+$(document).ready(function () { 
+    $(".svgMap-map-image").click(function (evt) {
+        console.log(evt.target.id);
+        if (evt.target.id.startsWith("svgMap-map-country")) {
+            $(".svgMap-tooltip").css("visibility", "hidden")
+            zoom.to({
+                element: document.getElementById(evt.target.id)
+            });
+            $(".svgMap-map-image").css("pointer-events", "none")
+            $("#" + evt.target.id).css("stroke", "black")
+        }
+    });
+    $("#search-cnt").click(function () {
+        id = "svgMap-map-country-"+country_codes[$("#search-field").val().toLowerCase()]
+        elem_path = document.getElementById(id)
+        if (elem_path) {
+            $(".svgMap-tooltip").css("visibility", "hidden")
+            zoom.to({
+                element: document.getElementById(id)
+            });
+            $(".svgMap-map-image").css("pointer-events", "none")
+            $("#" + evt.target.id).css("stroke", "black")
+        }
+    });
+});
+
+
+//Legend for the Map
