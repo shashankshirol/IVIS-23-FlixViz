@@ -38,3 +38,10 @@ body{
 .logo > img {
     width: 30%;
 }
+
+.buttonDiv{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border: solid 1px black;
+}

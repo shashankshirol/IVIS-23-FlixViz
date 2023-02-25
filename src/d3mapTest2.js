@@ -1,15 +1,40 @@
-function getJSON(path) {
-    return fetch(path).then(response => response.json());
+async function getJSON(path) {
+    return await fetch(path).then(response => response.json());
 }
 
 let currentCountry = null
-
+let wasDivExpanded = false
 const width = window.innerWidth
 const height = window.innerHeight
 //make an array of colors out of colorOrdinalScale for the map, but colors should be strings, please help
 
+let tooltipVisibilityStatusComparedToClik = true
+const sideDiv  = d3.select("body")
+        .append("div")
+        .attr("id", "clickData")
+        .style("position", "absolute")
+        .style("top", "0px")
+        .style("right", "0px")
+        .style("width", "45%")
+        .style("height", "100%")
+        .style("display", "flex")
+        .style("flex-direction", "column")
+        .style("justify-content", "center")
+        .style("background-color", "white")
+        .style("z-index", 1000)
+        .style("opacity", 0)
+        .style("transition", "width 0.5s ease-in-out")
+        .style("transition", "opacity 0.5s ease-in-out")
+        .style("pointer-events", "none")
+        .html(`<h1> Click on a country to see its content availability </h1> 
+                <div class="buttonDiv">
+                    <button type="button" id="expandCollapeDiv">Go to Details</button>
+                </div>`)
+        .style("text-align", "center")
 
-let colorOrdinalScale = ["#295026",
+
+let colorOrdinalScale = [
+    "#295026",
     "#2A5428",
     "#2B582A",
     "#2C5C2D",
@@ -47,7 +72,9 @@ let colorOrdinalScale = ["#295026",
     "#D4E0C4",
     "#DBE4CC",
     "#E2E8D3",
-    "#E8ECDB"]
+    "#E8ECDB"
+]
+
 
 colorOrdinalScale = colorOrdinalScale.reverse()
 
@@ -151,7 +178,9 @@ function unselectCountry() {
         .style("stroke", "grey")
         .style("stroke-width", .7)
     }
+    sideDiv.style("opacity", 0).style("pointer-events", "none")
     currentCountry = null
+    tooltipVisibilityStatusComparedToClik = true
 }
 
 function zoomed() {
@@ -189,6 +218,19 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
         getJSON("../Data/code_to_movie_data.json").then(fromCodeToContent => {
             getJSON("https://unpkg.com/world-atlas@1/world/110m.json").then(data => {
 
+                d3.select("#expandCollapeDiv").on("click", () => {
+                    if(!wasDivExpanded){
+                        d3.select("#expandCollapeDiv").text("Click to collapse")
+                        sideDiv.transition().duration(500).style("width","100%").style("opacity", 1)
+                        wasDivExpanded = true
+                    }else{
+                        d3.select("#expandCollapeDiv").text("Click to expand")
+                        sideDiv.transition().duration(500).style("width","45%").style("opacity", 0.9)
+                        wasDivExpanded = false
+                    }
+
+                    
+                })
 
                 const mouseOver = function(d) {
 
@@ -232,8 +274,8 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
 
                     tooltip
                         .style("opacity", 0.8)
-                        .style("visibility", "visible")
-                        
+                        .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
+ 
                     d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
                     d3.select("#totalTitles").text(countryData)
                 
@@ -245,7 +287,6 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                         d3.select(this)
                         .transition()
                         .duration(150)
-                        .style("z-index", 0)
                         .style("opacity", .8)
                         .style("stroke", "grey")
                         .style("stroke-width", .7)
@@ -257,30 +298,38 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
 
                 //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
                 function clicked(d) {
-
-                    const [[x0, y0], [x1, y1]] = path.bounds(d);
-                    d3.event.stopPropagation();
-                    svg.transition().duration(750).call(
-                    zoom.transform,
-                    d3.zoomIdentity
-                        .translate(width / 2, height / 2)
-                        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
-                        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-                    d3.mouse(d3.event.target, svg.node())
-                    );
-                    //I want to edit the style of the country that I clicked on
-                    if(currentCountry != null){
-                        currentCountry
-                            .style("opacity", 0.8)
-                            .style("stroke", "grey")
-                            .style("stroke-width", 0.7)
+                    if(netflixData[countriesData[d.id]["alpha-2"]] != undefined){
+                        tooltip.style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
+                        tooltipVisibilityStatusComparedToClik = false
+                        const [[x0, y0], [x1, y1]] = path.bounds(d);
+                        d3.event.stopPropagation();
+                        svg.transition().duration(750).call(
+                        zoom.transform,
+                        d3.zoomIdentity
+                            .translate(width / 4, height / 2)
+                            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                        d3.mouse(d3.event.target, svg.node())
+                        );
+                        //I want to edit the style of the country that I clicked on
+                        if(currentCountry != null){
+                            currentCountry
+                                .style("opacity", 0.8)
+                                .style("stroke", "grey")
+                                .style("stroke-width", 0.7)
+                        }
+    
+                        d3.select(this)
+                            .raise()
+                            .style("stroke", "black")
+                            .style("stroke-width", 2)
+    
+                        currentCountry = d3.select(this)
+    
+                        sideDiv.style("opacity", 0.9).style("pointer-events", "auto")
                     }
 
-                    d3.select(this)
-                        .style("stroke", "black")
-                        .style("stroke-width", 2)
 
-                    currentCountry = d3.select(this)
                 }
 
                 //Need to find min len and max len of the netflixData
@@ -328,7 +377,12 @@ getJSON("../Data/country_to_content.json").then(netflixData => {
                     .on("click", clicked)
                     .on("mouseover", mouseOver )
                     .on("mouseleave", mouseLeave )
+                
+                
 
+                //I need to add a div in front of the map that will be static on the right side of the screen, partially covering the map, please help me with this
+                //it is not a tooltip, it is a div that will contain a bar chart
+                    
             })
         })
     })
