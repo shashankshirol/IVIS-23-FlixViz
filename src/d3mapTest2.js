@@ -75,7 +75,7 @@ let colorOrdinalScale = [
 
 
 colorOrdinalScale = colorOrdinalScale.reverse()
-tooltipVisibilityStatusComparedToClik = true
+let tooltipVisibilityStatusComparedToClik = true
 
 
 function generateTooltip(){
@@ -117,19 +117,17 @@ const svg = d3.select("body")
 
 
 const zoom = d3.zoom()
-  .translateExtent([[0, 0], [width, height]])
   .scaleExtent([1, 8])
   .on("zoom", zoomed);
 
           
 svg.call(zoom)
-svg.on("click", reset);
 
 function generateScatterChartInTooltip(data,x,y) {
     // Step 1
         
         let margin = {top: 10, right: 30, bottom: 30, left: 60}
-        let scatterWidth = 200 - margin.left - margin.right
+        let scatterWidth = 250 - margin.left - margin.right
         let scatterHeight = 150 - margin.top - margin.bottom
 
         // Step 3
@@ -139,7 +137,13 @@ function generateScatterChartInTooltip(data,x,y) {
             .append("g")
             .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
-
+        scatterSvg
+              .append("rect")
+                .attr("x",0)
+                .attr("y",0)
+                .attr("height", scatterHeight)
+                .attr("width", scatterWidth)
+                .style("fill", "EBEBEB")
         // Step 4 
         let xScale = d3.scaleLinear().domain([2000, 3000]).range([0, scatterWidth]),
             yScale = d3.scaleLinear().domain([3000, 6500]).range([scatterHeight, 0]);
@@ -147,20 +151,30 @@ function generateScatterChartInTooltip(data,x,y) {
         //Add x axis
         scatterSvg.append("g")
             .attr("transform", "translate(0," + scatterHeight + ")")
-            .call(d3.axisBottom(xScale));;
+            .call(d3.axisBottom(xScale).tickSize(-scatterHeight*1.3).ticks(5))
+            .select(".domain")
+            .remove();
 
         //Add y axis
         scatterSvg.append("g")
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale).tickSize(-scatterWidth*1.3).ticks(7))
+            .select(".domain").remove();
 
-        // Step 5
-        // Title
-        scatterSvg.append('text')
-        .attr('x', 100/2 + 100)
-        .attr('y', 100)
-        .attr('text-anchor', 'middle')
-        .style('font-family', 'Helvetica')
-        .style('font-size', 20)
+        scatterSvg.selectAll(".tick line").attr("stroke", "white")
+        //X axis label:
+        scatterSvg.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", scatterWidth/2 + margin.left)
+            .attr("y", scatterHeight + margin.top + 20)
+            .text("Series");
+
+        // Y axis label:
+        scatterSvg.append("text")
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -margin.left + 20)
+            .attr("x", -margin.top - scatterHeight/2 + 20)
+            .text("Movies")
         
         
         
@@ -189,7 +203,12 @@ function generateScatterChartInTooltip(data,x,y) {
                 }
                 return "#69b3a2"
           })
-          .style()
+          .filter(function(d){
+                if(d[1] == x && d[0] == y){
+                    return true
+                }
+                return false
+          }).raise()
         
         
 }
@@ -222,7 +241,7 @@ function stopped() {
 function reset() {
 
     svg.transition()
-        .duration(750)
+        .duration(1100)
         .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 
     unselectCountry()
@@ -238,7 +257,7 @@ const g = svg.append("g")
 
 //now I need to get the data from the json file, please help me with this
 
-getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
+getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
     let listOfDimensionsMoviesVsSeries = []
     for(let entry in countriesToOverviewInfo){
         listOfDimensionsMoviesVsSeries.push([countriesToOverviewInfo[entry]["tseries"], countriesToOverviewInfo[entry]["tmovs"]])
@@ -283,7 +302,6 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                                 }).then((contentInfo) => {
                                     let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                                     let y = countriesToOverviewInfo[countryCodeName]["tseries"]
-                                    console.log(x,y)
                                     generateScatterChartInTooltip(listOfDimensionsMoviesVsSeries,x,y)
                                 })
                             }else{
@@ -291,13 +309,16 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                             }
                         }
 
+
                         d3.select(this)
+                            .raise()
                             .transition()
                             .duration(150)
                             .style("opacity", 1)
                             .style("z-index", 100)
-                            .style("stroke", "black")
+                            .style("stroke", "#FFFDD0")
                             .style("stroke-width", 1.5)
+                            
                         let countryName = countriesData[d.id]["name"]
                         let countryData = "No data available"
 
@@ -318,7 +339,12 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                     const mouseLeave = function(d) {
                         tooltip.selectAll("svg").remove()
                         if(currentCountry == null || d3.select(this).node() != currentCountry.node() ){
+
+                            if(d3.select(this) != currentCountry){
+                                d3.select(this).lower()
+                            }
                             d3.select(this)
+                            .lower()
                             .transition()
                             .duration(150)
                             .style("opacity", .8)
@@ -329,7 +355,6 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                         tooltip.transition().duration(500).style("visibility", "hidden")
                         alreadyOver = false
                     }
-
 
                     //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
                     function clicked(d) {
@@ -360,12 +385,13 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
         
                             d3.select(this)
                                 .raise()
-                                .style("stroke", "black")
+                                .style("stroke", "#FFFDD0")
                                 .style("stroke-width", 2)
         
                             currentCountry = d3.select(this)
         
                             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto")
+
                         }
 
 
@@ -374,21 +400,17 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                     //Need to find min len and max len of the netflixData
                     let min = 100000
                     let max = 0
-
+                    const allValuesNumberContent = []
                     for(let country in countryToContentList){
-                        if(countryToContentList[country].length > max){
-                            max = countryToContentList[country].length
-                        }
-                        if(countryToContentList[country].length < min){
-                            min = countryToContentList[country].length
-                        }
+                        allValuesNumberContent.push(countryToContentList[country].length)
                     }
-                    
-                    const domain = [min, max]
-                    const colorScaler = d3.scaleOrdinal()
-                        .domain(domain)
-                        .range(colorOrdinalScale);
+                    allValuesNumberContent.sort()
+                    const range = d3.quantize(d3.interpolateHcl("#FFCCCB", "#E50914"), 38)
 
+                    const colorScaler = d3.scaleOrdinal()
+                        .domain(allValuesNumberContent)
+                        .range(range);
+                    
                     const countries = topojson.feature(data, data.objects.countries)
                     
                     g.selectAll("path")
@@ -398,15 +420,13 @@ getJSON("../EDA/countries.json").then(countriesToOverviewInfo => {
                         .attr("class", "country")
                         .attr("d", path) //This is a geopath that we previously created using d3
                         .style("fill", function (d) {
-                            if(countriesData[d.id] != undefined){
-                                if(countryToContentList[countriesData[d.id]["alpha-2"]] == undefined){
-                                    return "rgb(211, 211, 211)"
-                                } else {
+                            if(countriesData[d.id] != undefined && countryToContentList[countriesData[d.id]["alpha-2"]] != undefined){
+                                    if(countryToContentList[countriesData[d.id]["alpha-2"]].length > 8000){
+                                        console.log(colorScaler(countryToContentList[countriesData[d.id]["alpha-2"]].length))
+                                    }
                                     return colorScaler(countryToContentList[countriesData[d.id]["alpha-2"]].length)
-                                }
-                            }else{
-                                return "rgb(211, 211, 211)"
                             }
+                            return "rgb(211, 211, 211)"
                             
                         })
                         .style("z-index", 0)
