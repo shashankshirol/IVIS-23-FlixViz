@@ -35,8 +35,18 @@ d3.json("../Data/data_netflix.json", function (error, data) {
     .attr("height", height)
     .attr("x", 0)
     .attr("y", 0);
-
-  let yAxis = svg.append("g").call(d3.axisLeft(y));
+  function mouseover(){
+    d3.select(this).style("fill", "#FB0C0C").attr("stroke", "black").attr("stroke-width", 1.5).transition()
+    .duration('100')
+    .attr("r", 8)
+    .style("opacity", 0.7);
+  }
+  function mouseout(){
+    d3.select(this).style("fill", "black").transition()
+    .duration('200')
+    .attr("r", 6).style("opacity", 0.5);
+  }
+  let yAxis = svg.append("g").call(d3.axisLeft(y));;
   let brush = d3
     .brush() // Add the brush feature using the d3.brush function
     .extent([
@@ -62,9 +72,11 @@ scatter
  .append("circle")
    .attr("cx", function (d) { return x(d["imdb_rating"]); } )
    .attr("cy", function (d) { return y(d["votes"]); } )
-   .attr("r", 8)
+   .attr("r", 6)
    .style("opacity", 0.5)
    .attr("pointer-events", "all")
+   .on("mouseover", mouseover)
+   .on("mouseout", mouseout)
 
 // Add the brushing
 
@@ -88,7 +100,7 @@ scatter
         })
         x.domain([s[0][0], s[1][0]].map(x.invert, x));
         y.domain([s[1][1], s[0][1]].map(y.invert, y));
-        let selected = scatter.select(".brush").call(brush.move, null);
+        scatter.select(".brush").call(brush.move, null);
         
      // This remove the grey brush area as soon as the selection has been done
     }

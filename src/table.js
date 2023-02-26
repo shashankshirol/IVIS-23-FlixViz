@@ -6,13 +6,14 @@ function table(data) {
     if( id > 10)return
     let tr = document.createElement("tr");
     tr.innerHTML = `
-        <td><img src="${movie.img}"></img></td>
+        <td><img class="poster" src="${movie.img}"></img></td>
         <td>${movie.title}</td>
         <td>${movie.vtype}</td>
         <td>${movie.year}</td>
-        <td>${movie.imdb_rating}</td>
+        <td>${movie.imdb_rating == null ? "No data" : movie.imdb_rating}</td>
         <td>${movie.votes}</td>
         <td>${movie.genre}</td>
+        <td><a href="https://www.netflix.com/browse?jbv=${movie.nfid}">Netflix</a>${(movie.imdbid != null && movie.imdbid != undefined) ?  ` <a href="https://www.imdb.com/title/${movie.imdbid}">Imdb</a>` : ""}</td>
         `;
     tbody.append(tr)
   });
