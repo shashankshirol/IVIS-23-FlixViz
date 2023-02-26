@@ -20,8 +20,9 @@ for data_entry in data:
     countries_per_data = getEntryCountries(data_entry)
     for country in countries_per_data:
         if country not in country_to_imdb_codes:
-            country_to_imdb_codes[country] = []
-        country_to_imdb_codes[country].append(data_entry['id'])
+            country_to_imdb_codes[country] = set()
+        country_to_imdb_codes[country].update(data_entry['id'])
+
 
 # Serializing json
 json_object = json.dumps(country_to_imdb_codes, indent=4)
