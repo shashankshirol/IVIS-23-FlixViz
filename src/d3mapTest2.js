@@ -88,6 +88,7 @@ function generateTooltip(){
                 .style("border", "solid")
                 .style("border-width", "2px")
                 .style("border-radius", "5px")
+                .style("pointer-events", "none")
                 .style("padding", "5px")
                 .style("z-index", 1)
                 .html(
@@ -100,10 +101,47 @@ function generateTooltip(){
 
 const tooltip = generateTooltip()
 
+function tooltipWouldBeOutOfBoundBasedOnMousePos(element){
+    let rect = element.getBoundingClientRect();
+    let position_exiting = []
+    if(d3.event.pageY < 30){
+        position_exiting.push("top")
+    }
+    if(d3.event.pageX < 0){
+        position_exiting.push("left")
+    }
+    if(d3.event.pageX + (rect.width-25) > window.innerWidth){
+        position_exiting.push("right")
+    }
+    if(d3.event.pageY + (rect.height-25) > window.innerHeight){
+        position_exiting.push("bottom")
+    }
+    return position_exiting
+}
+
 function moveTooltip(d) {
-    tooltip
-        .style("left", (d3.event.pageX + 25) + "px")  
-        .style("top", (d3.event.pageY - 25) + "px");
+
+    let overflowingPositions = tooltipWouldBeOutOfBoundBasedOnMousePos(tooltip.node())
+
+    tooltip.style("top",function(){
+        if(overflowingPositions.includes("top")){
+            return (tooltip.node().getBoundingClientRect().height+10)+"px";
+        }else if(overflowingPositions.includes("bottom")){
+            return window.innerHeight-(tooltip.node().getBoundingClientRect().height-10)+"px";
+        } else{
+            return (d3.event.pageY - 25) + "px"
+        }
+    })
+    .style("left", function(d){
+        if(overflowingPositions.includes("left")){
+            return (tooltip.node().getBoundingClientRect().width+10)+"px";
+        }else if(overflowingPositions.includes("right")){
+            return window.innerWidth-(tooltip.node().getBoundingClientRect().width+10)+"px";
+        } else{
+            return (d3.event.pageX + 10) + "px"
+        }
+        
+    })  
 }
 
 const svg = d3.select("body")
@@ -118,6 +156,7 @@ const svg = d3.select("body")
 
 const zoom = d3.zoom()
   .scaleExtent([1, 8])
+  .translateExtent([[0, 0], [width, height]])
   .on("zoom", zoomed);
 
           
@@ -288,18 +327,6 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
                             //I now need to iterate over every single movie and series in the netflix data of this country and check how many are series and how many are movies
                             if(countryCodeName in countryToContentList){
                                 new Promise((resolve, reject) => { 
-                                    let movies = 0
-                                    let series = 0
-        
-                                    for(let i=0; i < countryToContentList[countryCodeName].length; i++){
-                                        if(fromCodeToContent[countryToContentList[countryCodeName][i]]["vtype"] == "movie"){
-                                            movies++
-                                        }else{
-                                            series++
-                                        }
-                                    }
-                                    resolve([{"type": "movies", "value": movies}, {"type": "series", "value": series}])
-                                }).then((contentInfo) => {
                                     let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                                     let y = countriesToOverviewInfo[countryCodeName]["tseries"]
                                     generateScatterChartInTooltip(listOfDimensionsMoviesVsSeries,x,y)
@@ -358,6 +385,7 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
 
                     //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
                     function clicked(d) {
+
                         if(countryToContentList[countriesData[d.id]["alpha-2"]] != undefined){
                             if(tooltipVisibilityStatusComparedToClik){
                                 tooltipVisibilityStatusComparedToClik = false
@@ -389,7 +417,7 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
                                 .style("stroke-width", 2)
         
                             currentCountry = d3.select(this)
-        
+                            
                             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto")
 
                         }
