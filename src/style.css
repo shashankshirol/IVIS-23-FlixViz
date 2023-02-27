@@ -55,17 +55,3 @@ body{
 }
 
 
-.form-label{
-    /* font-weight: bold; */
-    color: white;
-}
-
-#contactForm{
-    padding-top:50px;
-}
-
-#contact-title{
-    text-align: center;
-    color: white;
-    padding-top: 80px;
-}
