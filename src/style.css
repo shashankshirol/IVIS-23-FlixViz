@@ -19,6 +19,7 @@ body{
     position: absolute;
 }
 
+
 .tooltip > p{
     fill: red;
     stroke: #999;
@@ -51,4 +52,20 @@ body{
     width: 100%;
     height: 50px;
     border: solid 1px black;
+}
+
+
+.form-label{
+    /* font-weight: bold; */
+    color: white;
+}
+
+#contactForm{
+    padding-top:50px;
+}
+
+#contact-title{
+    text-align: center;
+    color: white;
+    padding-top: 80px;
 }

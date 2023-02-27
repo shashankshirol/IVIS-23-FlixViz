@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>FlixViz</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+        <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas+Neue">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <style>
+          body{
+                  margin: 0%;
+                  padding: 0%;
+                  height: 100%;
+                  background-color: rgb(14, 17, 23);
+          }
+
+          #about-project{
+          
+          }
+
+          #about-flixviz{
+            border-radius:10px 10px 0px 0px;
+            background-color: #f0ead6;
+          }
+
+          #about-data{
+            border-radius:0px 0px 0px 0px;
+            background-color: #cabf9d;
+          }
+
+          #about-methods{
+            border-radius:0px 0px 10px 10px;
+            background-color: #a59a78;
+          }
+
+          #about-text{
+            font-family:  "Montserrat", sans-serif;
+            padding-top:15px;
+            padding-bottom:10px;
+            padding-left: 30px;
+          }
+          #project-title{
+            text-align: center;
+            font-family:  "Bebas Neue", sans-serif;
+            vertical-align: middle;
+            padding-top:7px;
+          }
+          #about-title{
+            font-size:56px;
+            padding-top:70px;
+            padding-bottom:15px;
+            text-align: center;
+            font-family:  "Bebas Neue", sans-serif;
+            color:white;
+          }
+          #member-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+          }
+
+          .member-name{
+            color: white;
+            font-family: "Bebas Neue", sans-serif;
+            text-align: center;
+          }
+
+          .member-email{
+            color: #E50914;
+            font-family: "Bebas Neue", sans-serif;
+            text-align: center;
+          }
+
+          .member-info{
+            color: white;
+            font-family: "Montserrat", sans-serif;
+            text-align: center;
+            padding-left:10px;
+            padding-right:10px;
+          }
+      </style>
+    </head>
+    <body>
+    <nav class="navbar sticky-top bg-dark navbar-expand-lg" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html"><img src="../res/imgs/flixviz_logo.png" alt="FlixViz Logo" height="35"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active co" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="demo.html">Demo</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <p id="about-title">
+          About Flixviz
+        </p>
+      </div>
+    </div>
+    <div class="container" id="about-project">
+      <div class="row align-items-center" id="about-flixviz">
+        <div class="col-3 col-md-2 align-middle" id="project-title">
+          <h2 id="title-test">Flixviz</h2>
+        </div>
+        <div class="col-9 col-md-10" id="about-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </div>
+      <div class="row align-items-center" id="about-data">
+        <div class="col-3 col-md-2 align-middle" id="project-title">
+          <h2 id="title-test">Data</h2>
+        </div>
+        <div class="col-9 col-md-10" id="about-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </div>
+      <div class="row align-items-center" id="about-methods">
+        <div class="col-3 col-md-2 align-middle" id="project-title">
+          <h2 id="title-test">Methods</h2>
+        </div>
+        <div class="col-9 col-md-10" id="about-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </div>
+    </div>
+    <div class="container " id="about-team">
+      <div class="row">
+        <p  id="about-title">
+          Meet the Team
+        </p>
+      </div>
+      <div class="row gy-5  justify-content-evenly">
+        <div class="col-6">
+          <img src="../res/imgs/placeholder.png" id="member-img" class="mx-auto">
+          <h3 class="member-name">Member A</h3>
+          <h5 class="member-email">membera@kth.se</h5>
+          <p class="member-info">Information about the member and maybe their role in the project. Also some more just to pad out and check how it responds to more text. Let's add some Lorem Ipsum also, because we know Latin.</p>
+        </div>
+        <div class="col-6">
+          <img src="../res/imgs/placeholder.png" id="member-img" class="mx-auto">
+          <h3 class="member-name">Member B</h3>
+          <h5 class="member-email">memberb@kth.se</h5>
+          <p class="member-info">Information about the member and maybe their role in the project. Also some more just to pad out and check how it responds to more text. Let's add some Lorem Ipsum also, because we know Latin.</p>
+        </div>
+        <div class="col-6">
+          <img src="../res/imgs/placeholder.png" id="member-img" class="mx-auto">
+          <h3 class="member-name">Member C</h3>
+          <h5 class="member-email">memberc@kth.se</h5>
+          <p class="member-info">Information about the member and maybe their role in the project. Also some more just to pad out and check how it responds to more text. Let's add some Lorem Ipsum also, because we know Latin.</p>
+        </div>
+        <div class="col-6">
+          <img src="../res/imgs/placeholder.png" id="member-img" class="mx-auto">
+          <h3 class="member-name">Member D</h3>
+          <h5 class="member-email">memberd@kth.se</h5>
+          <p class="member-info">Information about the member and maybe their role in the project. Also some more just to pad out and check how it responds to more text. Let's add some Lorem Ipsum also, because we know Latin.</p>
+        </div>
+        <div class="col-6">
+          <img src="../res/imgs/placeholder.png" id="member-img" class="mx-auto">
+          <h3 class="member-name">Member E</h3>
+          <h5 class="member-email">membere@kth.se</h5>
+          <p class="member-info">Information about the member and maybe their role in the project. Also some more just to pad out and check how it responds to more text. Let's add some Lorem Ipsum also, because we know Latin.</p>
+        </div>
+      </div>
+    </div>
+    
+    
+
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="zoom.js"></script>
+        <script src="map.js"></script>
+    </body>
+</html>
