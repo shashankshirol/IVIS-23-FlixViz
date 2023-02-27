@@ -7,14 +7,16 @@
     height:500px;
 }
 .poster{
-    height: 150px;
+    height: 280px;
 }
 table, th, td {
     border: 1px solid;
     text-align: center;
   }
+
 td{
-    width: 100px;
+    width: 200px; /* Set a fixed width for the text column */
+
 }
 a{
     color: black;
