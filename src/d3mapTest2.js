@@ -148,6 +148,7 @@ const svg = d3.select("body")
                 .append("div")
                 .attr("class", "map")
                 .append("svg")
+                .style("shape-rendering", "optimizeSpeed")
                 .attr("width", width)
                 .attr("height", height)
                 .on("mousemove", moveTooltip)
@@ -309,7 +310,7 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
             const countries = topojson.feature(data, data.objects.countries)
             const projection = d3
                                 .geoEquirectangular()
-                                .center([0, 0]) // set centre to further North
+                                .center([0, 0]) // set centre
                                 .scale([width/(2*Math.PI)]) // scale to fit group width
                                 .translate([width/2,height/2]) // ensure centred in group
                             ;
