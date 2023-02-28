@@ -305,7 +305,7 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
         getJSON("../Data/countriesCodesParsed.json").then(countriesData => {
             getJSON("../Data/code_to_movie_data.json").then(fromCodeToContent => {
                 getJSON("https://unpkg.com/world-atlas@1/world/110m.json").then(data => {
-
+                    //TODO: pull less detailed svg map json to improve performance
                     d3.select("#expandCollapeDiv").on("click", () => {
                         if(!wasDivExpanded){
                             d3.select("#expandCollapeDiv").text("Click to collapse")
