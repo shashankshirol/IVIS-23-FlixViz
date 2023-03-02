@@ -436,11 +436,14 @@ getJSON("../Data/countries.json").then(countriesToOverviewInfo => {
 
 
             }
+            
             const allValuesNumberContent = []
             for (let i = 0; i < countryCodeList.length; i++){
                 allValuesNumberContent.push(countriesToOverviewInfo[countryCodeList[i]]["tvids"])
             }
             allValuesNumberContent.sort()
+
+
             const range = d3.quantize(d3.interpolateHcl("#FFCCCB", "#E50914"), 37)
 
             const colorScaler = d3.scaleOrdinal()
