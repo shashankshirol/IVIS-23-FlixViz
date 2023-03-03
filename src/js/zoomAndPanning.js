@@ -2,12 +2,11 @@ const zoom = d3.zoom()
   .scaleExtent([1, 8])
   .translateExtent([[0, 0], [width, height]])
   .on("zoom", zoomed);
-        
-svg.call(zoom)
+
 
 function zoomed() {
     if(currentCountry != undefined && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) > 0)){
-        unselectCountry()
+        unselectCountry(currentCountry)
     }
     const { transform } = d3.event;
     g.attr("transform", transform);
@@ -25,5 +24,5 @@ function reset() {
         .duration(500)
         .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 
-    unselectCountry()
+    unselectCountry(currentCountry)
 }

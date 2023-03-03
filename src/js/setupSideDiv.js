@@ -1,3 +1,4 @@
+let wasDivExpanded = false
 function setupSideDiv(){
     return d3.select("body")
             .append("div")
@@ -19,4 +20,8 @@ function setupSideDiv(){
                         <button type="button" id="expandCollapeDiv">Go to Details</button>
                     </div>`)
             .style("text-align", "center")
+}
+
+function fillSideDivWithBarChart(countryCode){
+    
 }
