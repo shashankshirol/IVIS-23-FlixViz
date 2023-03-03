@@ -3,8 +3,7 @@ async function getJSON(path) {
 }
 
 //now I need to get the data from the json file, please help me with this
-let countryCodeList = []
-let listOfDimensionsMoviesVsSeries = []
+
 $.getJSON("../../Data/countries.json", function (data) { 
     $.each(data, function (key, val) {
         countryCodeList.push(key)

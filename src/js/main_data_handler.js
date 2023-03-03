@@ -51,6 +51,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(countryCodeList.includes(countryCodeName)){
                 let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                 let y = countriesToOverviewInfo[countryCodeName]["tseries"]
+                console.log("AOOOOOOOOO")
                 generateScatterChartInTooltip(listOfDimensionsMoviesVsSeries,x,y) 
             } else {
                 tooltip.selectAll("svg").remove()
@@ -76,7 +77,11 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             country_total_tiles = countriesToOverviewInfo[countriesData[d.id]["alpha-2"]]["tvids"] + " total titles"
         }
 
-        tooltip.transition().duration(500)
+        console.log(tooltipVisibilityStatusComparedToClik)
+
+        tooltip
+            .transition()
+            .duration(500)
             .style("opacity", 0.8)
             .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
 
@@ -98,11 +103,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 .style("opacity", .8)
                 .style("stroke", "grey")
                 .style("stroke-width", .5)
-        }else {
-            alreadyOver = false
         }
         tooltip.transition().duration(500).style("visibility", "hidden")
-        
+        alreadyOver = false
     }
 
     //I need a function that will be called when I click on a country and will zoom in on it, please help me with this

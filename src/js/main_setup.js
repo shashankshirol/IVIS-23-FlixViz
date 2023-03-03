@@ -9,4 +9,5 @@ const g = svg.append("g")
 svg.call(zoom)
 const sideDiv = setupSideDiv() 
 let neighbourCountriesSelected = []
-
+let countryCodeList = []
+let listOfDimensionsMoviesVsSeries = []
