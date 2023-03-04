@@ -1,4 +1,4 @@
-function highlightCountry(passedCountry){
+function highlightCountry(passedCountry) {
     passedCountry
         .raise()
         .style("stroke", "#FFFDD0")
@@ -30,7 +30,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                         .scale([width/(2*Math.PI)]) // scale to fit group width
                         .translate([width/2,height/2]) // ensure centred in group
                     ;
-    const path = d3.geoPath().projection(projection) //This is a geopath that we need to create using d3
+    window.path = d3.geoPath().projection(projection) //This is a geopath that we need to create using d3
 
     d3.select("#expandCollapeDiv").on("click", () => {
         if(!wasDivExpanded){
@@ -52,7 +52,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(countryCodeList.includes(countryCodeName)){
                 let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                 let y = countriesToOverviewInfo[countryCodeName]["tseries"]
-                console.log("AOOOOOOOOO")
                 generateScatterChartInTooltip(listOfDimensionsMoviesVsSeries,x,y) 
             } else {
                 tooltip.selectAll("svg").remove()
@@ -77,9 +76,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if(countryCodeList.includes(countriesData[d.id]["alpha-2"])){
             country_total_tiles = countriesToOverviewInfo[countriesData[d.id]["alpha-2"]]["tvids"] + " total titles"
         }
-
-        console.log(tooltipVisibilityStatusComparedToClik)
-
         tooltip
             .transition()
             .duration(500)
