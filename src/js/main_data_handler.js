@@ -108,7 +108,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
     function clicked(d) {
 
-        hasAllZoomingEnded = false
         let clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){

@@ -3,7 +3,7 @@ async function getJSON(path) {
 }
 
 function getCountryobject(country_features, id) {
-    for (var i = 0; i < country_features.length; i++) {
+    for (let i = 0; i < country_features.length; i++) {
         if (country_features[i].id == id) {
             return country_features[i]
         }
@@ -12,14 +12,14 @@ function getCountryobject(country_features, id) {
 
 
 function fillDataList(clist) {
-    var container = document.getElementById('search-field'),
+    let container = document.getElementById('search-field'),
     i = 0,
     len = clist.length,
     dl = document.createElement('datalist');
 
     dl.id = 'countrylist';
     for (; i < len; i += 1) {
-        var option = document.createElement('option');
+        let option = document.createElement('option');
         option.value = clist[i];
         dl.appendChild(option);
     }
@@ -40,28 +40,50 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
         Cname_id[country] = data[country]
     }
 
-    unavail_countries = ["Hong Kong", "Singapore"]
+    let unavail_countries = ["Hong Kong", "Singapore"]
     for (const c of unavail_countries) {
         let idx = countryList.indexOf(c)
         countryList.splice(idx, 1)
     }
     fillDataList(countryList);
 
-    getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
-        const country_features = topojson.feature(data, data.objects.countries).features
+    getJSON("../../Data/countriesCodesParsed.json").then(countriesData => {
+        getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
+            const country_features = topojson.feature(data, data.objects.countries).features
 
-        $("#search-cnt").click(function () {
-            id = Cname_id[$("#search-field").val()]
-            feature = getCountryobject(country_features, id)
-            const [[x0, y0], [x1, y1]] = path.bounds(feature);
-                svg.transition().duration(750).call(
-                    zoom.transform,
-                    d3.zoomIdentity
-                        .translate(width / 2, height / 2)
-                        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
-                        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-                );
+            $("#search-cnt").click(function () {
+                let id = Cname_id[$("#search-field").val()]
+                let clickedCountryCode = countriesData[id]["alpha-2"]
+                let feature = getCountryobject(country_features, id)
+                const [[x0, y0], [x1, y1]] = path.bounds(feature);
+                    svg.transition().duration(750).call(
+                        zoom.transform,
+                        d3.zoomIdentity
+                            .translate(width / 4, height / 2)
+                            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                    );
+                //I want to edit the style of the country that I clicked on
+                if(currentCountry != null){
+                    unhighlightCountry(currentCountry)
+                }
+
+                if(tooltipVisibilityStatusComparedToClik){
+                    tooltipVisibilityStatusComparedToClik = false
+                    //I now need to do an animation for the tooltio, it has to move to the right and have the same height as the side div
+                    tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
+                }
+
+                g.selectAll("path")
+                    .each(function (d) {
+                        if (d.id == id) {
+                            highlightCountry(d3.select(this))
+                            currentCountry = d3.select(this)
+                            sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
+                            fillSideDivWithBarChart(clickedCountryCode)
+                        }
+                    })
+                })
         });
-
     });
 });
