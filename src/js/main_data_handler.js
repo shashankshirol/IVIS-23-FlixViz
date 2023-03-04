@@ -45,6 +45,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     })
 
     function mouseOver(d) {
+
         if(!alreadyOver){
             let countryCodeName = countriesData[d.id]["alpha-2"]
 
@@ -110,6 +111,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
     function clicked(d) {
+
         hasAllZoomingEnded = false
         let clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
@@ -138,6 +140,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             
             currentCountry = d3.select(this)
             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
+            fillSideDivWithBarChart(clickedCountryCode)
         }
     }
     
