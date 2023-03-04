@@ -47,6 +47,16 @@ body{
     width: 30%;
 }
 
+#sidebarchart{
+    text-align: center;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: rgb(14, 17, 23);
+    z-index: 1;
+}
+
 .buttonDiv{
     position: relative;
     width: 100%;

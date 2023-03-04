@@ -23,9 +23,9 @@ function setupSideDiv(){
 }
 
 function fillSideDivWithBarChart(countryCode){
-    let margin = {top: 30, right: 30, bottom: 70, left: 60}
-    let width_bar = 460 - margin.left - margin.right
-    let height_bar = 400 - margin.top - margin.bottom;
+    let margin = {top: 5, right: 25, bottom: 110, left: 70}
+    let width_bar = 300 - margin.left - margin.right
+    let height_bar = 350 - margin.top - margin.bottom;
     d3.select("#clickData").selectAll("svg").remove()
     // append the svg object to the body of the page
     let svgDivBarChart = d3.select("#clickData")
@@ -49,6 +49,7 @@ function fillSideDivWithBarChart(countryCode){
                 .padding(0.2);
 
         svgDivBarChart.append("g")
+                .attr("id", "sidebarchart")
                 .attr("transform", "translate(0," + height_bar + ")")
                 .call(d3.axisBottom(x))
                 .selectAll("text")
@@ -73,6 +74,22 @@ function fillSideDivWithBarChart(countryCode){
             .attr("width", x.bandwidth())
             .attr("height", function(d) { return height_bar - y(d[1]); })
             .attr("fill", "#69b3a2")
+
+        //Adding axis labels
+        svgDivBarChart.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", width_bar/2)
+            .attr("y", height_bar + margin.top + 85)
+            .text("Genres");
+        
+        svgDivBarChart.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("y", -margin.left+10) 
+            .attr("x", -50)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)")
+            .text("number of titles");
 
     })
 }
