@@ -45,8 +45,8 @@ function setupSideDiv(){
                     <div id="dropdown_container"><div id="dropdown_container_title"></div></div>
                     <div class="buttonDiv">
                         <button type="button" id="expandCollapeDiv">Go to Details</button>
-                    </div>`)
-            .style("text-align", "center")
+                    </div>
+                    `)
 }
 
 let currentSubGroups = []

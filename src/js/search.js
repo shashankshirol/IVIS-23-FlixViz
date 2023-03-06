@@ -63,14 +63,12 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
                             .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
                             .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                     );
-                //I want to edit the style of the country that I clicked on
                 if(currentCountry != null){
                     unhighlightCountry(currentCountry)
                 }
 
                 if(tooltipVisibilityStatusComparedToClik){
                     tooltipVisibilityStatusComparedToClik = false
-                    //I now need to do an animation for the tooltio, it has to move to the right and have the same height as the side div
                     tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
                 }
 
