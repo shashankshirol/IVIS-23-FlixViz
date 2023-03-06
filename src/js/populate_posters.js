@@ -19,10 +19,8 @@ function addCards(df, div_id) {
         <div class="card mx-auto" style="width: 15em">
         <img src="${title.img}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">${title.name} (IMDB: ${title.imdb_rating})</h5>
-          <p class="card-text">${title.synopsis.slice(0, 140)}${title.synopsis.length > 50 ? "...":""}</p>
-          <a href="https://www.netflix.com/title/${title.nfid}" class="btn btn-primary" target="_blank">Netflix</a>
-          <a href="https://www.imdb.com/title/${title.imdbid}" class="btn btn-primary" target="_blank">IMDB</a>
+          <a href="https://www.netflix.com/title/${title.nfid}" target="_blank">Netflix</a>
+          <a href="https://www.imdb.com/title/${title.imdbid}" target="_blank">IMDB</a>
         </div>
       </div>
         `);
@@ -30,26 +28,34 @@ function addCards(df, div_id) {
     }
 }
 
-getJSON("../Data/data_netflix.json").then(data => {
-    const country = "Italy"
-    df = new dfd.DataFrame(data)
+function emptyTopTitlescontainers() {
+    d3.select("#movies-header").html("")
+    d3.select("#MoviesDiv").html("")
+    d3.select("#series-header").html("")
+    d3.select("#SeriesDiv").html("")
+}
 
-    let filtered_top5_movies = df.iloc(
-        { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("movie")) }
-    ).sortValues(
-        "imdb_rating", { ascending: false }
-    ).head(5)
+function fillTopTitles(country) {
+    getJSON("../Data/data_netflix.json").then(data => {
+        df = new dfd.DataFrame(data)
 
-    let filtered_top5_series = df.iloc(
-        { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("series")) }
-    ).sortValues(
-        "imdb_rating", { ascending: false }
-    ).head(5)
+        let filtered_top5_movies = df.iloc(
+            { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("movie")) }
+        ).sortValues(
+            "imdb_rating", { ascending: false }
+        ).head(5)
 
-    $("#movies-header").text(`Top Movies in ${country}`)
-    addCards(filtered_top5_movies, MoviesDiv)
+        let filtered_top5_series = df.iloc(
+            { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("series")) }
+        ).sortValues(
+            "imdb_rating", { ascending: false }
+        ).head(5)
 
-    $("#series-header").text(`Top Series in ${country}`)
-    addCards(filtered_top5_series, SeriesDiv)
+        $("#movies-header").text(`Top Movies in ${country}`)
+        addCards(filtered_top5_movies, MoviesDiv)
 
-});
+        $("#series-header").text(`Top Series in ${country}`)
+        addCards(filtered_top5_series, SeriesDiv)
+
+    });
+}

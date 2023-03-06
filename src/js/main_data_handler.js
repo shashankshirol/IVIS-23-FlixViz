@@ -149,8 +149,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         allValuesNumberContent.push(countriesToOverviewInfo[countryCodeList[i]]["tvids"])
     }
     allValuesNumberContent.sort()
-    let minTitlesNumber = allValuesNumberContent[0]
-    let maxTitlesNumber = allValuesNumberContent[allValuesNumberContent.length-1]
+    window.minTitlesNumber = allValuesNumberContent[0]
+    window.maxTitlesNumber = allValuesNumberContent[allValuesNumberContent.length-1]
     const range = d3.quantize(d3.interpolateHcl("#FFCCCB", "#E50914"), 37)
 
     const colorScaler = d3.scaleOrdinal()
