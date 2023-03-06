@@ -52,7 +52,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(countryCodeList.includes(countryCodeName)){
                 let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                 let y = countriesToOverviewInfo[countryCodeName]["tseries"]
-                generateScatterChartInTooltip(listOfDimensionsMoviesVsSeries,x,y) 
+                generateScatterChartInElement(listOfDimensionsMoviesVsSeries,x,y, tooltip) 
             } else {
                 tooltip.selectAll("svg").remove()
             }

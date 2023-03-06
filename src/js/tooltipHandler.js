@@ -60,15 +60,14 @@ function moveTooltip(d) {
     })  
 }
 
-function generateScatterChartInTooltip(data,x,y) {
+function generateScatterChartInElement(data, x, y, element) {
     // Step 1
-        
         let margin = {top: 10, right: 30, bottom: 30, left: 60}
         let scatterWidth = 250 - margin.left - margin.right
         let scatterHeight = 150 - margin.top - margin.bottom
 
         // Step 3
-        let scatterSvg = tooltip.append("svg")
+        let scatterSvg = element.append("svg")
             .attr("width", scatterWidth + margin.left + margin.right)
             .attr("height", scatterHeight + margin.top + margin.bottom)
             .append("g")
