@@ -42,6 +42,6 @@ function createLegendForColorScale(initialColor, finalColor, w,h){
         .attr("height", h) 
     
     svglegend.append("text").attr("fill", "white").attr("x", 3*w/8).attr("y", 3 * h / 4).html("No. of Titles")
-    svglegend.append("text").attr("fill", "white").attr("x", -50).attr("y", 3 * h / 4).html(minTitlesNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
-    svglegend.append("text").attr("fill", "red").attr("x", w+10).attr("y", 3*h/4).html(maxTitlesNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+    svglegend.append("text").attr("fill", "white").attr("x", -50).attr("y", 3 * h / 4).html(minTitlesNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'"))
+    svglegend.append("text").attr("fill", "red").attr("x", w+10).attr("y", 3*h/4).html(maxTitlesNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'"))
 }

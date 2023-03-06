@@ -65,6 +65,21 @@ let currentSubGroups = []
 function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
     // Add one dot in the legend for each name.
     
+    //Create click to delete suggestion
+    let toDeleteText = svgSideBar.selectAll("clickToRemove")
+        .data(currentSubGroups.slice(1))
+        .enter()
+        .append("text")
+        .attr("x", width-190)
+        .attr("y",  function(d,i){ return height/4.8 + (i+1)*25}) // 100 is where the first dot appears. 25 is the distance between dots
+        .style("fill", "black")
+        .attr("id", d => "toRemove"+d)
+        .text("Click to remove")
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle")
+        .style("font-size", "10px")
+        .style("opacity", 0)
+
     svgSideBar.selectAll("mydots")
         .data(keys)
         .enter()
@@ -81,11 +96,12 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
                     return rectData.key != d
                 })
                 .style("opacity", 0.2)
-                
+            toDeleteText.filter(di => di == d).style("opacity", 1)
         })
         .on("mouseleave", function(d){
             d3.select(this).attr("r", 7)
             svgSideBar.selectAll("rect").style("opacity", 1)
+            toDeleteText.style("opacity", 0)
         })
         .on("click", function(d){
             //I want to remove the country from the list of countries to compare
@@ -105,6 +121,7 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         .attr("x", width-85)
         .attr("y", function(d,i){ return height/4.5 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", function(d){ return colorfunction(d)})
+        .attr("class", "legendText")
         .text(function(d){
             if(swapped[d].toLowerCase() == "united states of america"){
                 return "Usa";
@@ -119,6 +136,8 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         })
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
+
+
 }
 
 
