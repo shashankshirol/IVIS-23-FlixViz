@@ -4,7 +4,7 @@ function ForceGraph(movieChoice){
 
   var title = [movieChoice.title];
   var genre = movieChoice.genre.split("|");
-  d3.json("../Data/data_netflix.json", function (error, data) {
+  d3.json("../Data/data_netflix.json").then(function(data) {
 
     let similarTitle = data.filter(d => d.genre.includes(movieChoice.genre));
     //console.log(similarTitle);
@@ -138,5 +138,7 @@ function ForceGraph(movieChoice){
       d.fx = null;
       d.fy = null;
     }
-  });
+  }).catch(function(error) {
+    if (error) throw error;
+  });;
 }
