@@ -129,14 +129,12 @@ function setupSideDiv(){
     return d3.select("body")
             .append("div")
             .attr("id", "clickData")
+            .attr("class", "d-flex flex-column justify-content-center")
             .style("position", "absolute")
             .style("top", "0px")
             .style("right", "0px")
             .style("width", "45%")
             .style("height", "100%")
-            .style("display", "flex")
-            .style("flex-direction", "column")
-            .style("justify-content", "center")
             .style("background-color", "white")
             .style("z-index", 1000)
             .style("opacity", 0)
@@ -144,7 +142,7 @@ function setupSideDiv(){
             .html(`<h1> Click on a country to see its content availability </h1> 
                     <div id="dropdown_container"><div id="dropdown_container_title"></div></div>
                     <div class="buttonDiv">
-                        <button type="button" id="expandCollapeDiv">Go to Details</button>
+                        <button class="btn btn-dark m-auto" type="button" id="expandCollapeDiv">Go to Details</button>
                     </div>
                     <div id="scatterPlotSideDiv"></div>`)
             .style("text-align", "center")
@@ -325,7 +323,7 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
         .attr("class", "legendText")
         .text(function(d){
             if(swapped[d].toLowerCase() == "united states of america"){
-                return "Usa";
+                return "USA";
             }else if(swapped[d].toLowerCase() == "korea, republic of (south korea)"){
                 return "South Korea";
             }else{
@@ -485,7 +483,8 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
         
 }
 
-function fillSideDivWithBarChart(countryCode){
+function fillSideDivWithBarChart(countryCode) {
+    d3.select("#clickData").selectAll("svg").remove()
     getJSON("../../Data/countries.json").then(countriesToOverviewInfo => {
         
         if(currentSubGroups.length + countryCode.length < 4){
