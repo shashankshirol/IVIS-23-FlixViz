@@ -135,7 +135,12 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             
             currentCountry = d3.select(this)
             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
-            fillSideDivWithBarChart(clickedCountryCode)
+            let countryName = countriesData[d.id]["name"]
+            if (countryName.includes("United Kingdom")){
+                countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
+            }
+            currentSubGroups= []
+            fillSideDivWithBarChart([clickedCountryCode])
         }
     }
     

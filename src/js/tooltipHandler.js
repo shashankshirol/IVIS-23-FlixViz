@@ -80,7 +80,7 @@ function generateScatterChartInTooltip(data,x,y) {
                 .attr("y",0)
                 .attr("height", scatterHeight)
                 .attr("width", scatterWidth)
-                .style("fill", "EBEBEB")
+                .style("fill", "black")
         // Step 4 
         let xScale = d3.scaleLinear().domain([2000, 3000]).range([0, scatterWidth]),
             yScale = d3.scaleLinear().domain([3000, 6500]).range([scatterHeight, 0]);

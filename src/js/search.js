@@ -80,7 +80,8 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
                             highlightCountry(d3.select(this))
                             currentCountry = d3.select(this)
                             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
-                            fillSideDivWithBarChart(clickedCountryCode)
+                            currentSubGroups = []
+                            fillSideDivWithBarChart([clickedCountryCode])
                         }
                     })
                 })

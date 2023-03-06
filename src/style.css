@@ -63,3 +63,29 @@ body{
     height: 50px;
     border: solid 1px black;
 }
+
+#clickData {
+    display:flex;
+    flex-direction: column;
+}
+
+#clickData > h1{
+    order: 1;
+}
+
+#clickData > svg{
+    order: 2;
+}
+
+.buttonDiv {
+    order: 3;
+}
+
+#dropdown_container{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    flex-direction: column;
+}
+
