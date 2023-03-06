@@ -39,7 +39,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             wasDivExpanded = true
         }else{
             d3.select("#expandCollapeDiv").text("Click to expand")
-            sideDiv.transition().duration(500).style("width","45%").style("opacity", 0.9)
+            sideDiv.transition().duration(500).style("width","35%").style("opacity", 0.9)
             wasDivExpanded = false
         } 
     })
@@ -121,7 +121,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             svg.transition().duration(750).call(
                 zoom.transform,
                 d3.zoomIdentity
-                    .translate(width / 4, height / 2)
+                    .translate(width / 3, height / 2)
                     .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                 d3.mouse(d3.event.target, svg.node())
@@ -134,7 +134,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             highlightCountry(d3.select(this))
             
             currentCountry = d3.select(this)
-            sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
+            sideDiv.transition().duration(750).style("width", "35%").style("opacity", 0.9).style("pointer-events", "auto");
             let countryName = countriesData[d.id]["name"]
             if (countryName.includes("United Kingdom")){
                 countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long

@@ -75,17 +75,23 @@ body{
 
 #clickData > svg{
     order: 2;
+    padding-top: 3px;
+}
+
+#scatterPlotSideDiv{
+    order: 3;
+    text-align: left;
+    padding-top: 3px;
 }
 
 .buttonDiv {
-    order: 3;
+    order: 4;
 }
 
 #dropdown_container{
     margin-top: 10px;
     margin-bottom: 10px;
     padding-top: 50px;
-    padding-bottom: 10px;
     flex-direction: column;
 }
 

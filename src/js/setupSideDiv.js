@@ -64,7 +64,7 @@ let currentSubGroups = []
 
 function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
     // Add one dot in the legend for each name.
-
+    
     svgSideBar.selectAll("mydots")
         .data(keys)
         .enter()
@@ -74,6 +74,7 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         .attr("r", 7)
         .style("fill", function(d){ return colorfunction(d)})
         .on("mouseover", function(d){
+            d3.select(this).style("cursor", "pointer"); 
             d3.select(this).attr("r", 10)
             svgSideBar.selectAll("rect")
                 .filter(function(rectData){
@@ -93,15 +94,7 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
             currentSubGroups = currentSubGroups.filter(function(country){
                 return country != d || country == initial_to_not_remove
             })
-
-            if(initial_size != currentSubGroups.length){
-                if(currentSubGroups.length == 1){
-                    fillSideDivWithBarChart([])
-                }else{
-                    fillSideDivWithBarChart(currentSubGroups)
-                }
-                
-            }
+            fillSideDivWithBarChart([])
         })
 
     // Add one dot in the legend for each name.
@@ -121,180 +114,332 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
                 return swapped[d].charAt(0).toUpperCase() + swapped[d].slice(1);
             }
         })
+        .attr("id", function(d){
+            return d + "_label"
+        })
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
 }
 
 
-function fillSideDivWithScatterPlot(countryCode){
+function generateScatterChartInsideDiv(svgSideBar, data, color, positions, element) {
+    // Step 1
+        let margin = {top: 40, right: 30, bottom: 40, left: 60}
+        let scatterWidth = 500 - margin.left - margin.right
+        let scatterHeight = 215 - margin.top - margin.bottom
 
+        // Step 3
+        let scatterSvg = element.append("svg")
+            .attr("width", scatterWidth + margin.left + margin.right)
+            .attr("height", scatterHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+        scatterSvg
+              .append("rect")
+                .attr("x",0)
+                .attr("y",0)
+                .attr("height", scatterHeight)
+                .attr("width", scatterWidth)
+                .style("fill", "lightgrey")
+        // Step 4 
+        let xScale = d3.scaleLinear().domain([2000, 3000]).range([0, scatterWidth]),
+            yScale = d3.scaleLinear().domain([3000, 6500]).range([scatterHeight, 0]);
+            
+        //Add x axis
+        scatterSvg.append("g")
+            .attr("transform", "translate(0," + scatterHeight + ")")
+            .call(d3.axisBottom(xScale).tickSize(-scatterHeight*1.3).ticks(5))
+            .select(".domain")
+            .remove();
+
+        //Add y axis
+        scatterSvg.append("g")
+            .call(d3.axisLeft(yScale).tickSize(-scatterWidth*1.3).ticks(7))
+            .select(".domain").remove();
+
+        scatterSvg.selectAll(".tick line").attr("stroke", "white")
+        //X axis label:
+        scatterSvg.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", scatterWidth/2 + margin.left)
+            .attr("y", scatterHeight + 35)
+            .text("Series");
+
+        // Y axis label:
+        scatterSvg.append("text")
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -margin.left + 20)
+            .attr("x", -margin.top - scatterHeight/3 + 30)
+            .text("Movies")
+          
+
+        scatterSvg.append("g")
+            .selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .style("opacity", 0)
+            .text(node => parseInt(parseInt(node[0]) + parseInt(node[1])) + " total titles")
+            .attr("fond-size", "10px")
+            .attr("class", "totalTitles")
+            .attr("id", node => "#"+node[0].toString() + "_" + node[1].toString() + "_text")
+            .attr("x", node => xScale(node[0]) + 12)
+            .attr("y", node => yScale(node[1]) - 8)
+            .exit()
+
+        
+
+        scatterSvg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter().append("circle")
+        .attr("cx", function (d) { return xScale(d[0]); } )
+        .attr("cy", function (d) { return yScale(d[1]); } )
+        .attr("r", function(d){
+        for(let i = 0; i < positions.length; i++){
+            if(positions[i][0] == d[1] && positions[i][1] == d[0]){
+                return 6
+            }
+        }
+        return 3
+        })
+        .style("fill", function(d){
+        for(let i = 0; i < positions.length; i++){
+            if(positions[i][0] == d[1] && positions[i][1] == d[0]){
+                return color(positions[i][2])
+            }
+        }
+        return "#69b3a2"
+        })
+        .style("stroke", function(d){
+        for(let i = 0; i < positions.length; i++){
+            if(positions[i][0] == d[1] && positions[i][1] == d[0]){
+                return "#000000"
+            }
+        }
+        return "#69b3a2"
+        })
+        .filter(function(d){
+            for(let i = 0; i < positions.length; i++){
+                if(positions[i][0] == d[1] && positions[i][1] == d[0]){
+                    return true
+                }
+            }
+            return false
+        })
+        .attr("id", d => d[0] + "_" + d[1] + "_circle")
+        .on("mouseover", function(d){
+            d3.select(this).style("cursor", "pointer"); 
+            d3.select(this) 
+            d3.select(this).attr("r", 9).style("stroke", "black")  
+            
+            scatterSvg.selectAll("circle")
+                .filter(di => di[0] != d[0] && di[1] != d[1])
+                .style("opacity", 0.4)
+                .each(function(di){
+                    svgSideBar.selectAll("rect")
+                        .filter(function(rectData){
+                            for(let i = 0; i < positions.length; i++){
+                                if(positions[i][0] == d[1] && positions[i][1] == d[0]){
+                                    return rectData.key != positions[i][2]
+                                }
+                            }
+                            return false
+                        })
+                    .style("opacity", 0.2)
+                })
+
+                scatterSvg.selectAll("text")
+                    .filter(dit => dit != undefined ? dit[0] == d[0] && dit[1] == d[1] : false)
+                    .style("opacity", 1)
+                    .raise()
+            
+        }).on("mouseleave", function(d){
+            d3.select(this).style("cursor", "default");
+            d3.select(this).attr("r", 6).style("stroke", "black")
+            scatterSvg.selectAll("circle").style("opacity", 1)
+            svgSideBar.selectAll("rect").style("opacity", 1)
+            d3.selectAll(".totalTitles").style("opacity", 0)
+        }).raise()
+
+        //Now I want to add a simple tooltip
+        
 }
 
 function fillSideDivWithBarChart(countryCode){
     getJSON("../../Data/countries.json").then(countriesToOverviewInfo => {
         
-        let x = countriesToOverviewInfo[countryCode[0]]["tmovs"]
-        let y = countriesToOverviewInfo[countryCode[0]]["tseries"]
-        console.log(x, y)
-        generateScatterChartInElement(listOfDimensionsMoviesVsSeries, x, y, d3.select("#scatterPlotSideDiv"))
-
         if(currentSubGroups.length + countryCode.length < 4){
             currentSubGroups = currentSubGroups.concat(countryCode)
-        }
 
-        let margin = {top: 5, right: 25, bottom: 110, left: 70}
-        let width_bar = 500 - margin.left - margin.right
-        let height_bar = 350 - margin.top - margin.bottom;
-        d3.select("#clickData").selectAll("svg").remove()
-        // append the svg object to the body of the page
-        let svgDivBarChart = d3.select("#clickData")
-        .append("svg")
-            .attr("width", width_bar + margin.left + margin.right)
-            .attr("height", height_bar + margin.top + margin.bottom)
-        .append("g")
-            .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+            let margin = {top: 5, right: 25, bottom: 110, left: 70}
+            let width_bar = 500 - margin.left - margin.right
+            let height_bar = 320 - margin.top - margin.bottom;
+            d3.select("#clickData").selectAll("svg").remove()
+            // append the svg object to the body of the page
+            let svgDivBarChart = d3.select("#clickData")
+            .append("svg")
+                .attr("width", width_bar + margin.left + margin.right)
+                .attr("height", height_bar + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
 
-        const getXMostPopularGenres = (countryToGenre, countryCode, x) => {
-            return Object.keys(countryToGenre[countryCode]).map((key) => [key, countryToGenre[countryCode][key]]).slice(0,x);
-        }
+            const getXMostPopularGenres = (countryToGenre, countryCode, x) => {
+                return Object.keys(countryToGenre[countryCode]).map((key) => [key, countryToGenre[countryCode][key]]).slice(0,x);
+            }
 
-        const swapKeyValue = (object) =>
-        Object.entries(object).reduce((swapped, [key, value]) => (
-            { ...swapped, [value]: key }
-        ), {});
+            const swapKeyValue = (object) =>
+            Object.entries(object).reduce((swapped, [key, value]) => (
+                { ...swapped, [value]: key }
+            ), {});
 
-        getJSON("../../Data/countryToGenreOverview.json").then(countryToGenre => {
-            getJSON("../../Data/country_to_code.json").then(countryname_to_code => {     
+            let color = d3.scaleOrdinal()
+                .domain(currentSubGroups)
+                .range(['#e41a1c','#377eb8','#4daf4a'])
 
-                let reference_country = currentSubGroups[0]
-                let ten_best_genres = {}
-                ten_best_genres[reference_country] = getXMostPopularGenres(countryToGenre, reference_country, 10)
+            getJSON("../../Data/countryToGenreOverview.json").then(countryToGenre => {
+                getJSON("../../Data/country_to_code.json").then(countryname_to_code => {     
 
-                let subgroup_except_reference = currentSubGroups.slice(1,currentSubGroups.length);
+                    let reference_country = currentSubGroups[0]
+                    let ten_best_genres = {}
+                    ten_best_genres[reference_country] = getXMostPopularGenres(countryToGenre, reference_country, 10)
 
-                for(let country in subgroup_except_reference){
-                    let ten_best_genres_subcountry = getXMostPopularGenres(countryToGenre, subgroup_except_reference[country], 10)
-                    let ten_best_genres_only_titles = ten_best_genres[reference_country].map((genre) => genre[0])
-                    ten_best_genres[subgroup_except_reference[country]] = ten_best_genres_subcountry.filter((genre) => ten_best_genres_only_titles.includes(genre[0]))           
-                }
+                    let subgroup_except_reference = currentSubGroups.slice(1,currentSubGroups.length);
 
-                //When referencing the reference graph, the different nation are the subgroups, and the different genres are the groups
-                let x = d3.scaleBand()
-                        .range([ 0, width_bar ])
-                        .domain(ten_best_genres[reference_country].map(function(d) { return d[0]; }))
-                        .padding(0.2);
-
-                svgDivBarChart.append("g")
-                        .attr("id", "sidebarchart")
-                        .attr("transform", "translate(0," + height_bar + ")")
-                        .call(d3.axisBottom(x))
-                        .selectAll("text")
-                            .attr("transform", "translate(-10,0)rotate(-45)")
-                            .style("text-anchor", "end");
-
-                //Somehow remaps the data to the new domain
-                let xSubgroup = d3.scaleBand()
-                    .domain(currentSubGroups)
-                    .range([0, x.bandwidth()])
-                    .padding([0.05])
-                
-                // Add Y axis
-                let y = d3.scaleLinear()
-                .domain([0, 2500])
-                .range([ height_bar, 0]);
-
-                svgDivBarChart.append("g")
-                .call(d3.axisLeft(y));
-
-                let color = d3.scaleOrdinal()
-                    .domain(currentSubGroups)
-                    .range(['#e41a1c','#377eb8','#4daf4a'])
-
-
-                // Bars
-                svgDivBarChart.append("g")
-                    .selectAll("g")
-                    // Enter in data = loop group per group
-                    .data(ten_best_genres[reference_country])
-                    .enter()
-                    .append("g")
-                    .attr("transform", function(d) {return "translate(" + x(d[0]) + ",0)"; })
-                    .selectAll("rect")
-                    .data(function(d) { 
-                        return currentSubGroups.map(function(key) {
-                            let genreEntry = ten_best_genres[key].filter((entry) => entry[0] == d[0])[0] 
-                            let val = genreEntry == undefined ? 0 : genreEntry[1]
-                            return {key: key, value: val}; }); 
-                    })
-                    .enter().append("rect")
-                    .attr("x", function(d) { return xSubgroup(d.key); })
-                    .attr("y", function(d) { return y(0); })
-                    .attr("width", xSubgroup.bandwidth())
-                    .attr("height", function(d) { return height_bar - y(0); })
-                    .attr("fill", function(d) { return color(d.key); });
-
-                //Adding axis labels
-                svgDivBarChart.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", width_bar/2)
-                    .attr("y", height_bar + margin.top + 85)
-                    .text("Genres");
-                
-                svgDivBarChart.append("text")
-                    .attr("class", "y label")
-                    .attr("text-anchor", "end")
-                    .attr("y", -margin.left+10) 
-                    .attr("x", -50)
-                    .attr("dy", ".75em")
-                    .attr("transform", "rotate(-90)")
-                    .text("number of titles");
-
-                svgDivBarChart.selectAll("rect")
-                    .on("mouseover", function(d) {
-                        let bar = d3.select(this); // Alternatively, d3.select(nodes[i]);
-                        let label = d3.select(this.parentNode).selectAll('.label').data([d]);
-
-                        label.enter()
-                            .append('text')
-                            .attr('class', 'label')
-                            .merge(label)
-                            .text( d.value )
-                            .style('display', null)
-                            .style('font', '10px sans-serif' )
-                            .attr('text-anchor', 'middle')
-                            .attr('x', +bar.attr('x') + ( +bar.attr('width') / 2 ))
-                            .attr('y', +bar.attr('y') - 6 );
-
-                        d3.select(this).style("fill", d3.rgb(color(d.key)).darker(2));
-                    })
-                    .on("mouseleave", function(d) {
-                        d3.select(this.parentNode)
-                            .select('.label')
-                            .style('display', 'none');
-
-                        d3.select(this).style("fill", color(d.key));
-                    })
-                    .transition()
-                    .duration(500)
-                    .attr("y", function(d) { return y(d.value); })
-                    .attr("height", function(d) { return height_bar - y(d.value); })
-                    .delay(function(d,i){return(i*100)})
-                    
-                let swapped = swapKeyValue(countryname_to_code)
-                mydropDown(Object.keys(countryToGenre).map(function(key) {return {key: swapped[key], value: key}}));
-                sideDiv.select("h1").text(function() {
-                    if(swapped[currentSubGroups[0]].toLowerCase() == "united states of america"){
-                        return "USA";
-                    }else if(swapped[currentSubGroups[0]].toLowerCase() == "korea, republic of (south korea)"){
-                        return "South Korea";
-                    }else{
-                        return swapped[currentSubGroups[0]].charAt(0).toUpperCase() + swapped[currentSubGroups[0]].slice(1);
+                    for(let country in subgroup_except_reference){
+                        let ten_best_genres_subcountry = getXMostPopularGenres(countryToGenre, subgroup_except_reference[country], 10)
+                        let ten_best_genres_only_titles = ten_best_genres[reference_country].map((genre) => genre[0])
+                        ten_best_genres[subgroup_except_reference[country]] = ten_best_genres_subcountry.filter((genre) => ten_best_genres_only_titles.includes(genre[0]))           
                     }
-                })
-                createLegend(svgDivBarChart, color, currentSubGroups,width_bar, height_bar, swapped)
-            })        
-        })
+
+                    //When referencing the reference graph, the different nation are the subgroups, and the different genres are the groups
+                    let x = d3.scaleBand()
+                            .range([ 0, width_bar ])
+                            .domain(ten_best_genres[reference_country].map(function(d) { return d[0]; }))
+                            .padding(0.2);
+
+                    svgDivBarChart.append("g")
+                            .attr("id", "sidebarchart")
+                            .attr("transform", "translate(0," + height_bar + ")")
+                            .call(d3.axisBottom(x))
+                            .selectAll("text")
+                                .attr("transform", "translate(-10,0)rotate(-45)")
+                                .style("text-anchor", "end");
+
+                    //Somehow remaps the data to the new domain
+                    let xSubgroup = d3.scaleBand()
+                        .domain(currentSubGroups)
+                        .range([0, x.bandwidth()])
+                        .padding([0.05])
+                    
+                    // Add Y axis
+                    let y = d3.scaleLinear()
+                    .domain([0, 2500])
+                    .range([ height_bar, 0]);
+
+                    svgDivBarChart.append("g")
+                    .call(d3.axisLeft(y));
+
+                    // Bars
+                    svgDivBarChart.append("g")
+                        .selectAll("g")
+                        // Enter in data = loop group per group
+                        .data(ten_best_genres[reference_country])
+                        .enter()
+                        .append("g")
+                        .attr("transform", function(d) {return "translate(" + x(d[0]) + ",0)"; })
+                        .selectAll("rect")
+                        .data(function(d) { 
+                            return currentSubGroups.map(function(key) {
+                                let genreEntry = ten_best_genres[key].filter((entry) => entry[0] == d[0])[0] 
+                                let val = genreEntry == undefined ? 0 : genreEntry[1]
+                                return {key: key, value: val}; }); 
+                        })
+                        .enter().append("rect")
+                        .attr("x", function(d) { return xSubgroup(d.key); })
+                        .attr("y", function(d) { return y(0); })
+                        .attr("width", xSubgroup.bandwidth())
+                        .attr("height", function(d) { return height_bar - y(0); })
+                        .attr("fill", function(d) { return color(d.key); });
+
+                    //Adding axis labels
+                    svgDivBarChart.append("text")
+                        .attr("text-anchor", "end")
+                        .attr("x", width_bar/2)
+                        .attr("y", height_bar + margin.top + 85)
+                        .text("Genres");
+                    
+                    svgDivBarChart.append("text")
+                        .attr("class", "y label")
+                        .attr("text-anchor", "end")
+                        .attr("y", -margin.left+10) 
+                        .attr("x", -50)
+                        .attr("dy", ".75em")
+                        .attr("transform", "rotate(-90)")
+                        .text("number of titles");
+
+                    svgDivBarChart.selectAll("rect")
+                        .on("mouseover", function(d) {
+                            d3.select(this).style("cursor", "pointer"); 
+                            let bar = d3.select(this); // Alternatively, d3.select(nodes[i]);
+                            let label = d3.select(this.parentNode).selectAll('.label').data([d]);
+
+                            label.enter()
+                                .append('text')
+                                .attr('class', 'label')
+                                .merge(label)
+                                .text( d.value )
+                                .style('display', null)
+                                .style('font', '10px sans-serif' )
+                                .attr('text-anchor', 'middle')
+                                .attr('x', +bar.attr('x') + ( +bar.attr('width') / 2 ))
+                                .attr('y', +bar.attr('y') - 6 );
+
+                            d3.select(this).style("fill", d3.rgb(color(d.key)).darker(2));
+                        })
+                        .on("mouseleave", function(d) {
+                            d3.select(this.parentNode)
+                                .select('.label')
+                                .style('display', 'none');
+
+                            d3.select(this).style("fill", color(d.key));
+                        })
+                        .transition()
+                        .duration(500)
+                        .attr("y", function(d) { return y(d.value); })
+                        .attr("height", function(d) { return height_bar - y(d.value); })
+                        .delay(function(d,i){return(i*100)})
+                        
+                    let swapped = swapKeyValue(countryname_to_code)
+                    mydropDown(Object.keys(countryToGenre).map(function(key) {return {key: swapped[key], value: key}}));
+                    sideDiv.select("h1").text(function() {
+                        if(swapped[currentSubGroups[0]].toLowerCase() == "united states of america"){
+                            return "USA";
+                        }else if(swapped[currentSubGroups[0]].toLowerCase() == "korea, republic of (south korea)"){
+                            return "South Korea";
+                        }else{
+                            return swapped[currentSubGroups[0]].charAt(0).toUpperCase() + swapped[currentSubGroups[0]].slice(1);
+                        }
+                    })
+                    createLegend(svgDivBarChart, color, currentSubGroups,width_bar, height_bar, swapped)
+                })        
+            })
+            //For some reason I have to add it after the bar chart is created
+            let positions = []
+            for(let country in currentSubGroups){
+                let x = countriesToOverviewInfo[currentSubGroups[country]]["tmovs"]
+                let y = countriesToOverviewInfo[currentSubGroups[country]]["tseries"]
+                positions.push([x,y,currentSubGroups[country]])
+            }
+
+            generateScatterChartInsideDiv(svgDivBarChart, listOfDimensionsMoviesVsSeries, color, positions, d3.select("#scatterPlotSideDiv"))
+        }else{
+            //Need to dispay an alert saying that the user already selected 3 countries
+            alert("You already selected 3 countries")
+        }
     })
 }
 
