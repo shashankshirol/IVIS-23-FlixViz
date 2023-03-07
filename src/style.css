@@ -1,57 +1,21 @@
-.country {
-    fill: #ccc;
-    stroke: #999;
-}
-
-body{
-    background-color: #fff;
-    margin: 0%;
-    padding: 0%;
-    height: 100%;
-}
-
-.map {
-    margin: 0%;
-    padding: 0%;
+#svgPlotForce {
+    position: relative;
 }
 
 .tooltip {
     position: absolute;
-}
-
-
-.tooltip > p{
-    fill: red;
-    stroke: #999;
-}
-
-.logo{
-    background-image: url("res/imgs/logo.png");
-    position: absolute;
-    text-align: center;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1;
+    border: 1px solid #313639;
+    background-color: #ffffff;
+    border-radius: 4px;
     pointer-events: none;
+    width: 199px;
 }
 
-
-
-#tipDiv{
-    width: 100%;
-    pointer-events: none;
+#tooltiptext{
+    padding-bottom: 5px;
+    padding-top: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: "Bebas Neue", "sans-serif";
+    color: #E50914;
 }
-
-.logo > img {
-    width: 30%;
-}
-
-.buttonDiv{
-    position: relative;
-    width: 100%;
-    height: 50px;
-    border: solid 1px black;
-}
-
-
