@@ -1,9 +1,3 @@
-.visualWindow{
-    width: 100%;
-    height: 500px;
-    display: flex;
-    flex-direction: row;
-}
 .scatterPlot{
     width:1000px;
     height:500px;
@@ -18,13 +12,6 @@ a{
   body {
     font-family: "Poppins", sans-serif;
 
-  }
-  .row {
-    margin: 10px 60px;
-  }
-  .row_title {
-    font-size: 1.3rem;
-    font-weight: 600;
   }
   
   .row_posters {

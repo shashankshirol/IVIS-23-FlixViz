@@ -1,7 +1,3 @@
-async function getJSON(path) {
-    return await fetch(path).then(response => response.json());
-}
-
 function addCards(df, div_id) {
     for (let i = 0; i < df.shape[0]; i++){
         let title = {}
@@ -16,11 +12,15 @@ function addCards(df, div_id) {
         title.imdb_rating = df.iloc({ rows: [i] })["imdb_rating"].values[0];
 
         $(div_id).append(`
-        <div class="card mx-auto" style="width: 15em">
-        <img src="${title.img}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <a href="https://www.netflix.com/title/${title.nfid}" target="_blank">Netflix</a>
-          <a href="https://www.imdb.com/title/${title.imdbid}" target="_blank">IMDB</a>
+        <div class="wrap">
+        <img src="${title.img}" alt="${title.name}_poster" class="row_poster" />
+        <div class="poster_info">
+            <div class="poster_text">
+                <h6>${title.name}</h6>
+                <p>${title.synopsis.length > 140? title.synopsis.slice(0, 100) + "..." : title.synopsis}</p>
+                <a href="https://www.netflix.com/title/${title.nfid}" target="_blank">Netflix</a>
+                <a href=${(title.imdbid == null || title.imdbid.includes("|")) ? "https://www.imdb.com/find/?q=" + encodeURIComponent(title.name) : "https://www.imdb.com/title/" + title.imdbid} target="_blank" id="imdb_link">IMDB</a>
+            </div>
         </div>
       </div>
         `);
@@ -35,27 +35,34 @@ function emptyTopTitlescontainers() {
     d3.select("#SeriesDiv").html("")
 }
 
-function fillTopTitles(country) {
-    getJSON("../Data/data_netflix.json").then(data => {
-        df = new dfd.DataFrame(data)
+function fillTopTitles(data, country) {
+    emptyTopTitlescontainers()
 
-        let filtered_top5_movies = df.iloc(
-            { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("movie")) }
-        ).sortValues(
+    df = new dfd.DataFrame(data)
+
+    let filtered_movies = df.iloc(
+        { rows: df["vtype"].str.includes("movie") }
+    )
+    let movie_row_size = filtered_movies.shape[0] > 50 ? 10 : filtered_movies.shape[0]
+
+    let filtered_series = df.iloc(
+        { rows: df["vtype"].str.includes("series") }
+    )
+    let series_row_size = filtered_series.shape[0] > 50 ? 10 : filtered_series.shape[0]
+
+    if (movie_row_size > 0) {
+        $("#movies-header").text(`Top Movies available in ${country}`)
+        filtered_movies = filtered_movies.sortValues(
             "imdb_rating", { ascending: false }
-        ).head(5)
+        )
+        addCards(filtered_movies.head(movie_row_size), MoviesDiv)
+    }
 
-        let filtered_top5_series = df.iloc(
-            { rows: df["clist"].str.includes(country).and(df["vtype"].str.includes("series")) }
-        ).sortValues(
+    if (series_row_size) {
+        $("#series-header").text(`Top Series available in ${country}`)
+        filtered_series = filtered_series.sortValues(
             "imdb_rating", { ascending: false }
-        ).head(5)
-
-        $("#movies-header").text(`Top Movies in ${country}`)
-        addCards(filtered_top5_movies, MoviesDiv)
-
-        $("#series-header").text(`Top Series in ${country}`)
-        addCards(filtered_top5_series, SeriesDiv)
-
-    });
+        )
+        addCards(filtered_series.head(series_row_size), SeriesDiv)
+    }
 }

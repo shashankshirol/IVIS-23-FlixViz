@@ -1,6 +1,7 @@
 let margin = { top: 10, right: 30, bottom: 30, left: 60 },
   width = 1000 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
+
 let svg = d3
   .selectAll("#svgPlot")
   .append("svg")
@@ -11,7 +12,7 @@ let svg = d3
 
  d3.json("../Data/data_netflix.json")
   .then(function(data) {
-    
+    const country = "India"
     const selections = {
       "year": ["year",1940, 2023, "Year"],
       "imdb_rating": ["imdb_rating",-0.1,10, "Imdb Rating"],
@@ -22,8 +23,8 @@ let svg = d3
 
     
     let orig_data = data;
-    data = data.filter(d => d.clist.includes("United States"));
-    createMovieRow(data)
+    data = data.filter(d => d.clist.includes(country));
+    fillTopTitles(data, country)
 
 
   // Define the x and y scales 
@@ -120,20 +121,20 @@ scatter
       x.domain([currX[1],currX[2]])
       y.domain([currY[1], currY[2]])
       data = orig_data
-    } else { 
+    } else {
         data = data.filter(d => {
             let xVals =  [s[0][0], s[1][0]].map(x.invert, x)
             let yVals = [s[1][1], s[0][1]].map(y.invert, y)
             if(d[currX[0]]< xVals[1] && d[currX[0]]> xVals[0] && d[currY[0]]< yVals[1] && d[currY[0]]> yVals[0])
             return d
         })
+      
         x.domain([s[0][0], s[1][0]].map(x.invert, x));
         y.domain([s[1][1], s[0][1]].map(y.invert, y));
         scatter.select(".brush").call(brush.move, null);
-        
      // This remove the grey brush area as soon as the selection has been done
     }
-    createMovieRow(data)
+    fillTopTitles(data, country)
     // Update axis and circle position
     xAxis.transition().duration(1000).call(d3.axisBottom(x));
     yAxis.transition().duration(1000).call(d3.axisLeft(y));

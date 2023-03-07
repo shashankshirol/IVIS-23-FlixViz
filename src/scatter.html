@@ -1,35 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="style_scatter.css" />
-    <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
-    <title>Document</title>
-    <style>
-      body{
-          margin: 0%;
-          padding: 0%;
-          height: 100%;
-      } 
-    </style>
-  </head>
-  <body>
-    <div id="scatterplotWindow" class="visualWindow">
-      <div id="svgPlot" class="scatterPlot"></div>
-      <div id="movieComponent"></div>
-    </div>
-    <div>
-        <h1 class="text-danger">Top Titles</h1>
-        <div id="movieRow" class="row_posters" onscroll="getScrollVal()">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Top 5 titles</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="style_scatter.css" />
+        <script src="https://d3js.org/d3.v5.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="js/populate_posters.js" crossorigin="anonymous"></script>
+        <style>
+            body{
+                margin: 0%;
+                padding: 0%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="scatter_titles">
+            <div id="scatterplotWindow" class="visualWindow">
+                <div id="svgPlot" class="scatterPlot"></div>
+            </div>
+            <h1 id="movies-header" class="display-5"></h1>
+            <div class="d-flex flex-row m-3" id="MoviesDiv"></div>
+            <h1 id="series-header" class="display-5"></h1>
+            <div class="d-flex flex-row m-3" id="SeriesDiv"></div>
         </div>
-      </table>
-    </div>
-    <script src="js/scatterPlot.js" crossorigin="anonymous"></script>
-    <script src="js/movieComponent.js" crossorigin="anonymous"></script>
-  </body>
+    
+        <script src="js/scatterPlot.js" crossorigin="anonymous"></script>
+    </body>
 </html>
