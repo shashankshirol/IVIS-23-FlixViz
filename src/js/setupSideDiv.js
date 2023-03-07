@@ -179,6 +179,7 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
         .attr("r", 7)
         .style("fill", function(d){ return colorfunction(d)})
         .on("mouseover", function(d){
+            
             d3.select(this).style("cursor", "pointer"); 
             d3.select(this).attr("r", 10)
             svgSideBar.selectAll("rect")
@@ -187,11 +188,52 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
                 })
                 .style("opacity", 0.2)
             toDeleteText.filter(di => di == d).style("opacity", 1)
+            if(d != currentSubGroups[0]){
+                getJSON("../Data/CName_to_id.json").then(data => {
+                    let Cname_id = fixCnameFromdata(data)
+                    getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
+                    //I need to connect the two countrie
+                        const swapKeyValue = (object) =>
+                        Object.entries(object).reduce((swapped, [key, value]) => (
+                            { ...swapped, [value]: key }
+                        ), {});
+                        const countryCode_to_country = swapKeyValue(country_to_countryCode)
+                        const code = Cname_id[countryCode_to_country[d]]
+                        g.selectAll("path")
+                            .each(function (di) {
+                                if (di != undefined && di.id == code) {
+                                    highlightCountryWithColorAndStroke(d3.select(this), colorfunction(d), 4)
+                                }
+                            })
+                    })
+                })
+            }
         })
         .on("mouseleave", function(d){
             d3.select(this).attr("r", 7)
             svgSideBar.selectAll("rect").style("opacity", 1)
             toDeleteText.style("opacity", 0)
+            if(d != currentSubGroups[0]){
+                getJSON("../Data/CName_to_id.json").then(data => {
+                    let Cname_id = fixCnameFromdata(data)
+                    getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
+                    //I need to connect the two countrie
+                        const swapKeyValue = (object) =>
+                        Object.entries(object).reduce((swapped, [key, value]) => (
+                            { ...swapped, [value]: key }
+                        ), {});
+                        const countryCode_to_country = swapKeyValue(country_to_countryCode)
+                        const code = Cname_id[countryCode_to_country[d]]
+                        g.selectAll("path")
+                            .each(function (di) {
+                                if (di != undefined && di.id == code) {
+                                    unhighlightCountry(d3.select(this))
+                                    highlightCountry(d3.select(this))
+                                }
+                            })
+                    })
+                })
+            }
         })
         .on("click", function(d){
             //I want to remove the country from the list of countries to compare

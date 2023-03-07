@@ -5,10 +5,26 @@ function highlightCountry(passedCountry) {
         .style("stroke-width", 2)
 }
 
+function highlightCountryWithColorAndStroke(passedCountry, color, stroke) {
+    passedCountry
+        .raise()
+        .style("stroke", color)
+        .style("stroke-width", stroke)
+}
+
+function unhilightCountry(id) {
+    g.selectAll("path")
+        .each(function (d) {
+            if (d != undefined && d.id != id) {
+                unhighlightCountry(d3.select(this))
+            }
+        })
+}
+
 function unhilightAllCountriesExcept(passedCountry) {
     g.selectAll("path")
         .each(function (d) {
-            if (d.id != passedCountry.id) {
+            if (d != undefined && d.id != passedCountry.id) {
                 unhighlightCountry(d3.select(this))
             }
         })
