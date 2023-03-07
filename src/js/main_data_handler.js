@@ -5,6 +5,22 @@ function highlightCountry(passedCountry) {
         .style("stroke-width", 2)
 }
 
+function unhilightAllCountriesExcept(passedCountry) {
+    g.selectAll("path")
+        .each(function (d) {
+            if (d.id != passedCountry.id) {
+                unhighlightCountry(d3.select(this))
+            }
+        })
+}
+
+function unhighlightAllCountries() {
+    g.selectAll("path")
+        .each(function (d) {
+            unhighlightCountry(d3.select(this))
+        })
+}
+
 function unhighlightCountry(passedCountry){
     passedCountry
         .lower()
@@ -20,6 +36,58 @@ function unselectCountry(passedCountry) {
     sideDiv.transition().duration(500).style("opacity", 0).style("width", "0%").style("pointer-events", "none")
     currentCountry = null
     tooltipVisibilityStatusComparedToClik = true
+}
+
+
+function findCenter(markers) {
+    if(markers.length > 1){
+        let biggestArrayLength = 0
+        let biggestArrayIndex = 0
+        for(let i = 0; i < markers.length; i++) {
+            if(markers[i].length > biggestArrayLength) {
+                biggestArrayLength = markers[i].length
+                biggestArrayIndex = i
+            }
+        }
+        markers = markers[biggestArrayIndex]
+    }
+    let flattened = markers.flat()
+    markers = Object.entries(markers)
+    let lat = 0;
+    let lng = 0;
+    
+    for(let i = 0; i < flattened.length; i++) {
+        lat += flattened[i][0];
+        lng += flattened[i][1];
+    }
+
+    lat /= flattened.length;
+    lng /= flattened.length;
+    return {lat: lat, lng: lng}
+}
+
+function connectTwoCountries(country1, country2){
+    let country1Center = findCenter(country1.geometry.coordinates)
+    let country2Center = findCenter(country2.geometry.coordinates)
+    let link = {type: "LineString", coordinates: [[country1Center.lat, country1Center.lng], [country2Center.lat, country2Center.lng]]}
+        g.selectAll(".link").remove()
+        g.append("path")
+            .attr("d", path(link))
+            .attr("id", "link_"+country1.id + "_" + country2.id)
+            .attr("class", "link")
+            .style("fill", "none")
+            .style("stroke", "orange")
+            .style("stroke-width", 3)
+            .style("stroke-linejoin", "round")
+            .raise()
+}
+
+function remove_specific_connection(id0, id1){
+    d3.select("#link_" + id0+ "_" +id1 ).remove()
+}
+
+function remove_all_connections(){
+    d3.selectAll(".link").remove()
 }
 
 function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countriesData, data){
@@ -105,14 +173,12 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         alreadyOver = false
     }
 
-    //I need a function that will be called when I click on a country and will zoom in on it, please help me with this
     function clicked(d) {
 
         let clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){
                 tooltipVisibilityStatusComparedToClik = false
-                //I now need to do an animation for the tooltio, it has to move to the right and have the same height as the side div
                 tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
             }
             
@@ -126,7 +192,10 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                 d3.mouse(d3.event.target, svg.node())
             )
-            //I want to edit the style of the country that I clicked on
+            
+            unhighlightAllCountries()
+            remove_all_connections()
+
             if(currentCountry != null){
                 unhighlightCountry(currentCountry)
             }
@@ -141,6 +210,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             }
             currentSubGroups= []
             fillSideDivWithBarChart([clickedCountryCode])
+            //console.log(centreCoordinates.lat, centreCoordinates.lng)
+            
         }
     }
     
@@ -157,9 +228,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         .domain(allValuesNumberContent)
         .range(range);
     
-
-
-    //I need to create a legend for the color scale
 
     createLegendForColorScale("#FFCCCB", "#E50914",300, 25)
 
@@ -182,4 +250,5 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         .on("click", clicked)
         .on("mouseover", mouseOver )
         .on("mouseleave", mouseLeave )
-}
+
+    }

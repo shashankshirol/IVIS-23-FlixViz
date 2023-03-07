@@ -52,9 +52,11 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
             const country_features = topojson.feature(data, data.objects.countries).features
 
             $("#search-cnt").click(function () {
+                console.log($("#search-field").val())
                 let id = Cname_id[$("#search-field").val()]
                 let clickedCountryCode = countriesData[id]["alpha-2"]
                 let feature = getCountryobject(country_features, id)
+                console.log(feature)
                 const [[x0, y0], [x1, y1]] = path.bounds(feature);
                     svg.transition().duration(750).call(
                         zoom.transform,
@@ -63,10 +65,12 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
                             .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
                             .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                     );
+                    
                 if(currentCountry != null){
                     unhighlightCountry(currentCountry)
                 }
-
+                unhighlightAllCountries()
+                remove_all_connections()
                 if(tooltipVisibilityStatusComparedToClik){
                     tooltipVisibilityStatusComparedToClik = false
                     tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")

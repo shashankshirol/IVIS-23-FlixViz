@@ -1,4 +1,7 @@
 let wasDivExpanded = false
+
+
+
 function mydropDown(countries_arr) {
     d3.select("#dropdown_container_title").text("Select up to 2 countries to compare to the currently selected")
     //I first empty the dropdown
@@ -30,9 +33,62 @@ function mydropDown(countries_arr) {
         )[0].value
         
         fillSideDivWithBarChart([result])
-      })
+        if(currentSubGroups.length < 3){
+        getJSON("../Data/CName_to_id.json").then(data => {
+            let Cname_id = {}
+            for (const country in data) {
+                Cname_id[country] = data[country]
+            }
+            getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
+            //I need to connect the two countrie
+                const swapKeyValue = (object) =>
+                Object.entries(object).reduce((swapped, [key, value]) => (
+                    { ...swapped, [value]: key }
+                ), {});
+                const countryCode_to_country = swapKeyValue(country_to_countryCode)
+                getJSON("../../Data/countriesCodesParsed.json").then(countriesData => {
+                    getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
+                        const country_features = topojson.feature(data, data.objects.countries).features
+                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[0]].slice(1)]
+                        let id1 = Cname_id[countryCode_to_country[result].charAt(0).toUpperCase() + countryCode_to_country[result].slice(1)]
+                        
+                        //let clickedCountryCode = countriesData[id]["alpha-2"]
+                        let feature0 = getCountryobject(country_features, id0)
+                        let feature1 = getCountryobject(country_features, id1)
+                        connectTwoCountries(feature0, feature1)
+                        const [[x0_0, y0_0], [x1_0, y1_0]] = path.bounds(feature0);
+                        const [[x0_1, y0_1], [x1_1, y1_1]] = path.bounds(feature1);
 
+                        //need to find the bounding box of the two countries
+                        let xs = [x0_0, x1_0, x0_1, x1_1]
+                        let ys = [y0_0, y1_0, y0_1, y1_1]
+                        let x0 = Math.min(...xs)
+                        let x1 = Math.max(...xs)
+                        let y1 = Math.min(...ys)
+                        let y0 = Math.max(...ys)
 
+                        svg.transition().duration(750).call(
+                            zoom.transform,
+                            d3.zoomIdentity
+                                .translate(width/2, height/2)
+                                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                                .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                        );
+                        
+                        g.selectAll("path")
+                            .each(function (di) {
+                                if (di != undefined && di.id == id1) {
+                                    highlightCountry(d3.select(this))
+                                }
+                        })
+                    })
+                    
+                    })
+                })
+            })
+        }
+        })
+    
 }
 
 function setupSideDiv(){
@@ -62,7 +118,7 @@ function setupSideDiv(){
 
 let currentSubGroups = []
 
-function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
+function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
     // Add one dot in the legend for each name.
     
     //Create click to delete suggestion
@@ -70,8 +126,8 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         .data(currentSubGroups.slice(1))
         .enter()
         .append("text")
-        .attr("x", width-190)
-        .attr("y",  function(d,i){ return height/4.8 + (i+1)*25}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("x", w-190)
+        .attr("y",  function(d,i){ return h/4.8 + (i+1)*25}) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", "black")
         .attr("id", d => "toRemove"+d)
         .text("Click to remove")
@@ -84,8 +140,8 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         .data(keys)
         .enter()
         .append("circle")
-        .attr("cx", width - 100)
-        .attr("cy", function(d,i){ return height/5  + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("cx", w-100)
+        .attr("cy", function(d,i){ return h/5  + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 7)
         .style("fill", function(d){ return colorfunction(d)})
         .on("mouseover", function(d){
@@ -104,6 +160,7 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
             toDeleteText.style("opacity", 0)
         })
         .on("click", function(d){
+            console.log(d)
             //I want to remove the country from the list of countries to compare
             let initial_to_not_remove = currentSubGroups[0]
             let initial_size = currentSubGroups.length
@@ -111,6 +168,75 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
                 return country != d || country == initial_to_not_remove
             })
             fillSideDivWithBarChart([])
+            //I need to remove the specific connection
+            getJSON("../Data/CName_to_id.json").then(data => {
+                let Cname_id = {}
+                for (const c in data) {
+                    Cname_id[c] = data[c]
+                }
+            getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
+            //I need to connect the two countrie
+                const swapKeyValue = (object) =>
+                Object.entries(object).reduce((swapped, [key, value]) => (
+                    { ...swapped, [value]: key }
+                ), {});
+                const countryCode_to_country = swapKeyValue(country_to_countryCode)
+                getJSON("../../Data/countriesCodesParsed.json").then(countriesData => {
+                    getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
+                        const country_features = topojson.feature(data, data.objects.countries).features
+                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[0]].slice(1)]
+                        let id1 = Cname_id[countryCode_to_country[d].charAt(0).toUpperCase() + countryCode_to_country[d].slice(1)]
+                        //let clickedCountryCode = countriesData[id]["alpha-2"]
+                        remove_specific_connection(id0, id1)
+                        //I need to select the svg of the country
+                        g.selectAll("path")
+                            .each(function (d) {
+                                if (d.id == id1) {
+                                    unhighlightCountry(d3.select(this))
+                                }
+                        })
+                        //Now I need to recented the view selecting the other country
+                        if(currentSubGroups.length == 2){
+                            let id2 = Cname_id[countryCode_to_country[currentSubGroups[1]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[1]].slice(1)]
+                            //let clickedCountryCode = countriesData[id]["alpha-2"]
+                            
+                            let feature0 = getCountryobject(country_features, id0)
+                            let feature1 = getCountryobject(country_features, id2)
+
+                            const [[x0_0, y0_0], [x1_0, y1_0]] = path.bounds(feature0);
+                            const [[x0_1, y0_1], [x1_1, y1_1]] = path.bounds(feature1);
+
+                            //need to find the bounding box of the two countries
+                            let xs = [x0_0, x1_0, x0_1, x1_1]
+                            let ys = [y0_0, y1_0, y0_1, y1_1]
+                            let x0 = Math.min(...xs)
+                            let x1 = Math.max(...xs)
+                            let y1 = Math.min(...ys)
+                            let y0 = Math.max(...ys)
+
+                            svg.transition().duration(750).call(
+                                zoom.transform,
+                                d3.zoomIdentity
+                                    .translate(width/3, height/2)
+                                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                                    .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                            );
+
+                        }else if (currentSubGroups.length == 1){
+                            let feature_last = getCountryobject(country_features, id0)
+                            console.log(feature_last)
+                            const [[x0, y0], [x1, y1]] = path.bounds(feature_last);
+                            svg.transition().duration(750).call(
+                                zoom.transform,
+                                d3.zoomIdentity
+                                    .translate(width / 3, height / 2)
+                                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                                    .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                            );
+                        }
+                    })
+                })
+            })})
         })
 
     // Add one dot in the legend for each name.
@@ -118,8 +244,8 @@ function createLegend(svgSideBar, colorfunction, keys, width, height, swapped){
         .data(keys)
         .enter()
         .append("text")
-        .attr("x", width-85)
-        .attr("y", function(d,i){ return height/4.5 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("x", w-85)
+        .attr("y", function(d,i){ return h/4.5 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", function(d){ return colorfunction(d)})
         .attr("class", "legendText")
         .text(function(d){
@@ -193,7 +319,6 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
             .attr("x", -margin.top - scatterHeight/3 + 30)
             .text("Movies")
           
-
         scatterSvg.append("g")
             .selectAll("text")
             .data(data)
@@ -207,8 +332,6 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
             .attr("x", node => xScale(node[0]) + 12)
             .attr("y", node => yScale(node[1]) - 8)
             .exit()
-
-        
 
         scatterSvg.append('g')
         .selectAll("dot")
