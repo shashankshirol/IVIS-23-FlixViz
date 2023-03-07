@@ -70,15 +70,18 @@ function connectTwoCountries(country1, country2){
     let country1Center = findCenter(country1.geometry.coordinates)
     let country2Center = findCenter(country2.geometry.coordinates)
     let link = {type: "LineString", coordinates: [[country1Center.lat, country1Center.lng], [country2Center.lat, country2Center.lng]]}
-        g.selectAll(".link").remove()
         g.append("path")
             .attr("d", path(link))
-            .attr("id", "link_"+country1.id + "_" + country2.id)
+            .attr("id", "link_"+ country1.id + "_" + country2.id)
             .attr("class", "link")
             .style("fill", "none")
             .style("stroke", "orange")
             .style("stroke-width", 3)
             .style("stroke-linejoin", "round")
+            .style("stroke-linecap", "round")
+            .style("opacity", 0.9)
+            .style("pointer-events", "none")
+            .style("stroke-dasharray", "10,5")
             .raise()
 }
 
@@ -112,6 +115,17 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         } 
     })
 
+    function checkIfCountryIsInLink(id){
+        if(d3.selectAll(".link") != undefined){
+            let allConnectedIds = d3.selectAll(".link").nodes().map((c) => {
+                return c.id.split("_")[2]
+            })
+
+            return allConnectedIds.includes(id)
+        }
+        return false
+    }
+
     function mouseOver(d) {
 
         if(!alreadyOver){
@@ -125,9 +139,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 tooltip.selectAll("svg").remove()
             }
         }
-
+        
         if(currentCountry == undefined || 
-                d3.select(this).node() != currentCountry.node()){
+                (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id))){
             d3.select(this)
                 .raise()
                 .style("opacity", 1)
@@ -157,9 +171,10 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     }
     
     function mouseLeave(d) {
+        
         tooltip.selectAll("svg").remove()
-        if(currentCountry == null || d3.select(this).node() != currentCountry.node()){
-
+        if(currentCountry == undefined || 
+            (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id))){       
             if(d3.select(this) != currentCountry){
                 d3.select(this).lower()
             }
@@ -174,7 +189,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     }
 
     function clicked(d) {
-
+        
         let clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){
@@ -210,7 +225,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             }
             currentSubGroups= []
             fillSideDivWithBarChart([clickedCountryCode])
-            //console.log(centreCoordinates.lat, centreCoordinates.lng)
             
         }
     }

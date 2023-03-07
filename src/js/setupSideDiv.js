@@ -1,6 +1,32 @@
 let wasDivExpanded = false
 
+let last_bounding_box = []
 
+function fixCnameFromdata(data){
+    let Cname_id = {}
+    for (let country in data) {
+        let new_name = null
+
+        if(country.includes("United Kingdom")){
+            new_name = "United Kingdom"
+        } else if(country.includes("Korea, Republic of")){
+            new_name = "Korea, Republic of (south korea)"
+        }else if(country.includes("Czech")){
+            new_name = "czech republic"
+        }
+        if(new_name != null){
+            Cname_id[new_name.toLowerCase()] = data[country]
+        }else{
+            Cname_id[country.toLowerCase()] = data[country]
+        }
+        
+    }
+    return Cname_id
+}
+
+function scaleFormula(x0, y0, x1, y1, w, h){
+    return Math.min(2, (0.9 / Math.max((x1 - x0) / w, (y1 - y0) / h))/2)
+}
 
 function mydropDown(countries_arr) {
     d3.select("#dropdown_container_title").text("Select up to 2 countries to compare to the currently selected")
@@ -35,10 +61,7 @@ function mydropDown(countries_arr) {
         fillSideDivWithBarChart([result])
         if(currentSubGroups.length < 3){
         getJSON("../Data/CName_to_id.json").then(data => {
-            let Cname_id = {}
-            for (const country in data) {
-                Cname_id[country] = data[country]
-            }
+            let Cname_id = fixCnameFromdata(data)
             getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
             //I need to connect the two countrie
                 const swapKeyValue = (object) =>
@@ -49,13 +72,13 @@ function mydropDown(countries_arr) {
                 getJSON("../../Data/countriesCodesParsed.json").then(countriesData => {
                     getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
                         const country_features = topojson.feature(data, data.objects.countries).features
-                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[0]].slice(1)]
-                        let id1 = Cname_id[countryCode_to_country[result].charAt(0).toUpperCase() + countryCode_to_country[result].slice(1)]
-                        
+                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]]]
+                        let id1 = Cname_id[countryCode_to_country[result]]
                         //let clickedCountryCode = countriesData[id]["alpha-2"]
                         let feature0 = getCountryobject(country_features, id0)
                         let feature1 = getCountryobject(country_features, id1)
                         connectTwoCountries(feature0, feature1)
+                        //I need to check if the two countries are closer than the current zoom level
                         const [[x0_0, y0_0], [x1_0, y1_0]] = path.bounds(feature0);
                         const [[x0_1, y0_1], [x1_1, y1_1]] = path.bounds(feature1);
 
@@ -64,14 +87,25 @@ function mydropDown(countries_arr) {
                         let ys = [y0_0, y1_0, y0_1, y1_1]
                         let x0 = Math.min(...xs)
                         let x1 = Math.max(...xs)
-                        let y1 = Math.min(...ys)
-                        let y0 = Math.max(...ys)
+                        let y0 = Math.min(...ys)
+                        let y1 = Math.max(...ys)
 
+                        //I need to get the max bounding box considering the current bounding box and the last one
+                        if(last_bounding_box.length > 0){
+                            let len = last_bounding_box.length
+                            let xs = [x0, x1, last_bounding_box[len-1][0], last_bounding_box[len-1][2]]
+                            let ys = [y0, y1, last_bounding_box[len-1][1], last_bounding_box[len-1][3]]
+                            x0 = Math.min(...xs)
+                            x1 = Math.max(...xs)
+                            y0 = Math.min(...ys)
+                            y1 = Math.max(...ys)
+                        }
+                        last_bounding_box.push([x0, y0, x1, y1, id1])
                         svg.transition().duration(750).call(
                             zoom.transform,
                             d3.zoomIdentity
-                                .translate(width/2, height/2)
-                                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                                .translate(width/4, height/2)
+                                .scale(scaleFormula(x0, y0, x1, y1, width, height))
                                 .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                         );
                         
@@ -160,8 +194,8 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
             toDeleteText.style("opacity", 0)
         })
         .on("click", function(d){
-            console.log(d)
             //I want to remove the country from the list of countries to compare
+            if(currentSubGroups.length > 1){
             let initial_to_not_remove = currentSubGroups[0]
             let initial_size = currentSubGroups.length
             currentSubGroups = currentSubGroups.filter(function(country){
@@ -169,11 +203,9 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
             })
             fillSideDivWithBarChart([])
             //I need to remove the specific connection
+
             getJSON("../Data/CName_to_id.json").then(data => {
-                let Cname_id = {}
-                for (const c in data) {
-                    Cname_id[c] = data[c]
-                }
+                let Cname_id = fixCnameFromdata(data)
             getJSON("../Data/country_to_code.json").then(country_to_countryCode => {
             //I need to connect the two countrie
                 const swapKeyValue = (object) =>
@@ -183,26 +215,27 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
                 const countryCode_to_country = swapKeyValue(country_to_countryCode)
                 getJSON("../../Data/countriesCodesParsed.json").then(countriesData => {
                     getJSON("https://unpkg.com/world-atlas@2.0.2/countries-110m.json").then(data => {
+                        
                         const country_features = topojson.feature(data, data.objects.countries).features
-                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[0]].slice(1)]
-                        let id1 = Cname_id[countryCode_to_country[d].charAt(0).toUpperCase() + countryCode_to_country[d].slice(1)]
+                        let id0 = Cname_id[countryCode_to_country[currentSubGroups[0]]]
+                        let id1 = Cname_id[countryCode_to_country[d]]
+                        last_bounding_box = last_bounding_box.filter(d => d[4] != id1)
                         //let clickedCountryCode = countriesData[id]["alpha-2"]
                         remove_specific_connection(id0, id1)
                         //I need to select the svg of the country
                         g.selectAll("path")
-                            .each(function (d) {
-                                if (d.id == id1) {
+                            .each(function (dt) {
+                                if (dt != undefined && dt.id == id1) {
                                     unhighlightCountry(d3.select(this))
                                 }
                         })
                         //Now I need to recented the view selecting the other country
                         if(currentSubGroups.length == 2){
-                            let id2 = Cname_id[countryCode_to_country[currentSubGroups[1]].charAt(0).toUpperCase() + countryCode_to_country[currentSubGroups[1]].slice(1)]
+                            let id2 = Cname_id[countryCode_to_country[currentSubGroups[1]]]
                             //let clickedCountryCode = countriesData[id]["alpha-2"]
-                            
                             let feature0 = getCountryobject(country_features, id0)
                             let feature1 = getCountryobject(country_features, id2)
-
+                            
                             const [[x0_0, y0_0], [x1_0, y1_0]] = path.bounds(feature0);
                             const [[x0_1, y0_1], [x1_1, y1_1]] = path.bounds(feature1);
 
@@ -211,25 +244,24 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
                             let ys = [y0_0, y1_0, y0_1, y1_1]
                             let x0 = Math.min(...xs)
                             let x1 = Math.max(...xs)
-                            let y1 = Math.min(...ys)
-                            let y0 = Math.max(...ys)
+                            let y0 = Math.min(...ys)
+                            let y1 = Math.max(...ys)
 
                             svg.transition().duration(750).call(
                                 zoom.transform,
                                 d3.zoomIdentity
-                                    .translate(width/3, height/2)
-                                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                                    .translate(width/4, height/2)
+                                    .scale(scaleFormula(x0, y0, x1, y1, width, height))
                                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                             );
 
                         }else if (currentSubGroups.length == 1){
                             let feature_last = getCountryobject(country_features, id0)
-                            console.log(feature_last)
                             const [[x0, y0], [x1, y1]] = path.bounds(feature_last);
                             svg.transition().duration(750).call(
                                 zoom.transform,
                                 d3.zoomIdentity
-                                    .translate(width / 3, height / 2)
+                                    .translate(width / 4, height / 2)
                                     .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
                                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                             );
@@ -237,7 +269,8 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
                     })
                 })
             })})
-        })
+        }
+    })
 
     // Add one dot in the legend for each name.
     svgSideBar.selectAll("mylabels")

@@ -65,7 +65,7 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
                             .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
                             .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
                     );
-                    
+
                 if(currentCountry != null){
                     unhighlightCountry(currentCountry)
                 }
@@ -78,7 +78,7 @@ $.getJSON("../Data/CName_to_id.json", function (data) {
 
                 g.selectAll("path")
                     .each(function (d) {
-                        if (d.id == id) {
+                        if (d != undefined && d.id == id) {
                             highlightCountry(d3.select(this))
                             currentCountry = d3.select(this)
                             sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");

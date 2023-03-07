@@ -11,3 +11,4 @@ const sideDiv = setupSideDiv()
 let neighbourCountriesSelected = []
 let countryCodeList = []
 let listOfDimensionsMoviesVsSeries = []
+let currentlyHighlightedCountries = []
