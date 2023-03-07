@@ -120,11 +120,15 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     window.path = d3.geoPath().projection(projection) //This is a geopath that we need to create using d3
 
     d3.select("#expandCollapeDiv").on("click", () => {
-        if(!wasDivExpanded){
+        if (!wasDivExpanded) {
+            // Temporary code - Will be changed
+            location.href = `scatter.html?country=${$("#clickData h1").text()}`
+
+            ////////////////////////////////////
             d3.select("#expandCollapeDiv").text("Click to collapse")
             sideDiv.transition().duration(500).style("width","100%").style("opacity", 1)
             wasDivExpanded = true
-        }else{
+        } else {
             d3.select("#expandCollapeDiv").text("Click to expand")
             sideDiv.transition().duration(500).style("width","35%").style("opacity", 0.9)
             wasDivExpanded = false

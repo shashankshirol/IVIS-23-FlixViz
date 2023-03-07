@@ -129,7 +129,7 @@ function setupSideDiv(){
     return d3.select("body")
             .append("div")
             .attr("id", "clickData")
-            .attr("class", "d-flex flex-column justify-content-center")
+            .attr("class", "d-flex flex-column justify-content-around")
             .style("position", "absolute")
             .style("top", "0px")
             .style("right", "0px")
@@ -348,7 +348,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
 
         // Step 3
         let scatterSvg = element.append("svg")
-            .attr("width", scatterWidth + margin.left + margin.right)
+            .attr("width", scatterWidth + margin.left + margin.right + 60)
             .attr("height", scatterHeight + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
@@ -484,10 +484,10 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
 }
 
 function fillSideDivWithBarChart(countryCode) {
-    d3.select("#clickData").selectAll("svg").remove()
     getJSON("../../Data/countries.json").then(countriesToOverviewInfo => {
         
-        if(currentSubGroups.length + countryCode.length < 4){
+        if (currentSubGroups.length + countryCode.length < 4) {
+            d3.select("#clickData").selectAll("svg").remove()
             currentSubGroups = currentSubGroups.concat(countryCode)
 
             let margin = {top: 5, right: 25, bottom: 110, left: 70}
@@ -496,7 +496,7 @@ function fillSideDivWithBarChart(countryCode) {
             d3.select("#clickData").selectAll("svg").remove()
             // append the svg object to the body of the page
             let svgDivBarChart = d3.select("#clickData")
-            .append("svg")
+                .append("svg")
                 .attr("width", width_bar + margin.left + margin.right)
                 .attr("height", height_bar + margin.top + margin.bottom)
             .append("g")

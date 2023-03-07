@@ -11,8 +11,13 @@ let svg = d3
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
  d3.json("../Data/data_netflix.json")
-  .then(function(data) {
-    const country = "India"
+   .then(function (data) {
+    // Temporary code - Will be changed
+    const urlParams = new URLSearchParams(window.location.search);
+    const country = urlParams.get('country');
+    ////////////////////////////////// 
+     
+
     const selections = {
       "year": ["year",1940, 2023, "Year"],
       "imdb_rating": ["imdb_rating",-0.1,10, "Imdb Rating"],
