@@ -122,7 +122,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     d3.select("#expandCollapeDiv").on("click", () => {
         if (!wasDivExpanded) {
             // Temporary code - Will be changed
-            location.href = `scatter.html?country=${$("#clickData h1").text()}`
+            location.href = `scatter.html?country=${$("#clickData h1").text() == "USA" ? "US":$("#clickData h1").text()}`
 
             ////////////////////////////////////
             d3.select("#expandCollapeDiv").text("Click to collapse")
