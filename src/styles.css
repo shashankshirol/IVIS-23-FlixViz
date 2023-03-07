@@ -68,9 +68,17 @@ a{
     cursor: pointer;
     transition: height 500ms;
   }
+  .wrap.selected{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    height: 180px;
+    width: fit-content;
+    cursor: pointer;
+    transition: height 500ms;
+  }
   .wrap:hover {
     height: 240px;
-    
     transition-delay: 0.2s;
   }
   .poster_text{
