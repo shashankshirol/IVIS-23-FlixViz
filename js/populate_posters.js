@@ -17,7 +17,7 @@ function addCards(df, div_id) {
         <div class="poster_info">
             <div class="poster_text">
                 <h6>${title.name}</h6>
-                <p>${title.synopsis.length > 140? title.synopsis.slice(0, 100) + "..." : title.synopsis}</p>
+                <p>${title.synopsis.length > 100? title.synopsis.slice(0, 100) + "..." : title.synopsis}</p>
                 <a href="https://www.netflix.com/title/${title.nfid}" target="_blank">Netflix</a>
                 <a href=${(title.imdbid == null || title.imdbid.includes("|")) ? "https://www.imdb.com/find/?q=" + encodeURIComponent(title.name) : "https://www.imdb.com/title/" + title.imdbid} target="_blank" id="imdb_link">IMDB</a>
             </div>
