@@ -16,8 +16,8 @@ d3.json("../Data/data_netflix.json")
       imdb_rating: ["imdb_rating", 0, 10, "Imdb Rating"],
       votes: ["votes", 0, 3000000, "Votes"],
     };
-    let currX = selections.year;
-    let currY = selections.imdb_rating;
+    let currX = selections.imdb_rating;
+    let currY = selections.votes;
     let selected = [];
     let countryData = data.filter((d) => d.clist.includes("United States"));
     data = countryData;

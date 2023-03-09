@@ -6,21 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
     <title>Document</title>
   </head>
   <body>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="title">Modal Header</h2>
+          <span class="close">&times;</span>
+        </div>
+        <div id="modalBody" class="modal-body">
+        </div>
+      </div>
+    </div>
     <div id="scatterplotWindow" class="visualWindow">
       <div id="svgPlot" class="scatterPlot"></div>
       <div id="movieComponent"></div>
     </div>
     <div>
-        <div id="movieRow" class="row_posters" onscroll="getScrollVal()">
-        </div>  
-        <div height="200" >
-
-        </div>
-      </table>
+      <div id="movieRow" class="row_posters" onscroll="getScrollVal()"></div>
+      <div height="200"></div>
     </div>
     <script src="scatterPlot.js"></script>
     <script src="table.js"></script>
