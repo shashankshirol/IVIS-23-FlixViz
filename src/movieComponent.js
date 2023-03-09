@@ -42,8 +42,7 @@ body.innerHTML = `
 modal.style.display = "block";
 }
 data.map((movie, id) => {
-if( data.length > 500)
-if( id > 10)return
+if( id > 9)return
 let child = document.createElement("div");
 if(selected.length!=0 && id < selected.length)
 child.innerHTML = `
