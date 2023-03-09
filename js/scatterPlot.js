@@ -12,10 +12,6 @@ let svg = d3
 
  d3.json("../Data/data_netflix.json")
    .then(function (data) {
-    // Temporary code - Will be changed
-    const urlParams = new URLSearchParams(window.location.search);
-    const country = urlParams.get('country');
-    ////////////////////////////////// 
      
 
     const selections = {

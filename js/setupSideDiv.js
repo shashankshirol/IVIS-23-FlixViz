@@ -129,7 +129,8 @@ function setupSideDiv(){
     return d3.select("body")
             .append("div")
             .attr("id", "clickData")
-            .attr("class", "d-flex flex-column justify-content-around")
+            .attr("class", "d-flex flex-column justify-content-around align-items-center")
+            .style("text-align", "center")
             .style("position", "absolute")
             .style("top", "0px")
             .style("right", "0px")
@@ -145,7 +146,6 @@ function setupSideDiv(){
                         <button class="btn btn-dark m-auto" type="button" id="expandCollapeDiv">Go to Details</button>
                     </div>
                     <div id="scatterPlotSideDiv"></div>`)
-            .style("text-align", "center")
 }
 
 let currentSubGroups = []
@@ -344,7 +344,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
     // Step 1
         let margin = {top: 40, right: 30, bottom: 40, left: 60}
         let scatterWidth = 500 - margin.left - margin.right
-        let scatterHeight = 215 - margin.top - margin.bottom
+        let scatterHeight = 320 - margin.top - margin.bottom
 
         // Step 3
         let scatterSvg = element.append("svg")
@@ -380,8 +380,8 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
         //X axis label:
         scatterSvg.append("text")
             .attr("text-anchor", "end")
-            .attr("x", scatterWidth/2 + margin.left)
-            .attr("y", scatterHeight + 35)
+            .attr("x", 3*scatterWidth/8 + margin.left)
+            .attr("y", scatterHeight + 40)
             .text("Series");
 
         // Y axis label:
@@ -493,7 +493,6 @@ function fillSideDivWithBarChart(countryCode) {
             let margin = {top: 5, right: 25, bottom: 110, left: 70}
             let width_bar = 500 - margin.left - margin.right
             let height_bar = 320 - margin.top - margin.bottom;
-            d3.select("#clickData").selectAll("svg").remove()
             // append the svg object to the body of the page
             let svgDivBarChart = d3.select("#clickData")
                 .append("svg")

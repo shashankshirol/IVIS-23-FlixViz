@@ -100,7 +100,7 @@ function generateScatterChartInElement(data, x, y, element) {
         //X axis label:
         scatterSvg.append("text")
             .attr("text-anchor", "end")
-            .attr("x", scatterWidth/2 + margin.left)
+            .attr("x", scatterWidth/4 + margin.left)
             .attr("y", scatterHeight + margin.top + 20)
             .text("Series");
 

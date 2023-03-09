@@ -109,6 +109,15 @@ function remove_all_connections(){
     d3.selectAll(".link").remove()
 }
 
+var clickedCountryCode = ""
+
+function generateCountryDetails(country_code) {
+    console.log(country_code)
+    d3.select("#clickData").selectAll("svg").remove()
+    d3.select("#clickData").selectAll("h1").remove()
+    d3.select("#clickData").select("#dropdown_container").remove()
+}
+
 function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countriesData, data){
     const countries = topojson.feature(data, data.objects.countries)
     const projection = d3
@@ -121,16 +130,24 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     d3.select("#expandCollapeDiv").on("click", () => {
         if (!wasDivExpanded) {
-            // Temporary code - Will be changed
-            location.href = `scatter.html?country=${$("#clickData h1").text() == "USA" ? "US":$("#clickData h1").text()}`
-
-            ////////////////////////////////////
             d3.select("#expandCollapeDiv").text("Click to collapse")
-            sideDiv.transition().duration(500).style("width","100%").style("opacity", 1)
+            sideDiv.transition().duration(500).style("width", "100%").style("opacity", 1)
+            generateCountryDetails(clickedCountryCode)
             wasDivExpanded = true
         } else {
             d3.select("#expandCollapeDiv").text("Click to expand")
-            sideDiv.transition().duration(500).style("width","35%").style("opacity", 0.9)
+            sideDiv.transition().duration(500).style("width", "35%").style("opacity", 0.9)
+
+            // Generate the sidebar again
+            unhighlightAllCountries()
+            remove_all_connections()
+            d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
+            d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
+            d3.select("#clickData").append("h1").lower()
+            currentSubGroups = []
+            fillSideDivWithBarChart([clickedCountryCode])
+
+
             wasDivExpanded = false
         } 
     })
@@ -210,7 +227,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     function clicked(d) {
         
-        let clickedCountryCode = countriesData[d.id]["alpha-2"]
+        clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){
                 tooltipVisibilityStatusComparedToClik = false
@@ -243,7 +260,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if (countryName.includes("United Kingdom")){
                 countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
             }
-            currentSubGroups= []
+            currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
             
         }
