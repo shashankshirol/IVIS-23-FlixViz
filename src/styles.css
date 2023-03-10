@@ -5,12 +5,14 @@
     flex-direction: row;
 }
 .scatterPlot{
-    width:1000px;
-    height:600px;
+    width:1800px;
+    height:500px;
 }
 .filters{
   height: 200px;
-  width: 520px;
+  width: 1800px;
+  display: flex;
+  justify-content: center;
 }
 #labelleft, #labelright {
 	dominant-baseline: hanging;
