@@ -113,9 +113,25 @@ var clickedCountryCode = ""
 
 function generateCountryDetails(country_code) {
     console.log(country_code)
+
+    // Removing existing SVGs
     d3.select("#clickData").selectAll("svg").remove()
     d3.select("#clickData").selectAll("h1").remove()
     d3.select("#clickData").select("#dropdown_container").remove()
+    
+    d3.select("#clickData").attr("class", "d-flex flex-column").style("text-align", "")
+    let scatter_div = d3.select("#clickData").append("div").attr("id", "scatter_titles").lower()
+    
+    let scatter_plot_window = scatter_div.append("div").attr("id", "scatterplotWindow").attr("class", "visualWindow")
+    scatter_plot_window.append("div").attr("id", "svgPlot").attr("class", "scatterPlot")
+
+    scatter_div.append("h1").attr("id", "movies-header").attr("class", "display-5")
+    scatter_div.append("div").attr("id", "MoviesDiv").attr("class", "d-flex flex-row m-3")
+    scatter_div.append("h1").attr("id", "series-header").attr("class", "display-5")
+    scatter_div.append("h1").attr("id", "SeriesDiv").attr("class", "d-flex flex-row m-3")
+
+    d3.select(".buttonDiv").style("text-align", "center")
+    generate_scatter_plot(country_code)
 }
 
 function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countriesData, data){
@@ -141,6 +157,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             // Generate the sidebar again
             unhighlightAllCountries()
             remove_all_connections()
+            d3.select("#clickData").attr("class", "d-flex flex-column justify-content-around align-items-center").style("text-align", "center")
+
+            d3.select("#scatter_titles").remove() // Clearing the Scatter Plot
             d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
             d3.select("#clickData").append("h1").lower()

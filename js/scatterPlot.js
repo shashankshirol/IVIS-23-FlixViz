@@ -1,4 +1,5 @@
-let margin = { top: 10, right: 30, bottom: 30, left: 60 },
+function generate_scatter_plot(code) {
+  let margin = { top: 10, right: 30, bottom: 30, left: 60 },
   width = 1000 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
 
@@ -12,8 +13,6 @@ let svg = d3
 
  d3.json("../Data/data_netflix.json")
    .then(function (data) {
-     
-
     const selections = {
       "year": ["year",1940, 2023, "Year"],
       "imdb_rating": ["imdb_rating",-0.1,10, "Imdb Rating"],
@@ -24,8 +23,8 @@ let svg = d3
 
     
     let orig_data = data;
-    data = data.filter(d => d.clist.includes(country));
-    fillTopTitles(data, country)
+    data = data.filter(d => d.clist.includes(code));
+    fillTopTitles(data, code)
 
 
   // Define the x and y scales 
@@ -154,3 +153,4 @@ scatter
 .catch(function(error) {
   console.error(error)
 });
+}

@@ -343,8 +343,8 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
 function generateScatterChartInsideDiv(svgSideBar, data, color, positions, element) {
     // Step 1
         let margin = {top: 40, right: 30, bottom: 40, left: 60}
-        let scatterWidth = 500 - margin.left - margin.right
-        let scatterHeight = 320 - margin.top - margin.bottom
+        let scatterWidth = 420 - margin.left - margin.right
+        let scatterHeight = 215 - margin.top - margin.bottom
 
         // Step 3
         let scatterSvg = element.append("svg")
@@ -381,7 +381,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
         scatterSvg.append("text")
             .attr("text-anchor", "end")
             .attr("x", 3*scatterWidth/8 + margin.left)
-            .attr("y", scatterHeight + 40)
+            .attr("y", scatterHeight + 35)
             .text("Series");
 
         // Y axis label:
@@ -584,7 +584,7 @@ function fillSideDivWithBarChart(countryCode) {
                     svgDivBarChart.append("text")
                         .attr("text-anchor", "end")
                         .attr("x", width_bar/2)
-                        .attr("y", height_bar + margin.top + 85)
+                        .attr("y", height_bar + margin.top + 100)
                         .text("Genres");
                     
                     svgDivBarChart.append("text")
