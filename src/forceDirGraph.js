@@ -22,21 +22,24 @@
 // }
 
 function ForceGraph(movieChoice){
+ 
   var width = 640;
   var height = 480;
 
   var title = [movieChoice.title];
   var genre = movieChoice.genre.split("|");
-  d3.json("../Data/data_netflix.json", function(error, data) {
-
+  d3.json("../Data/data_netflix.json").then(function(data) {
+    
     let similarTitle = data.filter(d => d.genre.includes(movieChoice.genre));
     //console.log(similarTitle);
+
+   similarTitle.sort((a, b) => (a.imdb_rating > b.imdb_rating) ? -1 : 1);
 
     var nodes = [];
     for (i = 0; i < title.length; i++) {
       nodes.push({name: title[i], weight: 14, fontsize: 17, circlecolor: "#E50914", fontcolor: "#92181E", poster: movieChoice.img, rating: movieChoice.imdb_rating});
     } 
-    for (i = 0; i < similarTitle.length; i++) {
+    for (i = 0; i < 10; i++) {
       if (similarTitle[i].title == movieChoice.title){
         continue;
       };
@@ -49,9 +52,12 @@ function ForceGraph(movieChoice){
       links.push({source: title[0], target: genre[i]});
     } 
 
-    for (i = 0; i < similarTitle.length; i++) {
+    for (i = 0; i < 10; i++) {
       links.push({source: title[0], target: similarTitle[i].title});
     } 
+
+    
+
     const gethtml = (poster, name, rating) => {
       return `<div><img class="poster" src="${poster}"></img><p id="tooltiptext" style="text-align: center;">${name}</p><p id="tooltiptext" style="text-align: center">IMDB: ${rating}</p></div>`;
     }
