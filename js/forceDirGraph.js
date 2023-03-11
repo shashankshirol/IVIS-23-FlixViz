@@ -1,7 +1,7 @@
 function ForceGraph(movieChoice, newData){
     let data = newData
-    var width = 480;
-    var height = 480;
+    var width = 512;
+    var height = 512;
   
     var title = [movieChoice.title];
     var genre = movieChoice.genre.split("|");
