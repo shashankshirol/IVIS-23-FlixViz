@@ -18,13 +18,13 @@ d3.json("../Data/data_netflix.json")
     };
     let currX = selections.imdb_rating;
     let currY = selections.votes;
-    let selected = [];
+
     let countryData = data.filter((d) => d.clist.includes("Japan"));
     let filteredData = countryData.filter(
       (x) => x.imdb_rating != null && x.votes != 0
     );
     data = filteredData;
-    createMovieRow(data, selected);
+    createMovieRow(data);
     // Define the x and y scales
     let x = d3.scaleLinear().domain([currX[1], currX[2]]).range([0, width]);
     let y = d3.scaleLinear().domain([currY[1], currY[2]]).range([height, 0]);
@@ -215,7 +215,7 @@ d3.json("../Data/data_netflix.json")
 
         // This remove the grey brush area as soon as the selection has been done
       }
-      selected = [];
+
       // Update axis and circle position
       updateAll();
     }
@@ -233,7 +233,7 @@ d3.json("../Data/data_netflix.json")
             )
               return x;
       });
-      createMovieRow(newData, selected);
+      createMovieRow(newData);
       updateFilters(newData);
     });
     d3.select("#votes").on("change", function () {
@@ -249,7 +249,7 @@ d3.json("../Data/data_netflix.json")
             if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
       });
       updateFilters(newData);
-      createMovieRow(newData, selected);
+      createMovieRow(newData);
       x.domain([ratingRange[0], ratingRange[1]]);
       y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
       updateAll();
@@ -264,7 +264,7 @@ d3.json("../Data/data_netflix.json")
             if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
       });
       updateFilters(newData);
-      createMovieRow(newData, selected);
+      createMovieRow(newData);
       x.domain([ratingRange[0], ratingRange[1]]);
       y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
       updateAll();
