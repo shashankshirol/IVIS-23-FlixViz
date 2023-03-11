@@ -21,13 +21,13 @@ child.innerHTML = `
       <div class="poster_info">
           <div class="poster_text">
               <h4>${movie.title}</h4>
-              <p>${movie.synopsis}</p>
+              <p >${movie.synopsis}</p>
           </div>
       </div>
     </div>
   `;
 
-child.onclick = () => displayModal(movie)
+child.onclick = () => displayModal(movie, data)
 parent.append(child)
 })
 };

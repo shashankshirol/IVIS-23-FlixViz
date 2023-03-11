@@ -17,6 +17,8 @@
           <span class="close">&times;</span>
         </div>
         <div id="modalBody" class="modal-body">
+          <div id="modalBodyInfo"></div>
+          <div id="svgPlotForce"></div>
         </div>
       </div>
     </div>
@@ -24,9 +26,9 @@
       <div class="scatterPlot">
         <div id="svgPlot"></div>
         <div class="filters" id="filter">
-          <div style="display: contents; text-align: center;" id="year"></div>
-          <div style="display: contents; text-align: center;" id="votes"></div>
-          <div style="display: contents; text-align: center;" id="rating"></div>
+          <div style="display: contents; text-align: center" id="year"></div>
+          <div style="display: contents; text-align: center" id="votes"></div>
+          <div style="display: contents; text-align: center" id="rating"></div>
         </div>
       </div>
       <div id="movieComponent"></div>
@@ -40,5 +42,6 @@
     <script src="movieComponent.js"></script>
     <script src="slider.js"></script>
     <script src="modal.js"></script>
+    <script src="forceDirGraph.js"></script>
   </body>
 </html>

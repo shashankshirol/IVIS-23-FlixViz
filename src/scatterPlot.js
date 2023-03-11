@@ -20,8 +20,10 @@ d3.json("../Data/data_netflix.json")
     let currY = selections.votes;
     let selected = [];
     let countryData = data.filter((d) => d.clist.includes("Japan"));
-    let filteredData = countryData.filter(x=> x.imdb_rating !=null && x.votes !=0)
-    data = filteredData
+    let filteredData = countryData.filter(
+      (x) => x.imdb_rating != null && x.votes != 0
+    );
+    data = filteredData;
     createMovieRow(data, selected);
     // Define the x and y scales
     let x = d3.scaleLinear().domain([currX[1], currX[2]]).range([0, width]);
@@ -33,8 +35,13 @@ d3.json("../Data/data_netflix.json")
 
     let yAxis = svg.append("g").call(d3.axisLeft(y));
     let yearSlider = slider_snap(1940, 2023, "Release Year", "year");
-    let votesSlider = slider_snap(0, 3000, "Number of Votes(" +"K" + ")" , "votes");
-    let ratingSlider = slider_snap(0,10, "Imdb Rating", "rating");
+    let votesSlider = slider_snap(
+      0,
+      3000,
+      "Number of Votes(" + "K" + ")",
+      "votes"
+    );
+    let ratingSlider = slider_snap(0, 10, "Imdb Rating", "rating");
     svg
       .append("text")
       .attr("text-anchor", "end")
@@ -62,30 +69,41 @@ d3.json("../Data/data_netflix.json")
     //Interaction functions
 
     function mouseover() {
-      Tooltip
-      .style("opacity", 1)
+      Tooltip.style("opacity", 1);
       d3.select(this).attr("r", 8).style("opacity", 1);
     }
     function mouseout() {
-      Tooltip
-      .style("opacity", 0)
+      Tooltip.style("opacity", 0);
       d3.select(this).attr("r", 6).style("opacity", 0.5);
     }
     function mousemove(d) {
-      Tooltip
-        .html(d.title + ", "+ d.year + ", " + "[" + d.imdb_rating + ", " + d.votes+ "]")
-        .style("left", (d3.mouse(this)[0]+70) + "px")
-        .style("top", (d3.mouse(this)[1]) + "px")
+      Tooltip.html(
+        d.title +
+          ", " +
+          d.year +
+          ", " +
+          "[" +
+          d.imdb_rating +
+          ", " +
+          d.votes +
+          "]"
+      )
+        .style("left", d3.mouse(this)[0] + 70 + "px")
+        .style("top", d3.mouse(this)[1] + "px");
     }
-    let Tooltip = d3.select("#svgPlot")
-    .append("div")
-    .style("opacity", 0)
-    .style("position", "absolute")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+    function mouseClick(d) {
+      displayModal(d, data);
+    }
+    let Tooltip = d3
+      .select("#svgPlot")
+      .append("div")
+      .style("opacity", 0)
+      .style("position", "absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px");
     let brush = d3
       .brush() // Add the brush feature using the d3.brush function
       .extent([
@@ -116,40 +134,37 @@ d3.json("../Data/data_netflix.json")
       .attr("pointer-events", "all")
       .on("mouseover", mouseover)
       .on("mouseout", mouseout)
-      .on("click", displayModal)
+      .on("click", mouseClick)
       .on("mousemove", mousemove);
 
     function updateFilters(newData) {
+      scatter.selectAll("circle").remove();
       scatter
         .selectAll("circle")
-        .remove()
-      scatter
-      .selectAll("circle")
-      .data(newData)
-      .enter()
-      .append("circle")
-      .attr("cx", function (d) {
-        return x(d[currX[0]]);
-      })
-      .attr("cy", function (d) {
-        return y(d[currY[0]]);
-      })
-      .attr("r", 6)
-      .style("opacity", 0.5)
-      .style("fill", "#FB0C0C")
-      .attr("pointer-events", "all")
-      .on("mouseover", mouseover)
-      .on("mouseout", mouseout)
-      .on("click", displayModal)
-      .on("mousemove", mousemove);
-
+        .data(newData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) {
+          return x(d[currX[0]]);
+        })
+        .attr("cy", function (d) {
+          return y(d[currY[0]]);
+        })
+        .attr("r", 6)
+        .style("opacity", 0.5)
+        .style("fill", "#FB0C0C")
+        .attr("pointer-events", "all")
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout)
+        .on("click", mouseClick)
+        .on("mousemove", mousemove);
     }
     let idleTimeout;
 
     function idled() {
       idleTimeout = null;
     }
-    function updateAll(){
+    function updateAll() {
       xAxis.transition().duration(1000).call(d3.axisBottom(x));
       yAxis.transition().duration(1000).call(d3.axisLeft(y));
       scatter
@@ -162,29 +177,27 @@ d3.json("../Data/data_netflix.json")
         .attr("cy", function (d) {
           return y(d[currY[0]]);
         });
-
     }
-    function resetFilters(){
-      votesSlider.reset()
-      yearSlider.reset()
-      ratingSlider.reset()
+    function resetFilters() {
+      votesSlider.reset();
+      yearSlider.reset();
+      ratingSlider.reset();
     }
-    function setFilters(s){
-      votesSlider.setRange([s[1][1], s[0][1]].map(y.invert, y))
-      ratingSlider.setRange([s[0][0], s[1][0]].map(x.invert, x))
+    function setFilters(s) {
+      votesSlider.setRange([s[1][1], s[0][1]].map(y.invert, y));
+      ratingSlider.setRange([s[0][0], s[1][0]].map(x.invert, x));
     }
     function updateChart(s = d3.event.selection) {
-      console.log(s)
+      console.log(s);
       let newData = data;
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if (!s) {
         if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
         x.domain([currX[1], currX[2]]);
         y.domain([currY[1], currY[2]]);
-        
       } else {
-        console.log([s[0][0], s[0][1]])
-        console.log([s[1][0], s[1][1]])
+        console.log([s[0][0], s[0][1]]);
+        console.log([s[1][0], s[1][1]]);
         newData = data.filter((d) => {
           let xVals = [s[0][0], s[1][0]].map(x.invert, x);
           let yVals = [s[1][1], s[0][1]].map(y.invert, y);
@@ -204,61 +217,58 @@ d3.json("../Data/data_netflix.json")
       }
       selected = [];
       // Update axis and circle position
-     updateAll()
+      updateAll();
     }
 
-    
     d3.select("#year").on("change", function () {
       yearRange = yearSlider.getRange();
-      voteRange = votesSlider.getRange()
-      ratingRange = ratingSlider.getRange()
+      voteRange = votesSlider.getRange();
+      ratingRange = ratingSlider.getRange();
       newData = data.filter((x) => {
-      if (x.year >= yearRange[0] && x.year <= yearRange[1])
-      if (x.votes >= voteRange[0]*1000 && x.votes <= voteRange[1]*1000)
-      if (x.imdb_rating >= ratingRange[0] && x.imdb_rating <= ratingRange[1])   
-      return x
-    })
-      createMovieRow(newData ,selected)
+        if (x.year >= yearRange[0] && x.year <= yearRange[1])
+          if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
+            if (
+              x.imdb_rating >= ratingRange[0] &&
+              x.imdb_rating <= ratingRange[1]
+            )
+              return x;
+      });
+      createMovieRow(newData, selected);
       updateFilters(newData);
-     
-     
     });
-    d3.select("#votes").on("change", function (){
+    d3.select("#votes").on("change", function () {
       yearRange = yearSlider.getRange();
-      voteRange = votesSlider.getRange()
-      ratingRange = ratingSlider.getRange()
+      voteRange = votesSlider.getRange();
+      ratingRange = ratingSlider.getRange();
       let newData = data.filter((x) => {
-        if (x.votes >= voteRange[0]*1000 && x.votes <= voteRange[1]*1000)
-        if (x.imdb_rating >= ratingRange[0] && x.imdb_rating <= ratingRange[1])
-        if (x.year >= yearRange[0] && x.year <= yearRange[1])  
-        return x;
-        
+        if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
+          if (
+            x.imdb_rating >= ratingRange[0] &&
+            x.imdb_rating <= ratingRange[1]
+          )
+            if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
       });
       updateFilters(newData);
-      createMovieRow(newData ,selected)
+      createMovieRow(newData, selected);
       x.domain([ratingRange[0], ratingRange[1]]);
-      y.domain([voteRange[0]*1000, voteRange[1]*1000]);
-      updateAll()
-      
-    })
-      d3.select("#rating").on("change", function (){
-        yearRange = yearSlider.getRange();
-        voteRange = votesSlider.getRange()
-        ratingRange = ratingSlider.getRange()
-        let newData = data.filter((x) => {
-          if (x.imdb_rating >= ratingRange[0] && x.imdb_rating <= ratingRange[1])  
-          if (x.votes >= voteRange[0]*1000 && x.votes <= voteRange[1]*1000)
-          if (x.year >= yearRange[0] && x.year <= yearRange[1])
-          return x;
-          
-        });
+      y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
+      updateAll();
+    });
+    d3.select("#rating").on("change", function () {
+      yearRange = yearSlider.getRange();
+      voteRange = votesSlider.getRange();
+      ratingRange = ratingSlider.getRange();
+      let newData = data.filter((x) => {
+        if (x.imdb_rating >= ratingRange[0] && x.imdb_rating <= ratingRange[1])
+          if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
+            if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
+      });
       updateFilters(newData);
-      createMovieRow(newData ,selected)
+      createMovieRow(newData, selected);
       x.domain([ratingRange[0], ratingRange[1]]);
-      y.domain([voteRange[0]*1000, voteRange[1]*1000]);
-      updateAll()
-
-    })
+      y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
+      updateAll();
+    });
   })
   .catch(function (error) {
     console.error(error);

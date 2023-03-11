@@ -219,8 +219,8 @@ a{
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 60%;
-    height: 90%;
+    width: 900px;
+    height: 800px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     animation-name: animatetop;
     animation-duration: 0.4s
@@ -255,10 +255,56 @@ a{
 }
 
 /* Modal Body */
-.modal-body {padding: 2px 16px;}
-.modalImg{
-  height: 200px;
+.modal-body {
+
 }
+.modalImg{
+  height: 300px;
+}
+#svgPlotForce {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  border: 1px solid #313639;
+  background-color: #ffffff;
+  border-radius: 4px;
+  pointer-events: none;
+  width: 400px;
+}
+
+#tooltiptext{
+  padding-bottom: 5px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  font-family: "Bebas Neue", "sans-serif";
+  color: #E50914;
+}
+.modalView{
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+}
+.modalSummary{
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 20px;
+}
+.modalInfo{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+.modalInfo h4{
+  margin: 5px 0;
+}
+
+
+
 
 
 /* Add Animation */
