@@ -134,7 +134,7 @@ function setupSideDiv(){
             .style("position", "absolute")
             .style("top", "0px")
             .style("right", "0px")
-            .style("width", "45%")
+            .style("width", "35%")
             .style("height", "100%")
             .style("background-color", "white")
             .style("z-index", 1000)
@@ -323,7 +323,7 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
         .attr("class", "legendText")
         .text(function(d){
             if(swapped[d].toLowerCase() == "united states of america"){
-                return "USA";
+                return "United States";
             }else if(swapped[d].toLowerCase() == "korea, republic of (south korea)"){
                 return "South Korea";
             }else{
@@ -342,9 +342,9 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
 
 function generateScatterChartInsideDiv(svgSideBar, data, color, positions, element) {
     // Step 1
-        let margin = {top: 40, right: 30, bottom: 40, left: 60}
+        let margin = {top: 40, right: 40, bottom: 40, left: 60}
         let scatterWidth = 420 - margin.left - margin.right
-        let scatterHeight = 215 - margin.top - margin.bottom
+        let scatterHeight = 200 - margin.top - margin.bottom
 
         // Step 3
         let scatterSvg = element.append("svg")
@@ -410,6 +410,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
         .selectAll("dot")
         .data(data)
         .enter().append("circle")
+        .attr("class", "scatterDots")
         .attr("cx", function (d) { return xScale(d[0]); } )
         .attr("cy", function (d) { return yScale(d[1]); } )
         .attr("r", function(d){
@@ -452,6 +453,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
             
             scatterSvg.selectAll("circle")
                 .filter(di => di[0] != d[0] && di[1] != d[1])
+                .filter(".scatterDots")
                 .style("opacity", 0.4)
                 .each(function(di){
                     svgSideBar.selectAll("rect")
@@ -479,7 +481,35 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
             d3.selectAll(".totalTitles").style("opacity", 0)
         }).raise()
 
-        //Now I want to add a simple tooltip
+        let dataEntries = currentSubGroups.concat(["others"])
+
+
+        scatterSvg
+            .selectAll("myLegend")
+            .data(dataEntries)
+            .enter()
+                .append('g')
+                .append("text")
+                .attr('x', scatterWidth+17)
+                .attr('y', (d,i) => 30+i*20)
+                .style("font-weight", "bold")
+                .text(d => d!="others"?getCountryName(d):"other countries")
+                .style("fill", d => d!="others" ? color(d): "rgb(105, 179, 162)")
+                .style("font-size", 11)
+
+                
+        scatterSvg.append('g')
+            .selectAll("legendDots")
+                .data(dataEntries)
+                .enter()
+                .append("circle")
+                  .attr("class", "scatterLegendDots")
+                  .attr("cx", scatterWidth+8 )
+                  .attr("cy", (d,i) => 30+i*20 -5 )
+                  .attr("r", function(d){
+                    if(d!="others"){return 6}else{return 4}
+                  })
+                .style("fill", d => d!="others" ? color(d): "rgb(105, 179, 162)")
         
 }
 
@@ -489,9 +519,10 @@ function fillSideDivWithBarChart(countryCode) {
         if (currentSubGroups.length + countryCode.length < 4) {
             d3.select("#clickData").selectAll("svg").remove()
             currentSubGroups = currentSubGroups.concat(countryCode)
+            const divWidth = window.innerWidth*0.45
 
-            let margin = {top: 5, right: 25, bottom: 110, left: 70}
-            let width_bar = 500 - margin.left - margin.right
+            let margin = {top: 5, right: 150, bottom: 110, left: 150}
+            let width_bar = divWidth - margin.left - margin.right
             let height_bar = 320 - margin.top - margin.bottom;
             // append the svg object to the body of the page
             let svgDivBarChart = d3.select("#clickData")
@@ -580,21 +611,6 @@ function fillSideDivWithBarChart(countryCode) {
                         .attr("height", function(d) { return height_bar - y(0); })
                         .attr("fill", function(d) { return color(d.key); });
 
-                    //Adding axis labels
-                    svgDivBarChart.append("text")
-                        .attr("text-anchor", "end")
-                        .attr("x", width_bar/2)
-                        .attr("y", height_bar + margin.top + 100)
-                        .text("Genres");
-                    
-                    svgDivBarChart.append("text")
-                        .attr("class", "y label")
-                        .attr("text-anchor", "end")
-                        .attr("y", -margin.left+10) 
-                        .attr("x", -50)
-                        .attr("dy", ".75em")
-                        .attr("transform", "rotate(-90)")
-                        .text("number of titles");
 
                     svgDivBarChart.selectAll("rect")
                         .on("mouseover", function(d) {
@@ -640,6 +656,25 @@ function fillSideDivWithBarChart(countryCode) {
                         }
                     })
                     createLegend(svgDivBarChart, color, currentSubGroups,width_bar, height_bar, swapped)
+
+                    //let svgWidth = svgDivBarChart.node().getBoundingClientRect().width
+                    //let svgHeight = svgDivBarChart.node().getBoundingClientRect().height
+                    //Adding axis labels
+                    
+                    svgDivBarChart.append("text")
+                        .attr("text-anchor", "end")
+                        .attr("x", width_bar/2)
+                        .attr("y", height_bar+100)
+                        .text("Genres");
+                    
+                    svgDivBarChart.append("text")
+                        .attr("class", "y label")
+                        .attr("text-anchor", "end")
+                        .attr("y", -50) 
+                        .attr("x", -height_bar/3.5)
+                        .attr("dy", ".75em")
+                        .attr("transform", "rotate(-90)")
+                        .text("Number of titles");
                 })        
             })
             //For some reason I have to add it after the bar chart is created

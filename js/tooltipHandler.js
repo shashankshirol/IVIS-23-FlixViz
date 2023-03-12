@@ -1,7 +1,7 @@
 function generateTooltip(){
     return d3.select("body")
                 .append("div")
-                .attr("class", "tooltip")
+                .attr("class", "tooltip d-flex flex-column")
                 .style("opacity", 0)
                 .style("position", "absolute")
                 .style("background-color", "white")
@@ -12,10 +12,10 @@ function generateTooltip(){
                 .style("padding", "5px")
                 .style("z-index", 1)
                 .html(
-                    `<div id="tooltipTitle"><p>Content availability</p></div>
-                    <div id='nation'></div>
-                    <div id='tipDiv'></div>
-                    <div id='totalTitles'></div>`
+                    `<div id="tooltipTitle" class="p-1"><p>Content availability</p></div>
+                    <div id='nation' class="p-1"></div>
+                    <div id='tipDiv' class="p-2"></div>
+                    <div id='totalTitles' class="p-1"></div>`
                     );
 }
 
@@ -61,9 +61,10 @@ function moveTooltip(d) {
 }
 
 function generateScatterChartInElement(data, x, y, element) {
+    console.log(data)
     // Step 1
-        let margin = {top: 10, right: 30, bottom: 30, left: 60}
-        let scatterWidth = 250 - margin.left - margin.right
+        let margin = {top: 10, right: 100, bottom: 30, left: 60}
+        let scatterWidth = 400 - margin.left - margin.right
         let scatterHeight = 150 - margin.top - margin.bottom
 
         // Step 3
@@ -146,4 +147,38 @@ function generateScatterChartInElement(data, x, y, element) {
           .filter(function(d){
                 return d[1] == x && d[0] == y
           }).raise()
+
+
+          let dataEntries = [["Hovered country", "#FF0000"], ["Other countries", "#69b3a2"]]
+
+          scatterSvg
+            .selectAll("myLegend")
+            .data(dataEntries)
+            .enter()
+                .append('g')
+                .append("text")
+                .attr('x', scatterWidth+17)
+                .attr('y', (d,i) => 30+i*20)
+                .attr("id", function(d){ if(d[0] == "Hovered country"){return "hoveredCountryLegendScatter"}else{return "otherCountries"}})
+                .style("font-weight", "bold")
+                .text(d => d[0])
+                .style("fill", d => d[1])
+                .style("font-size", 11)
+
+        scatterSvg.append('g')
+            .selectAll("legendDot")
+                .data(dataEntries)
+                .enter()
+                .append("circle")
+                  .attr("cx", scatterWidth+8 )
+                  .attr("cy", (d,i) => 30+i*20 -5 )
+                  .attr("r", function(d){
+                    if(d[0] == "Hovered country"){
+                        return 6
+                    }else{
+                        return 4
+                        }
+                    })
+                  .style("fill", d => d[1])
+
 }

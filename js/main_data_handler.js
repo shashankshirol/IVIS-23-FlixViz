@@ -120,9 +120,11 @@ function generateCountryDetails(country_code) {
 
     //Hiding Search bar
     d3.select("#country-form").style("visibility", "hidden")
+    d3.select(".form-check").style("visibility", "hidden")
 
-    //Enable Overflow Attribute
+    //Modify sideDiv Style
     d3.select("#clickData").style("overflow", "auto")
+    d3.select("#clickData").attr("class", "d-inline-block")
     
     
     let outer_top_titles = d3.select("#clickData").append("div").attr("id", "top_titles").lower()
@@ -168,7 +170,7 @@ function generateCountryDetails(country_code) {
         <div id="modalBodyInfo"></div>
         <div class="dfg">
         <div id="svgPlotForce"></div>
-        <div id="modalGenres"> </div>
+        <div id="modalGenres"></div>
     </div>
     `)
 
@@ -215,11 +217,10 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
             d3.select("#clickData").append("h1").lower()
             d3.select("#country-form").style("visibility", "visible")
+            d3.select(".form-check").style("visibility", "visible")
 
             currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
-
-
             wasDivExpanded = false
         } 
     })
@@ -261,6 +262,10 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         let countryName = countriesData[d.id]["name"]
         if (countryName.includes("United Kingdom")){
             countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
+        } else if(countryName.includes("United States")){
+            countryName = "United States"
+        } else if(countryName.includes("Korea")){
+            countryName = "South Korea"
         }
         let country_total_tiles = "No data available"
 
@@ -274,8 +279,13 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
 
         d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
-        d3.select("#totalTitles").text(country_total_tiles)
-    
+        d3.select("#hoveredCountryLegendScatter").text(countryName)
+        if (country_total_tiles != "No data available") {
+            d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix")
+        }
+        else {
+            d3.select("#totalTitles").text(country_total_tiles)
+        }
         alreadyOver = true
     }
     
