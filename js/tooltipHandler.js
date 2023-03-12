@@ -66,7 +66,7 @@ function generateScatterChartInElement(data, x, y, element) {
         let parentSize = {width: d3.select(".tooltip").node().getBoundingClientRect().width,
             height: d3.select(".tooltip").node().getBoundingClientRect().height}
         let margin = {top: 10, right: 120, bottom: 30, left: 60}
-        let scatterWidth = parentSize.width - margin.left - margin.right
+        let scatterWidth = parentSize.width*1.5 - margin.left - margin.right
         let scatterHeight = parentSize.height*1.2 - margin.top - margin.bottom
 
         // Step 3
