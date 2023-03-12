@@ -24,20 +24,23 @@ function displayModal(d, data) {
       <p style="padding-right: 100px; padding-top: 20px">${d.synopsis}</p>
   </div>
   <div class="modalInfo" >
-  <h4>Votes: ${d.votes}</h4>
-  <h4>Imdb Rating: ${d.imdb_rating}</h4>
-  <h4>
+  <div class ="modalSideInfo"><h4>Votes: </h4><p>${d.votes}</p></div>
+  <div class ="modalSideInfo"> <h4>Imdb Rating: </h4><p>${d.imdb_rating}</p></div>
+  <div class ="modalSideInfo"><h4>Links: 
   <a href="https://www.netflix.com/title/${
     d.nfid
-  }" target="_blank">Netflix</a></h4>
+  }" target="_blank">Netflix</a>&nbsp;</h4>
+  
   <h4>
   <a href=${
     d.imdbid == null || d.imdbid.includes("|")
       ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.name)
       : "https://www.imdb.com/title/" + d.imdbid
-  } target="_blank" id="imdb_link">IMDB</a>
-  </h4>
-  <h4>Genres: ${genres}</h4>
+  } target="_blank" id="imdb_link"> IMDB</a>
+  </h4></div>
+  <div class ="modalSideInfo"><p><strong>Genres:  </strong>${genres}</p></div>
+  <div class ="modalSideInfo"><p><strong>Release Year:  </strong>${d.year}</p></div>
+  <div class ="modalSideInfo"><p><strong>Added To Netflix:  </strong>${d.titledate}</p></div>
   </div>
 </div>
 `;

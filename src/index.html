@@ -18,7 +18,11 @@
         </div>
         <div id="modalBody" class="modal-body">
           <div id="modalBodyInfo"></div>
-          <div id="svgPlotForce"></div>
+          <div class="dfg">
+            <div id="svgPlotForce"></div>
+            <div id="modalGenres"> </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -26,9 +30,21 @@
       <div class="scatterPlot">
         <div id="svgPlot"></div>
         <div class="filters" id="filter">
+          <div class="wrapper">
+            <div class="search-input">
+              <a href="" target="_blank" hidden></a>
+              <input type="text" placeholder="Search for Genres">
+              <div class="autocom-box">
+                <!-- here list are inserted from javascript -->
+              </div>
+              <div class="icon"><i class="fas fa-search"></i></div>
+            </div>
+            <div class="genreFilter" id="genreFilter"></div>
+          </div>
           <div style="display: contents; text-align: center" id="year"></div>
           <div style="display: contents; text-align: center" id="votes"></div>
           <div style="display: contents; text-align: center" id="rating"></div>
+          <button class="pill" id="resetFilters">Reset Filters</button>
         </div>
       </div>
       <div id="movieComponent"></div>
@@ -38,7 +54,6 @@
       <div height="200"></div>
     </div>
     <script src="scatterPlot.js"></script>
-    <script src="table.js"></script>
     <script src="movieComponent.js"></script>
     <script src="slider.js"></script>
     <script src="modal.js"></script>

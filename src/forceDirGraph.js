@@ -1,15 +1,50 @@
 function ForceGraph(movieChoice, newData){
-    let data = newData
+  createFDG(movieChoice, [], newData)
+  genreFilter(movieChoice, newData)
+  }
+
+  function genreFilter(movieChoice, data){
+    let selectedGenres = []
+    function pillClick(d, genre){
+      d.target.classList.toggle("pill--selected")
+      if(selectedGenres.includes(genre)){
+       selectedGenres.splice(selectedGenres.indexOf(genre), 1)
+      }else{
+        selectedGenres.push(genre)
+      }
+      let newData = data
+      selectedGenres.map(currGenre => {
+        newData = newData.filter(x => x.genre.includes(currGenre))
+      })
+      if(selectedGenres.length != 0){
+        createFDG(movieChoice, newData, data)
+      }
+      else{createFDG(movieChoice, [], data)}
+      
+    }
+    let parent = document.getElementById("modalGenres")
+    parent.innerHTML = ""
+    movieChoice.genre.split("|").map((x, id) => {
+      let pill = document.createElement("div")
+      pill.innerHTML = `
+      <button id="${id}" class="pill" type="button">${x}</button>
+      `
+
+      pill.onclick = (d) => pillClick(d, x);
+      parent.append(pill)
+    })
+  }
+
+
+
+  function createFDG(movieChoice, similarTitle, data){
     var width = 480;
     var height = 480;
   
     var title = [movieChoice.title];
     var genre = movieChoice.genre.split("|");
-      
-      let similarTitle = data.filter(d => d.genre.includes(movieChoice.genre));
       let arrLength = similarTitle.length
       if(similarTitle.length > 10) arrLength = 10; 
-        console.log(similarTitle)
      similarTitle.sort((a, b) => (a.imdb_rating > b.imdb_rating) ? -1 : 1);
   
       var nodes = [];
@@ -20,7 +55,7 @@ function ForceGraph(movieChoice, newData){
         if (similarTitle[i].title == movieChoice.title){
           continue;
         };
-        nodes.push({name: similarTitle[i].title, weight: 12, fontsize: 17, circlecolor: "#D4B56C", fontcolor: "#92181E", poster: similarTitle[i].img, rating: similarTitle[i].imdb_rating});
+        nodes.push({movieObject:similarTitle[i] ,name: similarTitle[i].title, weight: 12, fontsize: 17, circlecolor: "#D4B56C", fontcolor: "#92181E", poster: similarTitle[i].img, rating: similarTitle[i].imdb_rating});
       } 
   
       var links = [];
@@ -35,19 +70,20 @@ function ForceGraph(movieChoice, newData){
   
       
   
-      const gethtml = (poster, name, rating) => {
-        return `<div><img class="poster" src="${poster}"></img><p id="tooltiptext" style="text-align: center;">${name}</p><p id="tooltiptext" style="text-align: center">IMDB: ${rating}</p></div>`;
-      }
+      // const gethtml = (poster, name, rating) => {
+      //   return `<div><img class="poster" src="${poster}"></img><p id="tooltiptext" style="text-align: center;">${name}</p><p id="tooltiptext" style="text-align: center">IMDB: ${rating}</p></div>`;
+      // }
       document.getElementById("svgPlotForce").innerHTML= ""
       var svg = d3.selectAll('#svgPlotForce')
         .append('svg')
         .attr('width', width)
         .attr('height', height)
   
-      var tooltip = d3.select("#svgPlotForce").append("div")
-       .attr("class", "tooltip")
-       .style("opacity", 0);
-  
+      // var tooltip = d3.select("#svgPlotForce").append("div")
+      //  .attr("class", "tooltip")
+      //  .style("opacity", 1);
+      
+      
       var simulation = d3
         .forceSimulation(nodes)
         .force(
@@ -91,35 +127,37 @@ function ForceGraph(movieChoice, newData){
             d3.select(this).transition()
                  .duration('50')
                  .attr('opacity', '.85')
-                 .attr("r", d => d.weight+5);
-            tooltipShow(d);
+                 .attr("r", d => d.weight+5)
+                 
+            // tooltipShow(d);
        })
        .on('mouseout', function (d) {
             d3.select(this).transition()
                  .duration('50')
                  .attr('opacity', '1')
                  .attr("r", d => d.weight);
-            tooltipHide(d);
-       })
+            // tooltipHide(d);
+       }).on("click", (d) => displayModal(d.movieObject, data));
     ;
-       function tooltipShow(d){
-        if (d.poster!="none"){
-          tooltip.transition()
-            .duration(50)
-            .style("opacity", 1);
-          tooltip.html(gethtml(d.poster, d.name, d.rating))
-            .style("left", (480) + "px")
-            .style("top", (0) + "px");
-        }
-       }
-  
-       function tooltipHide(d){
-        if (d.poster!="none"){
-          tooltip.transition()
-            .duration(50)
-            .style("opacity", 0);
-        }
-     }
+      //  function tooltipShow(d){
+      //   console.log(d)
+      //   if (d.poster!="none"){
+      //     tooltip.transition()
+      //       .duration(50)
+      //       .style("opacity", 1);
+      //     tooltip.html(gethtml(d.poster, d.name, d.rating))
+      //       .style("left", (480) + "px")
+      //       .style("top", (0) + "px");
+      //   }
+      //  }
+       
+    //    function tooltipHide(d){
+    //     if (d.poster!="none"){
+    //       tooltip.transition()
+    //         .duration(50)
+    //         .style("opacity", 1);
+    //     }
+    //  }
       // Create a drag handler and append it to the node object instead
         var dragger = d3.drag()
           .on("start", dragstarted)

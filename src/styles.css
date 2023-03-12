@@ -9,16 +9,26 @@
     height:500px;
 }
 .filters{
-  height: 200px;
+  height: 100px;
   width: 1800px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 #labelleft, #labelright {
 	dominant-baseline: hanging;
   font-size: 12px;
 }
-
+.genreFilter{
+  width: 400px;
+  height: 100px;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  
+  
+}
 #labelleft {
 	text-anchor: end;
 }
@@ -89,15 +99,6 @@ a{
   }
   
   .wrap {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    height: 180px;
-    width: fit-content;
-    cursor: pointer;
-    transition: height 500ms;
-  }
-  .wrap.selected{
     display: flex;
     flex-direction: row;
     position: relative;
@@ -261,17 +262,21 @@ a{
 .modalImg{
   height: 300px;
 }
-#svgPlotForce {
-  position: relative;
+.dfg {
+  display: flex;
+  flex-direction: row;
 }
 
-.tooltip {
-  position: absolute;
+#modalGenres {
   border: 1px solid #313639;
   background-color: #ffffff;
   border-radius: 4px;
-  pointer-events: none;
   width: 400px;
+  height: 480px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  
 }
 
 #tooltiptext{
@@ -299,12 +304,109 @@ a{
   flex-direction: column;
   width: 300px;
 }
-.modalInfo h4{
+
+.modalSideInfo{
   margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+.pill{
+  background-color: #181818;
+  border: none;
+  color: #fafafa;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+  opacity: 0.7;
+  height: fit-content;
+}
+.pill:hover {
+  opacity: 1;
+}
+.pill--selected {
+  background: #E50914;
+  
+}
+.pill.selected{
+  background: #E50914;
 }
 
+.wrapper{
+  max-width: 450px;
+  margin: 150px auto;
+}
+.wrapper .search-input{
+  background: #fff;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+.search-input input{
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+}
+.search-input.active input{
+  border-radius: 5px 5px 0 0;
+}
+.search-input .autocom-box{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.search-input.active .autocom-box{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+.autocom-box li{
+  list-style: none;
+  padding: 8px 12px;
+  display: none;
+  width: 100%;
+  cursor: default;
+  border-radius: 3px;
+}
+.search-input.active .autocom-box li{
+  display: block;
+}
+.autocom-box li:hover{
+  background: #efefef;
+}
+.search-input .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
-
+::selection{
+  color: #fff;
+  background: #664AFF;
+}
 
 
 /* Add Animation */
