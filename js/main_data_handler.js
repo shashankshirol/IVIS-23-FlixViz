@@ -280,8 +280,12 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
         d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
         d3.select("#hoveredCountryLegendScatter").text(countryName)
-        d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix")
-    
+        if (country_total_tiles != "No data available") {
+            d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix")
+        }
+        else {
+            d3.select("#totalTitles").text(country_total_tiles)
+        }
         alreadyOver = true
     }
     
