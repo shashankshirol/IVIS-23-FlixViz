@@ -146,4 +146,5 @@ function generateScatterChartInElement(data, x, y, element) {
           .filter(function(d){
                 return d[1] == x && d[0] == y
           }).raise()
+
 }
