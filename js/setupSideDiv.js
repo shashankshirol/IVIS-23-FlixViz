@@ -489,9 +489,11 @@ function fillSideDivWithBarChart(countryCode) {
         if (currentSubGroups.length + countryCode.length < 4) {
             d3.select("#clickData").selectAll("svg").remove()
             currentSubGroups = currentSubGroups.concat(countryCode)
+            const divWidth = d3.select("#clickData").node().getBoundingClientRect().width
+            const divHeight = d3.select("#clickData").node().getBoundingClientRect().height
 
-            let margin = {top: 5, right: 25, bottom: 110, left: 70}
-            let width_bar = 500 - margin.left - margin.right
+            let margin = {top: 5, right: 150, bottom: 110, left: 150}
+            let width_bar = divWidth - margin.left - margin.right
             let height_bar = 320 - margin.top - margin.bottom;
             // append the svg object to the body of the page
             let svgDivBarChart = d3.select("#clickData")
@@ -580,11 +582,13 @@ function fillSideDivWithBarChart(countryCode) {
                         .attr("height", function(d) { return height_bar - y(0); })
                         .attr("fill", function(d) { return color(d.key); });
 
+                    
+
                     //Adding axis labels
                     svgDivBarChart.append("text")
                         .attr("text-anchor", "end")
-                        .attr("x", width_bar/2)
-                        .attr("y", height_bar + margin.top + 100)
+                        .attr("x", 0)
+                        .attr("y", 0)
                         .text("Genres");
                     
                     svgDivBarChart.append("text")
@@ -594,7 +598,7 @@ function fillSideDivWithBarChart(countryCode) {
                         .attr("x", -50)
                         .attr("dy", ".75em")
                         .attr("transform", "rotate(-90)")
-                        .text("number of titles");
+                        .text("Number of titles");
 
                     svgDivBarChart.selectAll("rect")
                         .on("mouseover", function(d) {

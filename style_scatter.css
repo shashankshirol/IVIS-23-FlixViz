@@ -141,6 +141,23 @@ body {
 .poster_info p {
   padding-top: 5px;
 }
+
+#tooltipTitle{
+  margin: auto;
+}
+
+#totalTitles{
+  margin: auto;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+#nation{
+  margin: auto;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
 .scroll_button {
   position: absolute;
   height: 187px;

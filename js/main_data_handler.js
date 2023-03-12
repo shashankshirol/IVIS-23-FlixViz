@@ -237,6 +237,10 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         let countryName = countriesData[d.id]["name"]
         if (countryName.includes("United Kingdom")){
             countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
+        } else if(countryName.includes("United States")){
+            countryName = "USA"
+        } else if(countryName.includes("Korea")){
+            countryName = "South Korea"
         }
         let country_total_tiles = "No data available"
 
@@ -250,7 +254,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
 
         d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
-        d3.select("#totalTitles").text(country_total_tiles)
+        d3.select("#hoveredCountryLegendScatter").text(countryName)
+        d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix")
     
         alreadyOver = true
     }
