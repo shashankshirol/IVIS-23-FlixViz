@@ -52,6 +52,7 @@ async function highlightCountriesWithTitle(countryCodes) {
     })
 
     sideDiv.transition().duration(750).style("width", "0%").style("opacity", 0).style("pointer-events", "none");
+    isItInCountryAvailabilityMode = true
 }
 
 //Map Country name to IDs
