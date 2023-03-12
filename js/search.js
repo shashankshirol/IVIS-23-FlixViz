@@ -109,7 +109,7 @@ getJSON("../Data/CName_to_id.json").then(data => {
                                 if (d != undefined && d.id == id) {
                                     highlightCountry(d3.select(this))
                                     currentCountry = d3.select(this)
-                                    sideDiv.transition().duration(750).style("width", "45%").style("opacity", 0.9).style("pointer-events", "auto");
+                                    sideDiv.transition().duration(750).style("width", "35%").style("opacity", 0.9).style("pointer-events", "auto");
                                     currentSubGroups = []
                                     fillSideDivWithBarChart([clickedCountryCode])
                                 }
