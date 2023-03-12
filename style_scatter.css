@@ -1,16 +1,15 @@
 .visualWindow{
   width: 100%;
-  height: 600px;
+  height: 100%;
   display: flex;
   flex-direction: row;
 }
 .scatterPlot{
   width:1800px;
-  height:500px;
+  height:100%;
 }
 .filters{
 height: 100px;
-width: 1800px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -344,10 +343,17 @@ opacity: 1;
 background: #E50914;
 
 }
+#scatter_titles{
+  margin-top: 100px;
+}
+.pill.selected {
+  background: #E50914;
+  
+  }
 
 .wrapper{
 max-width: 450px;
-margin: 150px auto;
+margin-right: 20px; 
 }
 .wrapper .search-input{
 background: #fff;

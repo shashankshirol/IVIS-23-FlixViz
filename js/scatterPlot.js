@@ -1,7 +1,9 @@
 function generate_scatter_plot(code) {
   let margin = { top: 5, right: 30, bottom: 30, left: 60 },
-  width = 1800 - margin.left - margin.right,
+  width = window.innerWidth*0.9 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
+  window.onresize = () => generate_scatter_plot(code)
+  document.getElementById("svgPlot").innerHTML = ""
 let svg = d3
   .selectAll("#svgPlot")
   .append("svg")
@@ -91,8 +93,8 @@ d3.json("../Data/data_netflix.json")
           d.votes +
           "]"
       )
-        .style("left", d3.mouse(this)[0] + 70 + "px")
-        .style("top", d3.mouse(this)[1] + "px");
+        .style("left", d3.mouse(this)[0] + 100 + "px")
+        .style("top", d3.mouse(this)[1] + 100 + "px");
     }
     function mouseClick(d) {
       displayModal(d, data);
@@ -106,7 +108,8 @@ d3.json("../Data/data_netflix.json")
       .style("border", "solid")
       .style("border-width", "2px")
       .style("border-radius", "5px")
-      .style("padding", "5px");
+      .style("padding", "5px")
+      .style("pointer-events", "none")
     let brush = d3
       .brush() // Add the brush feature using the d3.brush function
       .extent([
