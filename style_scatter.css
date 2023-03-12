@@ -227,7 +227,7 @@ body {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 .modal-content {
-  overflow: hidden;
+  overflow: auto;
   position: absolute;
   border-radius: 20px;
   top: 50%;

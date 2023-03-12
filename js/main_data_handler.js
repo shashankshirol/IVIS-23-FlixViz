@@ -170,7 +170,7 @@ function generateCountryDetails(country_code) {
         <div id="modalBodyInfo"></div>
         <div class="dfg">
         <div id="svgPlotForce"></div>
-        <div id="modalGenres"> </div>
+        <div id="modalGenres"></div>
     </div>
     `)
 

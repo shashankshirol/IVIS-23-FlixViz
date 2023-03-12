@@ -24,12 +24,14 @@ function ForceGraph(movieChoice, newData){
     }
     let parent = document.getElementById("modalGenres")
     parent.innerHTML = ""
+    let parent_header = document.createElement("h4")
+    parent_header.innerHTML = "Search Titles by Similar Genres"
+    parent.append(parent_header)
     movieChoice.genre.split("|").map((x, id) => {
       let pill = document.createElement("div")
       pill.innerHTML = `
       <button id="${id}" class="pill" type="button">${x}</button>
       `
-
       pill.onclick = (d) => pillClick(d, x);
       parent.append(pill)
     })
