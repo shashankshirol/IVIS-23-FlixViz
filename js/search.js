@@ -83,12 +83,10 @@ getJSON("../Data/CName_to_id.json").then(data => {
 
         $("#title_search_cb").change(function () {
             if ($("#title_search_cb").is(":checked")) {
-                console.log("Checkbox is Checked")
                 $('#search-field').attr('placeholder', 'Search Title');
                 fillDataList(titleList, 'titlelist');
             }
             else {
-                console.log("Unchecked")
                 $('#search-field').attr('placeholder', 'Search Country');
                 fillDataList(countryList, 'countrylist');
             }
