@@ -194,8 +194,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
             currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
-
-
             wasDivExpanded = false
         } 
     })
@@ -238,7 +236,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if (countryName.includes("United Kingdom")){
             countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
         } else if(countryName.includes("United States")){
-            countryName = "USA"
+            countryName = "United States"
         } else if(countryName.includes("Korea")){
             countryName = "South Korea"
         }
