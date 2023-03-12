@@ -62,6 +62,17 @@
             </div>
         </div>
     </nav>
+    <script>
+      /* Prevents form Submit by Enter Key */
+      $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+    </script>
     <script src="js/setupSvg.js" crossorigin="anonymous"></script>
     <script src="js/setupSideDiv.js" crossorigin="anonymous"></script>
     <script src="js/zoomAndPanning.js" crossorigin="anonymous"></script>

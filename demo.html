@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>FlixViz</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v5.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas+Neue">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <style>
+          body{
+                  margin: 0%;
+                  padding: 0%;
+                  height: 100%;
+                  background-color: rgb(14, 17, 23);
+                  overflow: auto;
+          }
+
+          #about-flixviz{
+            border-radius:10px 10px 0px 0px;
+            background-color: #f0ead6;
+          }
+
+          #about-data{
+            border-radius:0px 0px 0px 0px;
+            background-color: #cabf9d;
+          }
+
+          #about-methods{
+            border-radius:0px 0px 10px 10px;
+            background-color: #a59a78;
+          }
+
+          #about-text{
+            font-family:  "Montserrat", sans-serif;
+            padding-top:15px;
+            padding-bottom:10px;
+            padding-left: 30px;
+          }
+          #project-title{
+            text-align: center;
+            font-family:  "Bebas Neue", sans-serif;
+            vertical-align: middle;
+            padding-top:7px;
+          }
+          .divtitle{
+            font-size:56px;
+            padding-top:70px;
+            padding-bottom:15px;
+            text-align: center;
+            font-family:  "Bebas Neue", sans-serif;
+            color:white;
+          }
+          #member-img {
+            display: block;
+            width: 200px;
+            height: auto;
+          }
+
+          .member-name{
+            color: white;
+            font-family: "Bebas Neue", sans-serif;
+            text-align: center;
+          }
+
+          .member-email{
+            color: #E50914;
+            font-family: "Bebas Neue", sans-serif;
+            text-align: center;
+          }
+
+          .member-info{
+            color: white;
+            font-family: "Montserrat", sans-serif;
+            text-align: center;
+            padding-left:10px;
+            padding-right:10px;
+          }
+      </style>
+    </head>
+    <body>
+    <nav class="navbar sticky-top bg-dark navbar-expand-lg" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html"><img src="../res/imgs/flixviz_logo.png" alt="FlixViz Logo" height="35"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active co" aria-current="page" href="demo.html">Demo</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <p class="divtitle">
+          Video
+        </p>
+      </div>
+    </div>
+
+    <div class="embed-responsive embed-responsive-16by9 d-flex flex-row justify-content-center">
+        <video class="embed-responsive-item col-4" controls>
+            <source src="res/vid/sample-5s.webm" type="video/webm">
+        </video>
+      </div>
+    
+    <div class="container" id="related_projects">
+    <div class="row">
+        <p class="divtitle">
+        Related Previous Projects
+        </p>
+    </div>
+    <div class="d-flex flex-column text-white">
+        
+        <p><strong>1.</strong> <a href="https://animeet-nine.vercel.app/" target="_blank">Animeet (2022)</a> by Xinmiao Yu, Harits Nur Fauzan, Yuanyang Ren, Kwan Mei Wong, Qinbai.</p>
+        <p><strong>2.</strong> <a href="https://viral50vis.github.io/" target="_blank">Viral50 (2020)</a> by Erik Båvenstrand, Diego Flores Leon, Hannes Runelöv, Martin Falke, Måns Ekelund, Robin Dahlkvist.</p>
+
+    </div>
+    </div>
+
+    <div class="container" id="references">
+      <div class="row">
+        <p class="divtitle">
+          References
+        </p>
+      </div>
+      <div class="d-flex flex-column text-white">
+        
+        <p><strong>[1]</strong> B. Shneiderman, “The eyes have it: a task by data type taxonomy for information visualizations,” in Proceedings 1996 IEEE Symposium on Visual Languages, Sep. 1996, pp. 336-343. doi: 10.1109/VL.1996.545307.</p>
+        <p><strong>[2]</strong> A. Bing and Z. Li-Gu, “Film Big Data Visualization Based on D3.js,” in 2020 International Conference on Big Data and Social Sciences (ICBDSS), Xi'an, China, Aug. 2020, pp. 50-53. doi: 10.1109/ICBDSS51270.2020.00019.</p>
+        <p><strong>[3]</strong> C. Ahlberg and B. Shneiderman, “Visual information seeking using the FilmFinder,” in Conference Companion on Human Factors in Computing Systems, New York, NY, USA, Apr. 1994, pp. 433-434. doi: 10.1145/259963.260431.</p>
+
+      </div>
+    </div>
+    </body>
+</html>

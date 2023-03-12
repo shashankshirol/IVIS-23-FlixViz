@@ -22,7 +22,9 @@
                   background-color: rgb(14, 17, 23);
                   overflow: auto;
           }
-
+          a {
+            color: red;
+          }
           #about-flixviz{
             border-radius:10px 10px 0px 0px;
             background-color: #f0ead6;
@@ -120,7 +122,7 @@
           <h2 id="title-test">Flixviz</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          The aim of this project was to visualize Netflix content available in 37 countries of the world. These countries share a majority stake in terms of number of users and number of titles available. Netflix, being a streaming service, has to abide by the distribution laws and has to geo-block certain titles. Netflix's Geo-blocking of content affects the consumers, making it increasingly difficult to find a particular title. We tried to augment the data by adding IMDB information for the titles to help users gain better insights on the data.
+          The aim of this project was to visualize Netflix content available in 37 countries of the world. These countries share a majority stake in terms of number of users and number of titles available. Netflix, being a streaming service, has to abide by the distribution laws and has to geo-block certain titles. Netflix's Geo-blocking of content affects the consumers, making it increasingly difficult to find a particular title. The attempt is novel in that, we augment the data by adding IMDB information for the titles to help users gain better insights on the data.
         </div>
       </div>
       <div class="row align-items-center" id="about-data">
@@ -128,7 +130,7 @@
           <h2 id="title-test">Data</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          We made use of the UnOGs API hosted on the RapidAPI platform. Then scraped the IMDB website to get the ratings and number of votes per title. Owing to the differences in regional text, IMDB information is sometimes partial and missing. We have the following attributes in our data: Title, Type, Synopsis, Genre, Countries-available, netflix-ID, year, IMDB rating, IMDB-votes, Poster-link. Due to lack of quantitative data, we can only draw comparative insights by pinning a country with another.
+          We made use of the <a href="https://rapidapi.com/unogs/api/unogsng">UnOGs API</a> hosted on the RapidAPI platform. Then, we scraped the IMDB website to get the ratings and number of votes per title. Owing to the differences in regional text, IMDB information is sometimes partial and missing. We have the following attributes in our data: Title, Type, Synopsis, Genre, Countries-available, netflix-ID, year, IMDB rating, IMDB-votes, Poster-link. Due to restricted quantitative data, we can only draw comparative insights by pinning a country other countries.
         </div>
       </div>
       <div class="row align-items-center" id="about-methods">
@@ -136,8 +138,8 @@
           <h2 id="title-test">Methods</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          We make use of standard HTML, CSS, and Javascript for the app; with an occasional use of the Bootstrap framework. For charting, we use D3js. For our hosting solution, we make use of Netlify, which can directly host websites from GitHub repositories.
-          Through the course of the project development, we made use of Trello to organize, assign, and track tasks. Apart from these, we made use of several other productivity tools to help us work better.
+          We make use of standard HTML, CSS, and Javascript for the app; with an occasional use of the Bootstrap framework. For charting, we use D3.js. We explore D3 Map projections to get an overview of the data; We make use of traditional scatter plots and Bar plots to gain attribute-level insights into the data, and allow the user to filter content based on several controls. For our hosting solution, we make use of <a href="https://www.netlify.com/">Netlify</a>, which can directly host websites from GitHub repositories.
+          Through the course of the project development, we used <a href="https://trello.com/">Trello</a> to organize, assign, and track tasks. Apart from these, we made use of several other productivity tools to help us work better.
         </div>
       </div>
     </div>
@@ -179,6 +181,13 @@
           <p class="member-info">What Jeffrey said.</p>
         </div>
       </div>
+    </div>
+    <div class="container">
+      <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        </ul>
+        <p class="text-center text-white"><strong><mark>NOT</mark> Sponsored by NordVPN</strong></p>
+      </footer>
     </div>
     </body>
 </html>
