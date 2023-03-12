@@ -3,6 +3,7 @@ function highlightCountry(passedCountry) {
         .raise()
         .style("stroke", "#FFFDD0")
         .style("stroke-width", 2)
+        .style("opacity", 1)
 }
 
 function highlightCountryWithColorAndStroke(passedCountry, color, stroke) {
@@ -10,6 +11,7 @@ function highlightCountryWithColorAndStroke(passedCountry, color, stroke) {
         .raise()
         .style("stroke", color)
         .style("stroke-width", stroke)
+        .style("opacity", 1)
 }
 
 function unhilightCountry(id) {
@@ -33,6 +35,7 @@ function unhilightAllCountriesExcept(passedCountry) {
 function unhighlightAllCountries() {
     g.selectAll("path")
         .each(function (d) {
+            d3.select(this).style("opacity", 1)
             unhighlightCountry(d3.select(this))
         })
 }
@@ -46,10 +49,10 @@ function unhighlightCountry(passedCountry){
 }
 
 function unselectCountry(passedCountry) {
+    sideDiv.transition().duration(500).style("opacity", 0).style("width", "0%").style("pointer-events", "none")
     if(passedCountry != null){
         unhighlightCountry(passedCountry)
     }
-    sideDiv.transition().duration(500).style("opacity", 0).style("width", "0%").style("pointer-events", "none")
     currentCountry = null
     tooltipVisibilityStatusComparedToClik = true
 }
@@ -237,7 +240,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     }
 
     function mouseOver(d) {
-
+        
         if(!alreadyOver){
             let countryCodeName = countriesData[d.id]["alpha-2"]
 
@@ -344,7 +347,6 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             }
             currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
-            
         }
     }
     
