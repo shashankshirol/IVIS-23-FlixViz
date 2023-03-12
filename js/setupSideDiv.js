@@ -343,7 +343,8 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
 function generateScatterChartInsideDiv(svgSideBar, data, color, positions, element) {
     // Step 1
         let margin = {top: 40, right: 40, bottom: 40, left: 60}
-        let scatterWidth = 420 - margin.left - margin.right
+        const divWidth = window.innerWidth*0.25
+        let scatterWidth = divWidth - margin.left - margin.right
         let scatterHeight = 200 - margin.top - margin.bottom
 
         // Step 3
@@ -519,7 +520,7 @@ function fillSideDivWithBarChart(countryCode) {
         if (currentSubGroups.length + countryCode.length < 4) {
             d3.select("#clickData").selectAll("svg").remove()
             currentSubGroups = currentSubGroups.concat(countryCode)
-            const divWidth = window.innerWidth*0.45
+            const divWidth = window.innerWidth*0.35
 
             let margin = {top: 5, right: 150, bottom: 110, left: 150}
             let width_bar = divWidth - margin.left - margin.right
