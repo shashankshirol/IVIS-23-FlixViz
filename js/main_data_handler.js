@@ -120,9 +120,11 @@ function generateCountryDetails(country_code) {
 
     //Hiding Search bar
     d3.select("#country-form").style("visibility", "hidden")
+    d3.select(".form-check").style("visibility", "hidden")
 
-    //Enable Overflow Attribute
+    //Modify sideDiv Style
     d3.select("#clickData").style("overflow", "auto")
+    d3.select("#clickData").attr("class", "d-inline-block")
     
     
     let outer_top_titles = d3.select("#clickData").append("div").attr("id", "top_titles").lower()
@@ -215,6 +217,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
             d3.select("#clickData").append("h1").lower()
             d3.select("#country-form").style("visibility", "visible")
+            d3.select(".form-check").style("visibility", "visible")
 
             currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
