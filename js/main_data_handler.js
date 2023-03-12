@@ -109,6 +109,53 @@ function remove_all_connections(){
     d3.selectAll(".link").remove()
 }
 
+var clickedCountryCode = ""
+
+function generateCountryDetails(country_code) {
+
+    // Removing existing SVGs
+    d3.select("#clickData").selectAll("svg").remove()
+    d3.select("#clickData").selectAll("h1").remove()
+    d3.select("#clickData").select("#dropdown_container").remove()
+    
+    
+    d3.select("#clickData").append("div").attr("id", "movieRow").attr("class", "row_posters").attr("onscroll", "getScrollVal()").lower()
+    d3.select("#clickData").append("h1").attr("class", "display-5").attr("id", "movie-header").text(`Top Titles in ${getCountryName(country_code)} based on Filter values`).lower()
+    let outer_scatter_div = d3.select("#clickData").append("div").attr("id", "scatter_titles").lower()
+    let outer_modal_div = d3.select("#clickData").append("div").attr("id", "myModal").attr("class", "modal").lower()
+
+    // Scatter Plot DOM elements
+    let scatter_plot_window = outer_scatter_div.append("div").attr("id", "scatterplotWindow").attr("class", "visualWindow")
+    let scatterplot_div = scatter_plot_window.append("div").attr("class", "scatterPlot")
+    scatterplot_div.append("div").attr("id", "svgPlot").style("display", "block").style("margin", "auto")
+
+
+    let scatterplot_filters = scatterplot_div.append("div").attr("class", "filters").attr("id", "filter")
+    scatterplot_filters.append("div").attr("id", "year").style("display", "contents").style("text-align", "center")
+    scatterplot_filters.append("div").attr("id", "votes").style("display", "contents").style("text-align", "center")
+    scatterplot_filters.append("div").attr("id", "rating").style("display", "contents").style("text-align", "center")
+
+
+    // Modal DOM elements
+    outer_modal_div.append("div").attr("class", "modal-content").html(`
+        <div class="modal-header">
+            <h2 id="title">Modal Header</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div id="modalBody" class="modal-body">
+            <div id="modalBodyInfo"></div>
+            <div id="svgPlotForce"></div>
+        </div>
+    `)
+
+    setup_modal() // Setting up modal
+
+
+
+    d3.select(".buttonDiv").style("text-align", "center")
+    generate_scatter_plot(country_code)
+}
+
 function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countriesData, data){
     const countries = topojson.feature(data, data.objects.countries)
     const projection = d3
@@ -121,16 +168,34 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     d3.select("#expandCollapeDiv").on("click", () => {
         if (!wasDivExpanded) {
-            // Temporary code - Will be changed
-            location.href = `scatter.html?country=${$("#clickData h1").text() == "USA" ? "US":$("#clickData h1").text()}`
-
-            ////////////////////////////////////
             d3.select("#expandCollapeDiv").text("Click to collapse")
-            sideDiv.transition().duration(500).style("width","100%").style("opacity", 1)
+            sideDiv.transition().duration(500).style("width", "100%").style("opacity", 1)
+            generateCountryDetails(clickedCountryCode)
             wasDivExpanded = true
         } else {
             d3.select("#expandCollapeDiv").text("Click to expand")
-            sideDiv.transition().duration(500).style("width","35%").style("opacity", 0.9)
+            sideDiv.transition().duration(500).style("width", "35%").style("opacity", 0.9)
+
+            // Generate the sidebar again
+            unhighlightAllCountries()
+            remove_all_connections()
+            d3.select("#clickData").attr("class", "d-flex flex-column justify-content-around align-items-center").style("text-align", "center")
+
+            d3.select("#scatter_titles").remove() // Clearing the Scatter Plot
+            d3.select("#myModal").remove() // Clearing the Modal
+            d3.select("#movieRow").remove() // Clearing the MovieRow
+            d3.select("#movie-header").remove() // Clearing Movie Header
+
+            d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
+            d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
+            d3.select("#clickData").append("h1").lower()
+
+            d3.select("#country-scatter").remove() //Remove dynamically generated script
+
+            currentSubGroups = []
+            fillSideDivWithBarChart([clickedCountryCode])
+
+
             wasDivExpanded = false
         } 
     })
@@ -210,7 +275,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     function clicked(d) {
         
-        let clickedCountryCode = countriesData[d.id]["alpha-2"]
+        clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){
                 tooltipVisibilityStatusComparedToClik = false
@@ -243,7 +308,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if (countryName.includes("United Kingdom")){
                 countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
             }
-            currentSubGroups= []
+            currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])
             
         }
