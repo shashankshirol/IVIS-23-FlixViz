@@ -35,6 +35,25 @@ $("#country-form").submit(function() {
     return false;
 });
 
+async function highlightCountriesWithTitle(countryCodes) {
+    await svg.transition()
+        .duration(500)
+        .call( zoom.transform, d3.zoomIdentity ).end()
+    
+    unhighlightAllCountries()
+
+    g.selectAll("path")
+    .each(function (d) {
+        if (d != undefined && countryCodes.includes(d.id)) {
+            highlightCountry(d3.select(this))
+        }else{
+            d3.select(this).style("opacity", "0.1")
+        }
+    })
+
+    sideDiv.transition().duration(750).style("width", "0%").style("opacity", 0).style("pointer-events", "none");
+}
+
 //Map Country name to IDs
 getJSON("../Data/CName_to_id.json").then(data => {
     getJSON("../Data/data_netflix.json").then(netflix_data => {
@@ -116,10 +135,25 @@ getJSON("../Data/CName_to_id.json").then(data => {
                             })
                     }
                     else {
+                        getJSON("../Data/CName_to_id.json").then(data => {
+                            let content = $("#search-field").val()
+                            let countryCodes = titleCntry[content].split(",").map(function(string){
+                                let countryName = getCountryName(string.split(":")[0])
+                                if(countryName.includes("United Kingdom")){
+                                    countryName = "United Kingdom of Great Britain and Northern Ireland"
+                                } else if(countryName.includes("Korea")){
+                                    countryName = "Korea, Republic of"
+                                }else if(countryName.includes("Czech")){
+                                    countryName = "Czechia"
+                                } else if(countryName.includes("United States")){
+                                    countryName = "United States of America"
+                                }
+                                return data[countryName]
+                            })
+                            highlightCountriesWithTitle(countryCodes)
+                        })
                         // Add code to highlight countries here
-                        let content = $("#search-field").val()
-                        console.log(content)
-                        console.log(titleCntry[content])
+                        
                     }
                 
                 })

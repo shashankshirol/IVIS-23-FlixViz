@@ -5,7 +5,8 @@ const zoom = d3.zoom()
 
 
 function zoomed() {
-    if(currentCountry != undefined && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) > 0)){
+
+    if((currentCountry != undefined && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) > 0)) || currentCountry == undefined){
         unhighlightAllCountries()
         remove_all_connections()
         unselectCountry(currentCountry)
@@ -22,11 +23,12 @@ function stopped() {
 
 function reset() {
 
-    svg.transition()
-        .duration(500)
-        .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
-    
     remove_all_connections()
     unhighlightAllCountries()
     unselectCountry(currentCountry)
+
+    svg.transition()
+        .duration(500)
+        .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+
 }
