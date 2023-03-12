@@ -117,11 +117,20 @@ function generateCountryDetails(country_code) {
     d3.select("#clickData").selectAll("svg").remove()
     d3.select("#clickData").selectAll("h1").remove()
     d3.select("#clickData").select("#dropdown_container").remove()
+
+    //Hiding Search bar
+    d3.select("#country-form").style("visibility", "hidden")
+
+    //Enable Overflow Attribute
+    d3.select("#clickData").style("overflow", "auto")
     
     
-    d3.select("#clickData").append("div").attr("id", "movieRow").attr("class", "row_posters").attr("onscroll", "getScrollVal()").lower()
-    d3.select("#clickData").append("h1").attr("class", "display-5").attr("id", "movie-header").text(`Top Titles in ${getCountryName(country_code)} based on Filter values`).lower()
+    let outer_top_titles = d3.select("#clickData").append("div").attr("id", "top_titles").lower()
+    outer_top_titles.append("h5").attr("class", "h3 text-muted").attr("id", "movie-header").text(`Top Titles in ${getCountryName(country_code)} based on Filter values`)
+    outer_top_titles.append("div").attr("id", "movieRow").attr("class", "row_posters").attr("onscroll", "getScrollVal()")
+
     let outer_scatter_div = d3.select("#clickData").append("div").attr("id", "scatter_titles").lower()
+
     let outer_modal_div = d3.select("#clickData").append("div").attr("id", "myModal").attr("class", "modal").lower()
 
     // Scatter Plot DOM elements
@@ -131,21 +140,36 @@ function generateCountryDetails(country_code) {
 
 
     let scatterplot_filters = scatterplot_div.append("div").attr("class", "filters").attr("id", "filter")
-    scatterplot_filters.append("div").attr("id", "year").style("display", "contents").style("text-align", "center")
-    scatterplot_filters.append("div").attr("id", "votes").style("display", "contents").style("text-align", "center")
-    scatterplot_filters.append("div").attr("id", "rating").style("display", "contents").style("text-align", "center")
+    scatterplot_filters.html(`
+    <div class="wrapper d-flex flex-column">
+            <div class="search-input">
+              <a href="" target="_blank" hidden></a>
+              <input type="text" placeholder="Search for Genres">
+              <div class="autocom-box">
+              </div>
+                <div class="icon"><i class="fas fa-search"></i></div>
+            </div>
+            <div class="genreFilter" id="genreFilter"></div>
+    </div>
+    <div style="text-align: center" id="year"></div>
+    <div style="text-align: center" id="votes"></div>
+    <div style="text-align: center" id="rating"></div>
+    <button class="pill" id="resetFilters">Reset Filters</button>
+    `)
 
 
     // Modal DOM elements
     outer_modal_div.append("div").attr("class", "modal-content").html(`
-        <div class="modal-header">
-            <h2 id="title">Modal Header</h2>
-            <span class="close">&times;</span>
-        </div>
-        <div id="modalBody" class="modal-body">
-            <div id="modalBodyInfo"></div>
-            <div id="svgPlotForce"></div>
-        </div>
+    <div class="modal-header">
+        <h2 id="title">Modal Header</h2>
+        <span class="close">&times;</span>
+    </div>
+    <div id="modalBody" class="modal-body">
+        <div id="modalBodyInfo"></div>
+        <div class="dfg">
+        <div id="svgPlotForce"></div>
+        <div id="modalGenres"> </div>
+    </div>
     `)
 
     setup_modal() // Setting up modal
@@ -180,6 +204,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             unhighlightAllCountries()
             remove_all_connections()
             d3.select("#clickData").attr("class", "d-flex flex-column justify-content-around align-items-center").style("text-align", "center")
+            d3.select("#clickData").style("overflow", "hidden")
 
             d3.select("#scatter_titles").remove() // Clearing the Scatter Plot
             d3.select("#myModal").remove() // Clearing the Modal
@@ -189,8 +214,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
             d3.select("#clickData").append("h1").lower()
-
-            d3.select("#country-scatter").remove() //Remove dynamically generated script
+            d3.select("#country-form").style("visibility", "visible")
 
             currentSubGroups = []
             fillSideDivWithBarChart([clickedCountryCode])

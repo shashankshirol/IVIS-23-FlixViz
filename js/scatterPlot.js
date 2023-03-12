@@ -43,6 +43,8 @@ d3.json("../Data/data_netflix.json")
       "votes"
     );
     let ratingSlider = slider_snap(0, 10, "Imdb Rating", "rating");
+    let genreFilter = document.getElementById("genreFilter");
+
     svg
       .append("text")
       .attr("text-anchor", "end")
@@ -183,12 +185,17 @@ d3.json("../Data/data_netflix.json")
       votesSlider.reset();
       yearSlider.reset();
       ratingSlider.reset();
+      selectedGenres = []
+      document.getElementById("genreFilter").innerHTML = ""
+      applyFilters()
     }
     function setFilters(s) {
       votesSlider.setRange([s[1][1], s[0][1]].map(y.invert, y));
       ratingSlider.setRange([s[0][0], s[1][0]].map(x.invert, x));
     }
+    document.getElementById("resetFilters").onclick = () => resetFilters();
     function updateChart(s = d3.event.selection) {
+      console.log(s);
       let newData = data;
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if (!s) {
@@ -220,59 +227,126 @@ d3.json("../Data/data_netflix.json")
       updateAll();
     }
 
-    d3.select("#year").on("change", function () {
-      yearRange = yearSlider.getRange();
-      voteRange = votesSlider.getRange();
-      ratingRange = ratingSlider.getRange();
-      newData = data.filter((x) => {
-        if (x.year >= yearRange[0] && x.year <= yearRange[1])
-          if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
-            if (
-              x.imdb_rating >= ratingRange[0] &&
-              x.imdb_rating <= ratingRange[1]
-            )
-              return x;
-      });
-      createMovieRow(newData);
-      updateFilters(newData);
-    });
 
-    d3.select("#votes").on("change", function () {
+
+
+    let selectedGenres = [];
+    function applyFilters() {
       yearRange = yearSlider.getRange();
       voteRange = votesSlider.getRange();
       ratingRange = ratingSlider.getRange();
       let newData = data.filter((x) => {
-        if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
+        if (
+          x.imdb_rating >= ratingRange[0] &&
+          x.imdb_rating <= ratingRange[1]
+        )
           if (
-            x.imdb_rating >= ratingRange[0] &&
-            x.imdb_rating <= ratingRange[1]
+            x.votes >= voteRange[0] * 1000 &&
+            x.votes <= voteRange[1] * 1000
           )
-            if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
+            if (x.year >= yearRange[0] && x.year <= yearRange[1])
+                return x;
       });
+      selectedGenres.map(genre => {
+        newData = newData.filter(x => x.genre.split(" | ").includes(genre))
+      })
+      console.log(newData.length)
       updateFilters(newData);
       createMovieRow(newData);
       x.domain([ratingRange[0], ratingRange[1]]);
       y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
       updateAll();
+    }
+    d3.select("#year").on("change", function () {
+      applyFilters()
     });
-
+    d3.select("#votes").on("change", function () {
+      applyFilters()
+    });
     d3.select("#rating").on("change", function () {
-      yearRange = yearSlider.getRange();
-      voteRange = votesSlider.getRange();
-      ratingRange = ratingSlider.getRange();
-      let newData = data.filter((x) => {
-        if (x.imdb_rating >= ratingRange[0] && x.imdb_rating <= ratingRange[1])
-          if (x.votes >= voteRange[0] * 1000 && x.votes <= voteRange[1] * 1000)
-            if (x.year >= yearRange[0] && x.year <= yearRange[1]) return x;
-      });
-      updateFilters(newData);
-      createMovieRow(newData);
-      x.domain([ratingRange[0], ratingRange[1]]);
-      y.domain([voteRange[0] * 1000, voteRange[1] * 1000]);
-      updateAll();
+      applyFilters()
     });
-    
+    //GENRE FILTER
+    d3.json("../Data/countryToGenre.json")
+      .then(function (genres) {
+        let suggestions = Object.entries(genres.JP);
+        console.log(suggestions)
+        // getting all required elements
+        const searchWrapper = document.querySelector(".search-input");
+        const inputBox = searchWrapper.querySelector("input");
+        const suggBox = searchWrapper.querySelector(".autocom-box");
+        const icon = searchWrapper.querySelector(".icon");
+        let linkTag = searchWrapper.querySelector("a");
+        let webLink;
+        // if user press any key and release
+        inputBox.onkeyup = (e) => {
+          let userData = e.target.value; //user enetered data
+          let emptyArray = [];
+          if (userData) {
+            icon.onclick = () => {
+              webLink = `https://www.google.com/search?q=${userData}`;
+              linkTag.setAttribute("href", webLink);
+              linkTag.click();
+            };
+            emptyArray = suggestions.filter((data) => {
+              //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+              return data[0]
+                .toLocaleLowerCase()
+                .startsWith(userData.toLocaleLowerCase());
+            });
+            emptyArray = emptyArray.map((data) => {
+              // passing return data inside li tag
+              return (data = `<li>${data[0]}</li>`);
+            });
+            searchWrapper.classList.add("active"); //show autocomplete box
+            showSuggestions(emptyArray);
+            let allList = suggBox.querySelectorAll("li");
+            for (let i = 0; i < allList.length; i++) {
+              //adding onclick attribute in all li tag
+              allList[i].onclick = select;
+            }
+          } else {
+            searchWrapper.classList.remove("active"); //hide autocomplete box
+          }
+        };
+        function removeGenre(d, genre) {
+          console.log(d)
+          let genres = document.getElementById("genreFilter")
+          genres.removeChild(d)
+          selectedGenres.splice(selectedGenres.indexOf(genre), 1)
+          applyFilters()
+        }
+        function select(element) {
+          let genre = element.target.outerText;
+          inputBox.value = "";
+          searchWrapper.classList.remove("active");
+          let parent = document.getElementById("genreFilter");
+          let pill = document.createElement("div");
+          pill.innerHTML = `
+    <button id = ${genre.split(",")[0]} class="pill selected" type="button">${genre}</button>
+    `;
+
+          pill.onclick = () => removeGenre(pill, genre.split(",")[0]);
+          parent.append(pill);
+          selectedGenres.push(genre.split(",")[0])
+          applyFilters()
+        }
+        function showSuggestions(list) {
+          let listData;
+          if (!list.length) {
+            userValue = inputBox.value;
+            listData = `<li>${userValue}</li>`;
+          } else {
+            listData = list.join("");
+          }
+          suggBox.innerHTML = listData;
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   })
+
   .catch(function (error) {
     console.error(error);
   });

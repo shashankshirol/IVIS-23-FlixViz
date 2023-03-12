@@ -12,6 +12,10 @@ function setup_modal() {
   };
 }
 
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function displayModal(d, data) {
   let header = document.getElementById("title");
   header.innerHTML = "";
@@ -24,22 +28,26 @@ function displayModal(d, data) {
   <img src="${d.img} alt="movieImage" class="modalImg"/>
   <div class="modalSummary" style="text-align:left;">
       <h4>${d.title}</h4>
+      <p> <strong>Genres:</strong> ${genres}</p>
       <p>${d.synopsis}</p>
   </div>
   <div class="modalInfo" >
-  <h4>Votes: ${d.votes}</h4>
-  <h4>Imdb Rating: ${d.imdb_rating}</h4>
-  <h4>
+  <div class ="modalSideInfo"><p><strong>Votes: </strong>${numberWithCommas(d.votes)}</p></div>
+  <div class ="modalSideInfo"><p><strong>IMDb Rating: </strong>${d.imdb_rating}</p></div>
+  <div class ="modalSideInfo">
+  <p>
   <a href="https://www.netflix.com/title/${
     d.nfid
-  }" target="_blank">Netflix</a></h4>
-  <h4>
+  }" target="_blank">Netflix</a>&nbsp;
   <a href=${
     d.imdbid == null || d.imdbid.includes("|")
       ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.name)
       : "https://www.imdb.com/title/" + d.imdbid
-  } target="_blank" id="imdb_link">IMDB</a>
-  </h4>
+  } target="_blank" id="imdb_link"> IMDB</a>
+  </p>
+  </div>
+  <div class ="modalSideInfo"><p><strong>Release Year:  </strong>${d.year}</p></div>
+  <div class ="modalSideInfo"><p><strong>Added To Netflix:  </strong>${d.titledate}</p></div>
   </div>
 </div>
 `;
