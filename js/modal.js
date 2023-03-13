@@ -1,7 +1,6 @@
 function setup_modal() {
   let span = document.getElementsByClassName("close")[0];
   window.modal = document.getElementById("myModal");
-
   span.onclick = function () {
     modal.style.display = "none";
   };
@@ -17,6 +16,8 @@ function numberWithCommas(x) {
 }
 
 function displayModal(d, data) {
+  modalContent = document.getElementById("modalContent")
+  modalContent.style.height = window.innerHeight*0.8 + "px"
   let header = document.getElementById("title");
   header.innerHTML = "";
   header.innerHTML = d.title;
@@ -41,7 +42,7 @@ function displayModal(d, data) {
   }" target="_blank">Netflix</a>&nbsp;
   <a href=${
     d.imdbid == null || d.imdbid.includes("|")
-      ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.name)
+      ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.title)
       : "https://www.imdb.com/title/" + d.imdbid
   } target="_blank" id="imdb_link"> IMDB</a>
   </p>

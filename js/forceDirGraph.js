@@ -30,9 +30,9 @@ function ForceGraph(movieChoice, newData){
     movieChoice.genre.split("|").map((x, id) => {
       let pill = document.createElement("div")
       pill.innerHTML = `
-      <button id="${id}" class="pill" type="button">${x}</button>
+      <button id="${"genreButton"+id}" class="pill" type="button">${x}</button>
       `
-      pill.onclick = (d) => pillClick(d, x);
+      pill.querySelector("#"+"genreButton"+id).onclick = (d) => pillClick(d,x)
       parent.append(pill)
     })
   }

@@ -138,18 +138,22 @@ function generateCountryDetails(country_code) {
     // Scatter Plot DOM elements
     let scatter_plot_window = outer_scatter_div.append("div").attr("id", "scatterplotWindow").attr("class", "visualWindow")
     let scatterplot_div = scatter_plot_window.append("div").attr("class", "scatterPlot")
-    scatterplot_div.append("div").attr("id", "svgPlot").style("display", "block").style("margin", "auto")
+    let genre_div = scatterplot_div.append("div").attr("class", "pill-collector").attr("id", "genreFilter")
+    let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex").style("margin", "auto")
 
 
-    let scatterplot_filters = scatterplot_div.append("div").attr("class", "filters").attr("id", "filter")
+    let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter")
     scatterplot_filters.html(`
+    <div style="display: flex; justify-content: space-evenly" class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+    <label class="form-check-label" for="flexSwitchCheckChecked">Search for titles</label>
+    </div>
     <div class="wrapper d-flex flex-column">
             <div class="search-input">
               <a href="" target="_blank" hidden></a>
-              <input type="text" placeholder="Search for Genres">
+              <input type="text" id="searchBarInput" placeholder="Search for Genres">
               <div class="autocom-box">
               </div>
-                <div class="icon"><i class="fas fa-search"></i></div>
             </div>
             <div class="genreFilter" id="genreFilter"></div>
     </div>
@@ -161,7 +165,7 @@ function generateCountryDetails(country_code) {
 
 
     // Modal DOM elements
-    outer_modal_div.append("div").attr("class", "modal-content").html(`
+    outer_modal_div.append("div").attr("class", "modal-content").attr("id", "modalContent").html(`
     <div class="modal-header">
         <h2 id="title">Modal Header</h2>
         <span class="close">&times;</span>
