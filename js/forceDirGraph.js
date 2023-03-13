@@ -145,12 +145,12 @@ function ForceGraph(movieChoice, newData){
        }).on("click", (d) => displayModal(d.movieObject, data));
     ;
 
-    let dataForLegend = ["Suggested related movies", "Genres", "CurrentTitle"]
+    let dataForLegend = ["Suggested related Titles", "Genres", "Current Title"]
 
     function pickColor(d){
-      if(d == "Suggested related movies") return "rgb(212, 181, 108)"
+      if(d == "Suggested related Titles") return "rgb(212, 181, 108)"
       if(d == "Genres") return "rgb(210, 85, 91)"
-      if(d == "CurrentTitle") return "rgb(0, 0, 0)"
+      if(d == "Current Title") return "rgb(0, 0, 0)"
     }
 
     svg
