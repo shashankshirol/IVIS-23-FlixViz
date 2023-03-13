@@ -111,10 +111,11 @@ function remove_all_connections(){
     d3.selectAll(".link").remove()
 }
 
-var clickedCountryCode = ""
+window.clickedCountryCode_main = ""
 
 function generateCountryDetails(country_code) {
 
+    console.log(country_code)
     // Removing existing SVGs
     d3.select("#clickData").selectAll("svg").remove()
     d3.select("#clickData").selectAll("h1").remove()
@@ -213,7 +214,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if (!wasDivExpanded) {
             d3.select("#expandCollapeDiv").text("Click to collapse")
             sideDiv.transition().duration(500).style("width", "100%").style("opacity", 1)
-            generateCountryDetails(clickedCountryCode)
+            generateCountryDetails(clickedCountryCode_main)
             wasDivExpanded = true
         } else {
             d3.select("#expandCollapeDiv").text("Click to expand")
@@ -238,7 +239,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select(".form-check").style("visibility", "visible")
 
             currentSubGroups = []
-            fillSideDivWithBarChart([clickedCountryCode])
+            fillSideDivWithBarChart([clickedCountryCode_main])
             wasDivExpanded = false
         } 
     })
@@ -330,8 +331,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     function clicked(d) {
         
-        clickedCountryCode = countriesData[d.id]["alpha-2"]
-        if(countryCodeList.includes(clickedCountryCode)){
+        clickedCountryCode_main = countriesData[d.id]["alpha-2"]
+        if(countryCodeList.includes(clickedCountryCode_main)){
 
             tooltip.style("visibility", "hidden")
 
@@ -363,7 +364,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
             }
             currentSubGroups = []
-            fillSideDivWithBarChart([clickedCountryCode])
+            fillSideDivWithBarChart([clickedCountryCode_main])
         }
     }
     
