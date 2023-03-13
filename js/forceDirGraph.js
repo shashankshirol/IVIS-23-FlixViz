@@ -40,53 +40,43 @@ function ForceGraph(movieChoice, newData){
 
 
   function createFDG(movieChoice, similarTitle, data){
-    var width = 480;
-    var height = 480;
+    let width = 480;
+    let height = 480;
   
-    var title = [movieChoice.title];
-    var genre = movieChoice.genre.split("|");
+    let title = [movieChoice.title];
+    let genre = movieChoice.genre.split("|");
       let arrLength = similarTitle.length
       if(similarTitle.length > 10) arrLength = 10; 
      similarTitle.sort((a, b) => (a.imdb_rating > b.imdb_rating) ? -1 : 1);
   
-      var nodes = [];
-      for (i = 0; i < title.length; i++) {
-        nodes.push({name: title[i], weight: 14, fontsize: 17, circlecolor: "#E50914", fontcolor: "#92181E", poster: movieChoice.img, rating: movieChoice.imdb_rating});
+      let nodes = [];
+      for (let i = 0; i < title.length; i++) {
+        nodes.push({name: title[i], weight: 14, fontsize: 17, circlecolor: "#000000", fontcolor: "#92181E", poster: movieChoice.img, rating: movieChoice.imdb_rating});
       } 
-      for (i = 0; i < arrLength; i++) {
+      for (let i = 0; i < arrLength; i++) {
         if (similarTitle[i].title == movieChoice.title){
           continue;
         };
         nodes.push({movieObject:similarTitle[i] ,name: similarTitle[i].title, weight: 12, fontsize: 17, circlecolor: "#D4B56C", fontcolor: "#92181E", poster: similarTitle[i].img, rating: similarTitle[i].imdb_rating});
       } 
   
-      var links = [];
-      for (i = 0; i < genre.length; i++) {
+      let links = [];
+      for (let i = 0; i < genre.length; i++) {
         nodes.push({name: genre[i], weight: 8, fontsize: 13, circlecolor: "#D2555B", fontcolor: "#000", poster: "none", rating: "none"})
         links.push({source: title[0], target: genre[i]});
       } 
   
-      for (i = 0; i < arrLength; i++) {
+      for (let i = 0; i < arrLength; i++) {
         links.push({source: title[0], target: similarTitle[i].title});
       } 
   
-      
-  
-      // const gethtml = (poster, name, rating) => {
-      //   return `<div><img class="poster" src="${poster}"></img><p id="tooltiptext" style="text-align: center;">${name}</p><p id="tooltiptext" style="text-align: center">IMDB: ${rating}</p></div>`;
-      // }
       document.getElementById("svgPlotForce").innerHTML= ""
-      var svg = d3.selectAll('#svgPlotForce')
+      let svg = d3.selectAll('#svgPlotForce')
         .append('svg')
         .attr('width', width)
         .attr('height', height)
-  
-      // var tooltip = d3.select("#svgPlotForce").append("div")
-      //  .attr("class", "tooltip")
-      //  .style("opacity", 1);
       
-      
-      var simulation = d3
+      let simulation = d3
         .forceSimulation(nodes)
         .force(
           "link",
@@ -95,15 +85,14 @@ function ForceGraph(movieChoice, newData){
             .id(function(d){
               return d.name;
             })
-            .links(links)
-            
+            .links(links)  
         )
         .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(width/2, height/2))
         .on("tick", ticked);
   
   
-        var link = svg
+        let link = svg
               .append("g")
               .attr("class", "link")
               .selectAll("line")
@@ -114,13 +103,13 @@ function ForceGraph(movieChoice, newData){
               .attr("stroke-opacity", 0.7)
               .style("stroke", "grey");  
   
-        var node = svg.append("g")
+        let node = svg.append("g")
           .attr("class", "nodes")
           .selectAll("g")
           .data(nodes)
           .enter().append("g")
   
-        var circles = node.append("circle")
+        let circles = node.append("circle")
           .attr("r", d => d.weight)
           .attr("fill",  d => d.circlecolor)
           .attr("stroke", "#FFF")
@@ -130,9 +119,8 @@ function ForceGraph(movieChoice, newData){
                  .duration('50')
                  .attr('opacity', '.85')
                  .attr("r", d => d.weight+5)
-                 
-            // tooltipShow(d);
-       })
+
+        })
        .on('mouseout', function (d) {
             d3.select(this).transition()
                  .duration('50')
@@ -141,34 +129,48 @@ function ForceGraph(movieChoice, newData){
             // tooltipHide(d);
        }).on("click", (d) => displayModal(d.movieObject, data));
     ;
-      //  function tooltipShow(d){
-      //   console.log(d)
-      //   if (d.poster!="none"){
-      //     tooltip.transition()
-      //       .duration(50)
-      //       .style("opacity", 1);
-      //     tooltip.html(gethtml(d.poster, d.name, d.rating))
-      //       .style("left", (480) + "px")
-      //       .style("top", (0) + "px");
-      //   }
-      //  }
-       
-    //    function tooltipHide(d){
-    //     if (d.poster!="none"){
-    //       tooltip.transition()
-    //         .duration(50)
-    //         .style("opacity", 1);
-    //     }
-    //  }
-      // Create a drag handler and append it to the node object instead
-        var dragger = d3.drag()
+
+    let dataForLegend = ["Suggested related movies", "Genres", "CurrentTitle"]
+
+    function pickColor(d){
+      if(d == "Suggested related movies") return "rgb(212, 181, 108)"
+      if(d == "Genres") return "rgb(210, 85, 91)"
+      if(d == "CurrentTitle") return "rgb(0, 0, 0)"
+    }
+
+    svg
+    .selectAll("myLegend")
+    .data(dataForLegend)
+    .enter()
+        .append('g')
+        .append("text")
+        .attr('x', 25)
+        .attr('y', (d,i) => 30+i*20)
+        .style("font-weight", "bold")
+        .text(d => d)
+        .style("fill", pickColor)
+        .style("font-size", 11)
+
+        
+    svg.append('g')
+    .selectAll("legendDots")
+        .data(dataForLegend)
+        .enter()
+        .append("circle")
+          .attr("class", "scatterLegendDots")
+          .attr("cx", 15 )
+          .attr("cy", (d,i) => 30+i*20 -5 )
+          .attr("r", 6)
+        .style("fill", pickColor)
+
+        let dragger = d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended);
     
         dragger(node);
   
-        var titles = node.append("text")
+        let titles = node.append("text")
         .text(function(d) {
           return d.name;
         })
