@@ -62,7 +62,6 @@ function moveTooltip(d) {
 
 function generateScatterChartInElement(data, x, y, element) {
     // Step 1
-        console.log(element)
         let margin = {top: 10, right: 100, bottom: 30, left: 60}
         let scatterWidth = 400 - margin.left - margin.right
         let scatterHeight = 150 - margin.top - margin.bottom

@@ -147,10 +147,15 @@ function generateCountryDetails(country_code) {
     let genre_div = scatterplot_div.append("div").attr("class", "pill-collector").attr("id", "genreFilter")
     let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex")
 
+    // Add Instructions Text
+    let disclaimer_div = scatterplot_div.append("div").attr("class", "d-flex flex-row justify-content-start my-2").style("gap", "7px")
+    disclaimer_div.append("i").attr("class", "bi bi-info-circle")
+    disclaimer_div.append("p").html("Double click anywhere on the Scatter Plot to reset Axes").style("font-weight", "bold")
+
 
     let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter").style("border", "2px dashed").style("border-radius", "20px")
     scatterplot_filters.html(`
-    <div style="display: flex; justify-content: center;"><h4><strong>Filters</strong></h4> <i style="margin-left: 10px" class="bi bi-info-circle tooltip_info"><span class="tooltip_info_text tooltip-bottom">Find Titles/Genres of Interest</span></i></div>
+    <div style="display: flex; justify-content: center;"><h4><strong>Filters</strong></h4></div>
     <div style="display: flex; justify-content: space-evenly" class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
     <label class="form-check-label" for="flexSwitchCheckChecked">Search for titles</label>
