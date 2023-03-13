@@ -17,8 +17,10 @@ function numberWithCommas(x) {
 
 function displayModal(d, data) {
   modalContent = document.getElementById("modalContent")
+  modalContent.style.overflow = "hidden"
   modalContent.style.height = window.innerHeight*0.8 + "px"
   let header = document.getElementById("title");
+  header.style.marginTop = "15px"
   header.innerHTML = "";
   header.innerHTML = d.title;
   let body = document.getElementById("modalBodyInfo");

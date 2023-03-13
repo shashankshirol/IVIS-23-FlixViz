@@ -148,8 +148,9 @@ function generateCountryDetails(country_code) {
     let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex")
 
 
-    let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter")
+    let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter").style("border", "2px dashed").style("border-radius", "20px")
     scatterplot_filters.html(`
+    <div style="display: flex; justify-content: center;"><h4><strong>Filters</strong></h4> <i style="margin-left: 10px" class="bi bi-info-circle tooltip_info"><span class="tooltip_info_text tooltip-bottom">Find Titles/Genres of Interest</span></i></div>
     <div style="display: flex; justify-content: space-evenly" class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
     <label class="form-check-label" for="flexSwitchCheckChecked">Search for titles</label>

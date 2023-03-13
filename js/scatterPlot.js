@@ -9,8 +9,12 @@ let svg = d3
   .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom + 20)
+  .style("border", "2px dashed")
+  .style("border-radius", "20px")
+  .style("padding", "4px")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
 
 d3.json("../Data/data_netflix.json")
   .then(function (data) {
@@ -51,7 +55,7 @@ d3.json("../Data/data_netflix.json")
       .append("text")
       .attr("text-anchor", "end")
       .attr("x", width)
-      .attr("y", height + margin.top + 20)
+      .attr("y", height + margin.top + 30)
       .text(currX[3]);
 
     let clip = svg
@@ -187,12 +191,13 @@ d3.json("../Data/data_netflix.json")
     }
     document.getElementById("resetFilters").onclick = () => resetFilters();
     function updateChart(s = d3.event.selection) {
-      let newData = data;
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if (!s) {
         if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
-        x.domain([currX[1], currX[2]]);
-        y.domain([currY[1], currY[2]]);
+        let rangex = ratingSlider.getRange()
+        let rangey = votesSlider.getRange()
+        x.domain([rangex[0], rangex[1]]);
+        y.domain([rangey[0]*1000, rangey[1]*1000]);
       } else {
         newData = data.filter((d) => {
           let xVals = [s[0][0], s[1][0]].map(x.invert, x);

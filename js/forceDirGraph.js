@@ -81,15 +81,12 @@ function ForceGraph(movieChoice, newData){
         .append('svg')
         .attr('width', width)
         .attr('height', height)
-<<<<<<< HEAD
-        .style("border", "3px dashed")
+        .style("border", "2px dashed")
         .style("border-radius", "30px")
   
       // var tooltip = d3.select("#svgPlotForce").append("div")
       //  .attr("class", "tooltip")
       //  .style("opacity", 1);
-=======
->>>>>>> 91ada05 (added legend to fdg)
       
       let simulation = d3
         .forceSimulation(nodes)
