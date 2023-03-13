@@ -245,11 +245,12 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     }
 
     function mouseOver(d) {
-        
-        if(!alreadyOver){
-            let countryCodeName = countriesData[d.id]["alpha-2"]
 
-            if(countryCodeList.includes(countryCodeName)){
+        if(!alreadyOver){
+            console.log("Mouse over")
+            let countryCodeName = countriesData[d.id]["alpha-2"]
+            
+            if(countryCodeList.includes(countryCodeName)){  
                 let x = countriesToOverviewInfo[countryCodeName]["tmovs"]
                 let y = countriesToOverviewInfo[countryCodeName]["tseries"]
                 generateScatterChartInElement(listOfDimensionsMoviesVsSeries,x,y, tooltip) 
@@ -258,8 +259,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             }
         }
         
-        if(currentCountry == undefined || 
-                (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id))){
+        if(!isItInCountryAvailabilityMode && (currentCountry == undefined || 
+                (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id)))){
             d3.select(this)
                 .raise()
                 .style("opacity", 1)
@@ -280,9 +281,8 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if(countryCodeList.includes(countriesData[d.id]["alpha-2"])){
             country_total_tiles = countriesToOverviewInfo[countriesData[d.id]["alpha-2"]]["tvids"] + " total titles"
         }
+        
         tooltip
-            .transition()
-            .duration(500)
             .style("opacity", 0.8)
             .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
 
@@ -305,13 +305,15 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(d3.select(this) != currentCountry){
                 d3.select(this).lower()
             }
-            d3.select(this)
-                .lower()
-                .style("opacity", .8)
-                .style("stroke", "grey")
-                .style("stroke-width", .5)
+            if(!isItInCountryAvailabilityMode){
+                d3.select(this)
+                    .lower()
+                    .style("opacity", .8)
+                    .style("stroke", "grey")
+                    .style("stroke-width", .5)
+            }
         }
-        tooltip.transition().duration(500).style("visibility", "hidden")
+        tooltip.style("visibility", "hidden")
         alreadyOver = false
     }
 
@@ -321,7 +323,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if(countryCodeList.includes(clickedCountryCode)){
             if(tooltipVisibilityStatusComparedToClik){
                 tooltipVisibilityStatusComparedToClik = false
-                tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
+                tooltip.style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
             }
             
             const [[x0, y0], [x1, y1]] = path.bounds(d);
