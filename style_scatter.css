@@ -33,6 +33,10 @@
   
 }
 
+#nationNavbarDiv{
+  visibility: hidden;
+}
+
 rect.selection {
   stroke: none;
   fill: rgb(251, 12, 12);
@@ -201,6 +205,8 @@ body {
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
+
+
 
 .modal {
   display: none; /* Hidden by default */

@@ -31,7 +31,6 @@ async function transitionBack(){
         .duration(500)
         .call( zoom.transform, d3.zoomIdentity );
     isItInCountryAvailabilityMode = false
-    tooltipVisibilityStatusComparedToClik = true
 }
 
 function reset() {
