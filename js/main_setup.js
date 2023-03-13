@@ -1,6 +1,5 @@
 let currentCountry = null
 let hasAllZoomingEnded = false
-let tooltipVisibilityStatusComparedToClik = true
 let isItInCountryAvailabilityMode = false
 const tooltip = generateTooltip()
 let alreadyOver = false

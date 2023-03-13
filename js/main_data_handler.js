@@ -54,7 +54,6 @@ function unselectCountry(passedCountry) {
         unhighlightCountry(passedCountry)
     }
     currentCountry = null
-    tooltipVisibilityStatusComparedToClik = true
 }
 
 
@@ -242,7 +241,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     function mouseOver(d) {
 
         if(!alreadyOver){
-            console.log("Mouse over")
+
             let countryCodeName = countriesData[d.id]["alpha-2"]
             
             if(countryCodeList.includes(countryCodeName)){  
@@ -256,6 +255,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         
         if(!isItInCountryAvailabilityMode && (currentCountry == undefined || 
                 (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id)))){
+            d3.select(this).style("cursor", "pointer"); 
             d3.select(this)
                 .raise()
                 .style("opacity", 1)
@@ -279,7 +279,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         
         tooltip
             .style("opacity", 0.8)
-            .style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
+            .style("visibility", currentCountry == undefined ? "visible" : "hidden")
 
         d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
         d3.select("#hoveredCountryLegendScatter").text(countryName)
@@ -293,7 +293,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
     }
     
     function mouseLeave(d) {
-        
+        d3.select(this).style("cursor", "default");
         tooltip.selectAll("svg").remove()
         if(currentCountry == undefined || 
             (d3.select(this).node() != currentCountry.node() && !checkIfCountryIsInLink(d.id))){       
@@ -316,10 +316,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         
         clickedCountryCode = countriesData[d.id]["alpha-2"]
         if(countryCodeList.includes(clickedCountryCode)){
-            if(tooltipVisibilityStatusComparedToClik){
-                tooltipVisibilityStatusComparedToClik = false
-                tooltip.style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
-            }
+
+            tooltip.style("visibility", "hidden")
+
             
             const [[x0, y0], [x1, y1]] = path.bounds(d);
             d3.event.stopPropagation();

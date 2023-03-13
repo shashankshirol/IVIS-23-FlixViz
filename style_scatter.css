@@ -40,7 +40,9 @@ svg {
 font-family: sans-serif;
 }
 
-
+#nationNavbarDiv{
+  visibility: hidden;
+}
 
 rect.selection {
 stroke: none;
@@ -213,6 +215,8 @@ body {
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
+
+
 
 .modal {
   display: none; /* Hidden by default */

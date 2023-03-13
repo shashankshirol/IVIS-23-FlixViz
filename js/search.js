@@ -36,6 +36,7 @@ $("#country-form").submit(function() {
 });
 
 async function highlightCountriesWithTitle(countryCodes) {
+    sideDiv.transition().duration(750).style("width", "0%").style("opacity", 0).style("pointer-events", "none");
     await svg.transition()
         .duration(500)
         .call( zoom.transform, d3.zoomIdentity ).end()
@@ -50,8 +51,6 @@ async function highlightCountriesWithTitle(countryCodes) {
             d3.select(this).style("opacity", "0.1")
         }
     })
-
-    sideDiv.transition().duration(750).style("width", "0%").style("opacity", 0).style("pointer-events", "none");
     isItInCountryAvailabilityMode = true
 }
 
@@ -148,7 +147,12 @@ getJSON("../Data/CName_to_id.json").then(data => {
                                 }
                                 return data[countryName]
                             })
+                            
                             highlightCountriesWithTitle(countryCodes)
+                            currentCountry = undefined
+                            tooltip
+                                .style("opacity", 0.8)
+                                .style("visibility", "visible")
                         })
                         // Add code to highlight countries here
                         
