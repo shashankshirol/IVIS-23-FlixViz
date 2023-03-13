@@ -119,10 +119,7 @@ getJSON("../Data/CName_to_id.json").then(data => {
                         }
                         unhighlightAllCountries()
                         remove_all_connections()
-                        if (tooltipVisibilityStatusComparedToClik) {
-                            tooltipVisibilityStatusComparedToClik = false
-                            tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
-                        }
+                        
 
                         g.selectAll("path")
                             .each(function (d) {
