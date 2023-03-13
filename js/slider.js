@@ -9,7 +9,6 @@ function slider_snap(min, max, label, id) {
       right: 40,
     },
   };
-  document.getElementById("filter").style.width = window.innerWidth*0.4 + "px"
   let starting_min = min;
   let starting_max = max;
   var range = [min, max];

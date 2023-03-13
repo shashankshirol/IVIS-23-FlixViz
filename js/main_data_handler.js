@@ -139,7 +139,7 @@ function generateCountryDetails(country_code) {
     let scatter_plot_window = outer_scatter_div.append("div").attr("id", "scatterplotWindow").attr("class", "visualWindow")
     let scatterplot_div = scatter_plot_window.append("div").attr("class", "scatterPlot")
     let genre_div = scatterplot_div.append("div").attr("class", "pill-collector").attr("id", "genreFilter")
-    let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex").style("margin", "auto")
+    let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex")
 
 
     let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter")
@@ -160,7 +160,8 @@ function generateCountryDetails(country_code) {
     <div style="text-align: center" id="year"></div>
     <div style="text-align: center" id="votes"></div>
     <div style="text-align: center" id="rating"></div>
-    <button class="pill" id="resetFilters">Reset Filters</button>
+    <div style="text-align: center"><button class="pill" id="resetFilters">Reset Filters</button></div>
+    
     `)
 
 
@@ -172,8 +173,8 @@ function generateCountryDetails(country_code) {
     </div>
     <div id="modalBody" class="modal-body">
         <div id="modalBodyInfo"></div>
-        <div class="dfg">
-        <div id="svgPlotForce"></div>
+        <div style="padding-top:10px" class="dfg">
+        <div style="padding-right:20px;" id="svgPlotForce"></div>
         <div id="modalGenres"></div>
     </div>
     `)

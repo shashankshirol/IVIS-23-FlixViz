@@ -1,6 +1,6 @@
 function generate_scatter_plot(code) {
   let margin = { top: 5, right: 30, bottom: 30, left: 60 },
-  width = window.innerWidth*0.6 - margin.left - margin.right,
+  width = window.innerWidth*0.75 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
   window.onresize = () => generate_scatter_plot(code)
   d3.select("#svgPlot").selectAll("svg").remove()
@@ -10,7 +10,7 @@ let svg = d3
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom + 20)
   .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 d3.json("../Data/data_netflix.json")
   .then(function (data) {

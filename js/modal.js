@@ -24,9 +24,10 @@ function displayModal(d, data) {
   let body = document.getElementById("modalBodyInfo");
   let genres = d.genre.split("|")
   genres = genres.length > 4 ? genres.slice(0, 4) + "..." : genres
+  let imgheight = window.innerHeight/4
   body.innerHTML = `
-<div class=modalView>
-  <img src="${d.img} alt="movieImage" class="modalImg"/>
+<div class=modalView id="modalView">
+  <img src="${d.img}" alt="movieImage" />
   <div class="modalSummary" style="text-align:left;">
       <h4>${d.title}</h4>
       <p> <strong>Genres:</strong> ${genres}</p>
@@ -53,6 +54,6 @@ function displayModal(d, data) {
 </div>
 `;
   ForceGraph(d, data);
-
+  document.getElementById("modalView").style.height = imgheight + "px"
   modal.style.display = "block";
 }

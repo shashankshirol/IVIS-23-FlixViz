@@ -23,17 +23,23 @@ function ForceGraph(movieChoice, newData){
       
     }
     let parent = document.getElementById("modalGenres")
+    parent.style.height = window.innerHeight/2.5 + "px"
     parent.innerHTML = ""
-    let parent_header = document.createElement("h4")
-    parent_header.innerHTML = "Search Titles by Similar Genres"
+    let parent_header = document.createElement("div")
+    parent_header.innerHTML = "<strong>Search Titles by Similar Genres</strong>"
     parent.append(parent_header)
+    let genres = document.createElement("div")
+    parent.append(genres)
+    genres.style.overflow = "auto"
+    genres.className = "genreList"
+    genres.style.height = window.innerHeight/2.5 - 50+ "px"
     movieChoice.genre.split("|").map((x, id) => {
       let pill = document.createElement("div")
       pill.innerHTML = `
       <button id="${"genreButton"+id}" class="pill" type="button">${x}</button>
       `
       pill.querySelector("#"+"genreButton"+id).onclick = (d) => pillClick(d,x)
-      parent.append(pill)
+      genres.append(pill)
     })
   }
 
@@ -41,7 +47,7 @@ function ForceGraph(movieChoice, newData){
 
   function createFDG(movieChoice, similarTitle, data){
     var width = 480;
-    var height = 480;
+    var height = window.innerHeight/2.5
   
     var title = [movieChoice.title];
     var genre = movieChoice.genre.split("|");
@@ -80,6 +86,8 @@ function ForceGraph(movieChoice, newData){
         .append('svg')
         .attr('width', width)
         .attr('height', height)
+        .style("border", "3px dashed")
+        .style("border-radius", "30px")
   
       // var tooltip = d3.select("#svgPlotForce").append("div")
       //  .attr("class", "tooltip")
