@@ -127,6 +127,10 @@ function generateCountryDetails(country_code) {
     //Modify sideDiv Style
     d3.select("#clickData").style("overflow", "auto")
     d3.select("#clickData").attr("class", "d-inline-block")
+
+    //Add country Name to NAV
+    d3.select("#country_nav_selected").style("display", "")
+    d3.select("#country_nav_selected").select("h5").text(getCountryName(country_code))
     
     
     let outer_top_titles = d3.select("#clickData").append("div").attr("id", "top_titles").lower()
@@ -219,6 +223,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select("#myModal").remove() // Clearing the Modal
             d3.select("#movieRow").remove() // Clearing the MovieRow
             d3.select("#movie-header").remove() // Clearing Movie Header
+            d3.select("#country_nav_selected").style("display", "none")
 
             d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
