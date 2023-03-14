@@ -9,7 +9,7 @@ function createMovieRow(data){
     let child = document.createElement("div");
     child.innerHTML = `
           <div id=${id} class="wrap" >
-          <img src="${movie.img} alt="movieImage" class="row_poster" />
+          <img src="${movie.img}" alt="movieImage" class="row_poster" />
           <div class="poster_info">
               <div class="poster_text">
                   <h6>${movie.title}</h6>
