@@ -44,7 +44,7 @@ function unhighlightCountry(passedCountry){
     passedCountry
         .lower()
         .style("opacity", .8)
-        .style("stroke", "grey")
+        .style("stroke", "#E4E4E4")
         .style("stroke-width", .5)
 }
 
@@ -321,7 +321,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 d3.select(this)
                     .lower()
                     .style("opacity", .8)
-                    .style("stroke", "grey")
+                    .style("stroke", "#E4E4E4")
                     .style("stroke-width", .5)
             }
         }
@@ -394,11 +394,11 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(countriesData[d.id] != undefined && countryCodeList.includes(countriesData[d.id]["alpha-2"])){
                     return colorScaler(countriesToOverviewInfo[countriesData[d.id]["alpha-2"]]["tvids"])
             }
-            return "rgb(211, 211, 211)"
+            return "rgb(120, 120, 120)"
         })
         .style("z-index", 0)
         .style("opacity", .8)
-        .style("stroke", "grey")
+        .style("stroke", "#E4E4E4")
         .style("stroke-width", .5)
         .on("click", clicked)
         .on("mouseover", mouseOver )
