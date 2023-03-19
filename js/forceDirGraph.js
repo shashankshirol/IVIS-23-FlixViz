@@ -121,6 +121,8 @@ function ForceGraph(movieChoice, newData){
           .data(nodes)
           .enter().append("g")
   
+            
+
         let circles = node.append("circle")
           .attr("r", d => d.weight)
           .attr("fill",  d => d.circlecolor)
@@ -181,7 +183,7 @@ function ForceGraph(movieChoice, newData){
           .on("end", dragended);
     
         dragger(node);
-  
+
         let titles = node.append("text")
         .text(function(d) {
           return d.name;
@@ -193,20 +195,24 @@ function ForceGraph(movieChoice, newData){
         .attr('y', 3)
         .attr("pointer-events", "none")
   
-        node.append("title")
-          .text(function(d) { return d.name; });
-        
+        // node.append("title")
+        //   .text(function(d) { return d.name; });
         node.on('mouseover', function (d, i) {
           circles.attr('opacity', '.55')
-          d3.select(this).transition()
-               .duration('50')
+          titles.attr('opacity', '0.3')
+          d3.select(this).select('text').transition()
+              .attr('opacity', '1')
+              .attr("font-size", d => d.fontsize+4)
+              .duration('50')
                
         })
         .on('mouseout', function (d, i) {
           circles.attr('opacity', '1')
+          titles.attr('opacity', '1')
+          titles.attr("font-size", d => d.fontsize)
           d3.select(this).transition()
                .duration('50')
-               .attr('opacity', '1')
+               
         });
   
       function ticked(){
