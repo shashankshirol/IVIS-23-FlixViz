@@ -31,6 +31,17 @@
         font-family: 'Bebas Neue', sans-serif;  
         font-weight: 400;
       }
+      .form-check-input:checked {
+        background-color: white;
+        border-color: pink;
+      }
+
+      .form-switch .form-check-input {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='red'/%3e%3c/svg%3e");
+      }
+      .form-switch .form-check-input:focus {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='red'/%3e%3c/svg%3e");
+      }
   </style>
 </head>
 <body>
@@ -57,9 +68,9 @@
               <input class="form-control me-2" id="search-field" type="search" placeholder="Search Country" aria-label="Search" autocomplete="off">
               <button class="btn btn-outline-danger" type="button" id="search-cnt">Search</button>
             </form>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="title_search_cb">
-              <label class="form-check-label" for="flexCheckDefault" style="color: whitesmoke">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="title_search_cb">
+              <label class="form-check-label" for="title_search_cb" style="color: whitesmoke">
                 Search Titles
               </label>
             </div>
