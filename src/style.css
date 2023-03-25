@@ -1,0 +1,21 @@
+#svgPlotForce {
+    position: relative;
+}
+
+.tooltip {
+    position: absolute;
+    border: 1px solid #313639;
+    background-color: #ffffff;
+    border-radius: 4px;
+    pointer-events: none;
+    width: 199px;
+}
+
+#tooltiptext{
+    padding-bottom: 5px;
+    padding-top: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: "Bebas Neue", "sans-serif";
+    color: #E50914;
+}

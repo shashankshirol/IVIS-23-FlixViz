@@ -1,6 +1,6 @@
 function slider_snap(min, max, label, id) {
   let layout = {
-    width: 400,
+    width: window.innerWidth/5,
     height: 80,
     margin: {
       top: 20,
@@ -9,7 +9,6 @@ function slider_snap(min, max, label, id) {
       right: 40,
     },
   };
-
   let starting_min = min;
   let starting_max = max;
   var range = [min, max];
@@ -32,6 +31,7 @@ function slider_snap(min, max, label, id) {
 
   
   // create svg and translated g
+  document.getElementById(id).innerHTML = ""
   var svg = d3
     .select("#" + id)
     .append("svg")

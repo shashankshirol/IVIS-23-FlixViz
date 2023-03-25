@@ -52,6 +52,7 @@ function mydropDown(countries_arr) {
     
     dropDown
       .on("change", function(d) {
+        d3.select(".link").raise()
         let selectedOption = d3.select(this).property("value")
 
         let result = countries_arr.filter(entry => 
@@ -115,6 +116,8 @@ function mydropDown(countries_arr) {
                                     highlightCountry(d3.select(this))
                                 }
                         })
+
+                        d3.selectAll(".link").raise()
                     })
                     
                     })
@@ -547,7 +550,7 @@ function fillSideDivWithBarChart(countryCode) {
                 .domain(currentSubGroups)
                 .range(['#e41a1c','#377eb8','#4daf4a'])
 
-            getJSON("../../Data/countryToGenreOverview.json").then(countryToGenre => {
+            getJSON("../../Data/countryToGenre.json").then(countryToGenre => {
                 getJSON("../../Data/country_to_code.json").then(countryname_to_code => {     
 
                     let reference_country = currentSubGroups[0]

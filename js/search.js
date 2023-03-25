@@ -35,6 +35,25 @@ $("#country-form").submit(function() {
     return false;
 });
 
+async function highlightCountriesWithTitle(countryCodes) {
+    sideDiv.transition().duration(750).style("width", "0%").style("opacity", 0).style("pointer-events", "none");
+    await svg.transition()
+        .duration(500)
+        .call( zoom.transform, d3.zoomIdentity ).end()
+    
+    unhighlightAllCountries()
+
+    g.selectAll("path")
+    .each(function (d) {
+        if (d != undefined && countryCodes.includes(d.id)) {
+            highlightCountry(d3.select(this))
+        }else{
+            d3.select(this).style("opacity", "0.1")
+        }
+    })
+    isItInCountryAvailabilityMode = true
+}
+
 //Map Country name to IDs
 getJSON("../Data/CName_to_id.json").then(data => {
     getJSON("../Data/data_netflix.json").then(netflix_data => {
@@ -64,12 +83,10 @@ getJSON("../Data/CName_to_id.json").then(data => {
 
         $("#title_search_cb").change(function () {
             if ($("#title_search_cb").is(":checked")) {
-                console.log("Checkbox is Checked")
                 $('#search-field').attr('placeholder', 'Search Title');
                 fillDataList(titleList, 'titlelist');
             }
             else {
-                console.log("Unchecked")
                 $('#search-field').attr('placeholder', 'Search Country');
                 fillDataList(countryList, 'countrylist');
             }
@@ -83,7 +100,8 @@ getJSON("../Data/CName_to_id.json").then(data => {
 
                     if (!$("#title_search_cb").is(":checked")) {
                         let id = Cname_id[$("#search-field").val()]
-                        let clickedCountryCode = countriesData[id]["alpha-2"]
+                        let clickedCountryCode = countriesData[id]["alpha-2"];
+                        clickedCountryCode_main = clickedCountryCode;
                         let feature = getCountryobject(country_features, id)
                         const [[x0, y0], [x1, y1]] = path.bounds(feature);
                         svg.transition().duration(750).call(
@@ -99,10 +117,7 @@ getJSON("../Data/CName_to_id.json").then(data => {
                         }
                         unhighlightAllCountries()
                         remove_all_connections()
-                        if (tooltipVisibilityStatusComparedToClik) {
-                            tooltipVisibilityStatusComparedToClik = false
-                            tooltip.transition().duration(500).style("visibility", tooltipVisibilityStatusComparedToClik ? "visible" : "hidden")
-                        }
+                        
 
                         g.selectAll("path")
                             .each(function (d) {
@@ -116,10 +131,30 @@ getJSON("../Data/CName_to_id.json").then(data => {
                             })
                     }
                     else {
+                        getJSON("../Data/CName_to_id.json").then(data => {
+                            let content = $("#search-field").val()
+                            let countryCodes = titleCntry[content].split(",").map(function(string){
+                                let countryName = getCountryName(string.split(":")[0])
+                                if(countryName.includes("United Kingdom")){
+                                    countryName = "United Kingdom of Great Britain and Northern Ireland"
+                                } else if(countryName.includes("Korea")){
+                                    countryName = "Korea, Republic of"
+                                }else if(countryName.includes("Czech")){
+                                    countryName = "Czechia"
+                                } else if(countryName.includes("United States")){
+                                    countryName = "United States of America"
+                                }
+                                return data[countryName]
+                            })
+                            
+                            highlightCountriesWithTitle(countryCodes)
+                            currentCountry = undefined
+                            tooltip
+                                .style("opacity", 0.8)
+                                .style("visibility", "visible")
+                        })
                         // Add code to highlight countries here
-                        let content = $("#search-field").val()
-                        console.log(content)
-                        console.log(titleCntry[content])
+                        
                     }
                 
                 })

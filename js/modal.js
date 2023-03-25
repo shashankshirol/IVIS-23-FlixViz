@@ -1,7 +1,6 @@
 function setup_modal() {
   let span = document.getElementsByClassName("close")[0];
   window.modal = document.getElementById("myModal");
-
   span.onclick = function () {
     modal.style.display = "none";
   };
@@ -17,15 +16,20 @@ function numberWithCommas(x) {
 }
 
 function displayModal(d, data) {
+  modalContent = document.getElementById("modalContent")
+  modalContent.style.overflow = "hidden"
+  modalContent.style.height = window.innerHeight*0.8 + "px"
   let header = document.getElementById("title");
+  header.style.marginTop = "15px"
   header.innerHTML = "";
   header.innerHTML = d.title;
   let body = document.getElementById("modalBodyInfo");
   let genres = d.genre.split("|")
   genres = genres.length > 4 ? genres.slice(0, 4) + "..." : genres
+  let imgheight = window.innerHeight/4
   body.innerHTML = `
-<div class=modalView>
-  <img src="${d.img} alt="movieImage" class="modalImg"/>
+<div class=modalView id="modalView">
+  <img src="${d.img}" alt="movieImage" />
   <div class="modalSummary" style="text-align:left;">
       <h4>${d.title}</h4>
       <p> <strong>Genres:</strong> ${genres}</p>
@@ -41,7 +45,7 @@ function displayModal(d, data) {
   }" target="_blank">Netflix</a>&nbsp;
   <a href=${
     d.imdbid == null || d.imdbid.includes("|")
-      ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.name)
+      ? "https://www.imdb.com/find/?q=" + encodeURIComponent(d.title)
       : "https://www.imdb.com/title/" + d.imdbid
   } target="_blank" id="imdb_link"> IMDB</a>
   </p>
@@ -52,6 +56,6 @@ function displayModal(d, data) {
 </div>
 `;
   ForceGraph(d, data);
-
+  document.getElementById("modalView").style.height = imgheight + "px"
   modal.style.display = "block";
 }

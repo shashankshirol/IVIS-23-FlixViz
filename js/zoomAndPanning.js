@@ -5,10 +5,16 @@ const zoom = d3.zoom()
 
 
 function zoomed() {
-    if(currentCountry != undefined && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) > 0)){
+
+    if((currentCountry != undefined && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) > 0)) || currentCountry == undefined){
         unhighlightAllCountries()
         remove_all_connections()
         unselectCountry(currentCountry)
+    }
+    if(isItInCountryAvailabilityMode && (d3.event?.sourceEvent?.type === "mousemove" || Math.sign(d3.event?.sourceEvent?.deltaY) < 0)){
+        unhighlightAllCountries()
+        remove_all_connections()
+        isItInCountryAvailabilityMode = false
     }
     const { transform } = d3.event;
     g.attr("transform", transform);
@@ -20,13 +26,19 @@ function stopped() {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
 
+async function transitionBack(){
+    await svg.transition()
+        .duration(500)
+        .call( zoom.transform, d3.zoomIdentity );
+    isItInCountryAvailabilityMode = false
+}
+
 function reset() {
 
-    svg.transition()
-        .duration(500)
-        .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
-    
     remove_all_connections()
     unhighlightAllCountries()
     unselectCountry(currentCountry)
+
+     // updated for d3 v4
+    transitionBack()
 }
