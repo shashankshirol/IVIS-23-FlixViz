@@ -21,6 +21,22 @@ body{
     position: absolute;
 }
 
+#sidebarchart{
+    font-size: 15px;
+}
+
+#clickData > svg:nth-child(5) > g:nth-child(1) > g:nth-child(2) {
+    font-size: 15px;
+}
+
+#scatterPlotSideDiv > svg:nth-child(1) > g:nth-child(1) > g:nth-child(3) {
+    font-size: 15px;
+}
+
+#scatterPlotSideDiv > svg:nth-child(1) > g:nth-child(1) > g:nth-child(2) {
+    font-size: 15px;
+}
+
 .tooltip > p{
     fill: red;
     stroke: #999;

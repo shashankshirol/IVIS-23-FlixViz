@@ -345,7 +345,7 @@ function createLegend(svgSideBar, colorfunction, keys, w, h, swapped){
 
 function generateScatterChartInsideDiv(svgSideBar, data, color, positions, element) {
     // Step 1
-        let margin = {top: 40, right: 40, bottom: 40, left: 60}
+        let margin = {top: 40, right: 60, bottom: 40, left: 60}
         const divWidth = window.innerWidth*0.25
         let scatterWidth = divWidth - margin.left - margin.right
         let scatterHeight = 200 - margin.top - margin.bottom
@@ -499,7 +499,7 @@ function generateScatterChartInsideDiv(svgSideBar, data, color, positions, eleme
                 .style("font-weight", "bold")
                 .text(d => d!="others"?getCountryName(d):"other countries")
                 .style("fill", d => d!="others" ? color(d): "rgb(105, 179, 162)")
-                .style("font-size", 11)
+                .style("font-size", "17px")
 
                 
         scatterSvg.append('g')
