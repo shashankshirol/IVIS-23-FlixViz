@@ -550,7 +550,7 @@ function fillSideDivWithBarChart(countryCode) {
                 .domain(currentSubGroups)
                 .range(['#e41a1c','#377eb8','#4daf4a'])
 
-            getJSON("../../Data/countryToGenreOverview.json").then(countryToGenre => {
+            getJSON("../../Data/countryToGenre.json").then(countryToGenre => {
                 getJSON("../../Data/country_to_code.json").then(countryname_to_code => {     
 
                     let reference_country = currentSubGroups[0]

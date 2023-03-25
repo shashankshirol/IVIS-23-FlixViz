@@ -23,25 +23,33 @@ function ForceGraph(movieChoice, newData){
       
     }
     let parent = document.getElementById("modalGenres")
+    parent.style.height = window.innerHeight/2.5 + "px"
     parent.innerHTML = ""
-    let parent_header = document.createElement("h4")
-    parent_header.innerHTML = "Search Titles by Similar Genres"
+    let parent_header = document.createElement("div")
+    parent_header.innerHTML = "<strong>Search Titles by Similar Genres</strong>"
     parent.append(parent_header)
+    let genres = document.createElement("div")
+    parent.append(genres)
+    genres.style.overflow = "auto"
+    genres.className = "genreList"
+    genres.style.height = window.innerHeight/2.5 - 50+ "px"
     movieChoice.genre.split("|").map((x, id) => {
       let pill = document.createElement("div")
       pill.innerHTML = `
-      <button id="${id}" class="pill" type="button">${x}</button>
+      <button id="${"genreButton"+id}" class="pill" type="button">${x}</button>
       `
-      pill.onclick = (d) => pillClick(d, x);
-      parent.append(pill)
+      pill.querySelector("#"+"genreButton"+id).onclick = (d) => pillClick(d,x)
+      genres.append(pill)
     })
   }
 
 
 
   function createFDG(movieChoice, similarTitle, data){
+
     let width = 480;
-    let height = 480;
+    let height = window.innerHeight/2.5
+
   
     let title = [movieChoice.title];
     let genre = movieChoice.genre.split("|");
@@ -75,6 +83,13 @@ function ForceGraph(movieChoice, newData){
         .append('svg')
         .attr('width', width)
         .attr('height', height)
+
+        .style("border", "2px dashed")
+        .style("border-radius", "30px")
+  
+      // var tooltip = d3.select("#svgPlotForce").append("div")
+      //  .attr("class", "tooltip")
+      //  .style("opacity", 1);
       
       let simulation = d3
         .forceSimulation(nodes)
@@ -130,12 +145,12 @@ function ForceGraph(movieChoice, newData){
        }).on("click", (d) => displayModal(d.movieObject, data));
     ;
 
-    let dataForLegend = ["Suggested related movies", "Genres", "CurrentTitle"]
+    let dataForLegend = ["Related Titles", "Genres", "Current Title"]
 
     function pickColor(d){
-      if(d == "Suggested related movies") return "rgb(212, 181, 108)"
+      if(d == "Related Titles") return "rgb(212, 181, 108)"
       if(d == "Genres") return "rgb(210, 85, 91)"
-      if(d == "CurrentTitle") return "rgb(0, 0, 0)"
+      if(d == "Current Title") return "rgb(0, 0, 0)"
     }
 
     svg
@@ -169,7 +184,7 @@ function ForceGraph(movieChoice, newData){
           .on("end", dragended);
     
         dragger(node);
-  
+
         let titles = node.append("text")
         .text(function(d) {
           return d.name;
@@ -181,20 +196,24 @@ function ForceGraph(movieChoice, newData){
         .attr('y', 3)
         .attr("pointer-events", "none")
   
-        node.append("title")
-          .text(function(d) { return d.name; });
-        
+        // node.append("title")
+        //   .text(function(d) { return d.name; });
         node.on('mouseover', function (d, i) {
           circles.attr('opacity', '.55')
-          d3.select(this).transition()
-               .duration('50')
+          titles.attr('opacity', '0.3')
+          d3.select(this).select('text').transition()
+              .attr('opacity', '1')
+              .attr("font-size", d => d.fontsize+4)
+              .duration('50')
                
         })
         .on('mouseout', function (d, i) {
           circles.attr('opacity', '1')
+          titles.attr('opacity', '1')
+          titles.attr("font-size", d => d.fontsize)
           d3.select(this).transition()
                .duration('50')
-               .attr('opacity', '1')
+               
         });
   
       function ticked(){

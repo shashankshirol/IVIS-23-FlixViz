@@ -6,7 +6,7 @@
         <title>FlixViz</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+        <link rel="icon" type="image/x-icon" href="res/imgs/flixviz_favi.png">
         <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -22,20 +22,27 @@
                   background-color: rgb(14, 17, 23);
                   overflow: auto;
           }
-
+          a {
+            color: red;
+          }
           #about-flixviz{
             border-radius:10px 10px 0px 0px;
-            background-color: #f0ead6;
+            background-color: #FFF0F0;
           }
 
           #about-data{
             border-radius:0px 0px 0px 0px;
-            background-color: #cabf9d;
+            background-color: #FFD9D9;
           }
 
           #about-methods{
+            border-radius:0px 0px 0px 0px;
+            background-color: #FFC6C6;
+          }
+
+          #about-learning-objectives{
             border-radius:0px 0px 10px 10px;
-            background-color: #a59a78;
+            background-color: #FFB6B6;
           }
 
           #about-text{
@@ -44,12 +51,29 @@
             padding-bottom:10px;
             padding-left: 30px;
           }
+
+          #lo-text{
+            padding-top:15px;
+            padding-bottom:10px;
+            padding-left: 30px;
+          }
+
           #project-title{
             text-align: center;
             font-family:  "Bebas Neue", sans-serif;
             vertical-align: middle;
             padding-top:7px;
           }
+
+          .divtitle{
+            font-size:56px;
+            padding-top:70px;
+            padding-bottom:15px;
+            text-align: center;
+            font-family:  "Bebas Neue", sans-serif;
+            color:white;
+          }
+
           #about-title{
             font-size:56px;
             padding-top:70px;
@@ -82,6 +106,18 @@
             text-align: center;
             padding-left:10px;
             padding-right:10px;
+          }
+
+          .member-contri{
+            color: white;
+            text-align: center;
+            padding-left:10px;
+            padding-right:10px;
+          }
+
+          nav{
+          font-family: 'Bebas Neue', sans-serif;  
+          font-weight: 400;
           }
       </style>
     </head>
@@ -120,7 +156,7 @@
           <h2 id="title-test">Flixviz</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          The aim of this project was to visualize Netflix content available in 37 countries of the world. These countries share a majority stake in terms of number of users and number of titles available. Netflix, being a streaming service, has to abide by the distribution laws and has to geo-block certain titles. Netflix's Geo-blocking of content affects the consumers, making it increasingly difficult to find a particular title. We tried to augment the data by adding IMDB information for the titles to help users gain better insights on the data.
+          The aim of this project was to visualize Netflix content available in 37 countries of the world. These countries share a majority stake in terms of number of users and number of titles available. Netflix, being a streaming service, has to abide by the distribution laws and has to geo-block certain titles. Netflix's Geo-blocking of content affects the consumers, making it increasingly difficult to find a particular title. The attempt is novel in that, we augment the data by adding IMDB information for the titles to help users gain better insights on the data. <a href="https://github.com/shashankshirol/IVIS-23-FlixViz/tree/Shashank-branch">GitHub</a>
         </div>
       </div>
       <div class="row align-items-center" id="about-data">
@@ -128,7 +164,7 @@
           <h2 id="title-test">Data</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          We made use of the UnOGs API hosted on the RapidAPI platform. Then scraped the IMDB website to get the ratings and number of votes per title. Owing to the differences in regional text, IMDB information is sometimes partial and missing. We have the following attributes in our data: Title, Type, Synopsis, Genre, Countries-available, netflix-ID, year, IMDB rating, IMDB-votes, Poster-link. Due to lack of quantitative data, we can only draw comparative insights by pinning a country with another.
+          We made use of the <a href="https://rapidapi.com/unogs/api/unogsng">UnOGs API</a> hosted on the RapidAPI platform. Then, we scraped the IMDB website to get the ratings and number of votes per title. Owing to the differences in regional text, IMDB information is sometimes partial and missing. We have the following attributes in our data: Title, Type, Synopsis, Genre, Countries-available, netflix-ID, year, IMDB rating, IMDB-votes, Poster-link. Due to restricted quantitative data, we can only draw comparative insights by pinning a country other countries.
         </div>
       </div>
       <div class="row align-items-center" id="about-methods">
@@ -136,11 +172,65 @@
           <h2 id="title-test">Methods</h2>
         </div>
         <div class="col-9 col-md-10" id="about-text">
-          We make use of standard HTML, CSS, and Javascript for the app; with an occasional use of the Bootstrap framework. For charting, we use D3js. For our hosting solution, we make use of Netlify, which can directly host websites from GitHub repositories.
-          Through the course of the project development, we made use of Trello to organize, assign, and track tasks. Apart from these, we made use of several other productivity tools to help us work better.
+          We follow Ben Shneiderman's Visualization Mantra [1] to the core, and use visual structures that were previously tried and tested for similar "movie" visualizations [2,3]. We also draw inspiration from previous years' projects, as listed below. We make use of standard HTML, CSS, and Javascript for the app; with an occasional use of the Bootstrap framework. For charting, we use D3.js. We explore D3 Map projections to get an overview of the data; We make use of traditional scatter plots and Bar plots to gain attribute-level insights into the data, and allow the user to filter content based on several controls. For our hosting solution, we make use of <a href="https://www.netlify.com/">Netlify</a>, which can directly host websites from GitHub repositories.
+          Through the course of the project development, we used <a href="https://trello.com/">Trello</a> to organize, assign, and track tasks. Apart from these, we made use of several other productivity tools to help us work better.
+        </div>
+      </div>
+      <div class="row align-items-center" id="about-learning-objectives">
+        <div class="col-3 col-md-2 align-middle" id="project-title">
+          <h2 id="title-test">Learning Objectives Achieved</h2>
+        </div>
+        <div class="col-9 col-md-10" id="lo-text">
+          <ul>
+            <li>
+              <strong>Design: </strong><span style="font-family: 'Montserrat', sans-serif;">Collaborated with a group to create FlixViz - A Netflix Visualization system.</span>
+            </li>
+            <li>
+              <strong>Defend: </strong><span style="font-family: 'Montserrat', sans-serif;"> Defended our design choices and approach via regular presentations and evaluations.</span>
+            </li>
+            <li>
+              <strong>Critque: </strong><span style="font-family: 'Montserrat', sans-serif;"> Participated in regular presentations and evaluations to provide constructive criticism to other group projects in the course.</span>
+            </li>
+            <li>
+              <strong>Demonstrate: </strong><span style="font-family: 'Montserrat', sans-serif;"> Adapted presentation material to reach broader audiences through simplified language and use of graphics.</span>
+            </li>
+            <li>
+              <strong>Evaluate: </strong><span style="font-family: 'Montserrat', sans-serif;"> Used constructive criticism received to improve the visualization system.</span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+
+    <div class="container" id="related_projects">
+      <div class="row">
+          <p class="divtitle">
+          Related Previous Projects
+          </p>
+      </div>
+      <div class="d-flex flex-column text-white">
+          
+          <p><strong>1.</strong> <a href="https://animeet-nine.vercel.app/" target="_blank">Animeet (2022)</a> by Xinmiao Yu, Harits Nur Fauzan, Yuanyang Ren, Kwan Mei Wong, Qinbai.</p>
+          <p><strong>2.</strong> <a href="https://viral50vis.github.io/" target="_blank">Viral50 (2020)</a> by Erik Båvenstrand, Diego Flores Leon, Hannes Runelöv, Martin Falke, Måns Ekelund, Robin Dahlkvist.</p>
+  
+      </div>
+      </div>
+  
+      <div class="container" id="references">
+        <div class="row">
+          <p class="divtitle">
+            References
+          </p>
+        </div>
+        <div class="d-flex flex-column text-white">
+          
+          <p><strong>[1]</strong> B. Shneiderman, “The eyes have it: a task by data type taxonomy for information visualizations,” in Proceedings 1996 IEEE Symposium on Visual Languages, Sep. 1996, pp. 336-343. doi: 10.1109/VL.1996.545307.</p>
+          <p><strong>[2]</strong> A. Bing and Z. Li-Gu, “Film Big Data Visualization Based on D3.js,” in 2020 International Conference on Big Data and Social Sciences (ICBDSS), Xi'an, China, Aug. 2020, pp. 50-53. doi: 10.1109/ICBDSS51270.2020.00019.</p>
+          <p><strong>[3]</strong> C. Ahlberg and B. Shneiderman, “Visual information seeking using the FilmFinder,” in Conference Companion on Human Factors in Computing Systems, New York, NY, USA, Apr. 1994, pp. 433-434. doi: 10.1145/259963.260431.</p>
+  
+        </div>
+      </div>
+
     <div class="container " id="about-team">
       <div class="row">
         <p  id="about-title">
@@ -152,33 +242,45 @@
           <img src="res/imgs/shas.png" id="member-img" class="mx-auto img-thumbnail">
           <h3 class="member-name">Shashank Shirol</h3>
           <h5 class="member-email">shirol@kth.se</h5>
-          <p class="member-info">Hoarder of Keyboards.</p>
+          <p class="member-info">"Hoarder of Keyboards."</p>
+          <p class="member-contri"><span style="font-weight: bolder;">Contributions:</span> Presentations, D3.js, HTML/CSS/JS, Visualization structures, Data Pull/Cleaning, CI/CD.</p>
         </div>
         <div class="col">
           <img src="res/imgs/stef.png" id="member-img" class="mx-auto img-thumbnail">
           <h3 class="member-name">Stefano Scolari</h3>
           <h5 class="member-email">sscolari@kth.se</h5>
-          <p class="member-info">I like Spaghetti.</p>
+          <p class="member-info">"I like Spaghetti."</p>
+          <p class="member-contri"><span style="font-weight: bolder;">Contributions:</span> Presentations, Design/Mockup, D3.js, HTML/CSS/JS, Visualization structures, and Data handling.</p>
         </div>
         <div class="col">
           <img src="res/imgs/nico.png" id="member-img" class="mx-auto img-thumbnail">
           <h3 class="member-name">Nicolas Rollino</h3>
           <h5 class="member-email">nsrs@kth.se</h5>
-          <p class="member-info">Professional binge watcher.</p>
+          <p class="member-info">"Professional binge watcher."</p>
+          <p class="member-contri"><span style="font-weight: bolder;">Contributions:</span> D3.js, HTML/CSS/JS, Visualization structures, and Data handling.</p>
         </div>
         <div class="col">
           <img src="res/imgs/jeff.png" id="member-img" class="mx-auto img-thumbnail">
           <h3 class="member-name">Jeffrey Deng</h3>
           <h5 class="member-email">jeffreyd@kth.se</h5>
-          <p class="member-info">Due today, do today.</p>
+          <p class="member-info">"Due today, do today."</p>
+          <p class="member-contri"><span style="font-weight: bolder;">Contributions:</span> Presentations, Design/Mockup, Demo Video, D3, and Productivity tools</p>
         </div>
         <div class="col">
           <img src="res/imgs/san.png" id="member-img" class="mx-auto img-thumbnail">
           <h3 class="member-name">Sanjin Redzepagic</h3>
           <h5 class="member-email">sanjinr@kth.se</h5>
-          <p class="member-info">What Jeffrey said.</p>
+          <p class="member-info">"What Jeffrey said."</p>
+          <p class="member-contri"><span style="font-weight: bolder;">Contributions:</span> D3.js, HTML/CSS/JS, Visualization structures, Presentations & iconography</p>
         </div>
       </div>
+    </div>
+    <div class="container">
+      <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        </ul>
+        <p class="text-center text-white"><strong><mark>NOT</mark> Sponsored by NordVPN</strong></p>
+      </footer>
     </div>
     </body>
 </html>

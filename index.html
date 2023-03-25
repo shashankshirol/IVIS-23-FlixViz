@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="res/imgs/flixviz_favi.png">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
@@ -11,16 +12,35 @@
     <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" integrity="sha512-YFENbnqHbCRmJt5d+9lHimyEMt8LKSNTMLSaHjvsclnZGICeY/0KYEeiHwD1Ux4Tcao0h60tdcMv+0GljvWyHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style_scatter.css" />
     <script src="js/country_alpha.js" crossorigin="anonymous"></script>
     <title>FlixViz</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas+Neue">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <style>
       body{
           margin: 0%;
           padding: 0%;
           height: 100%;
           background-color: rgb(14, 17, 23);
+          
+      }
+      * {
+        font-family: 'Bebas Neue', sans-serif;  
+        font-weight: 400;
+      }
+      .form-check-input:checked {
+        background-color: white;
+        border-color: pink;
+      }
+
+      .form-switch .form-check-input {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='red'/%3e%3c/svg%3e");
+      }
+      .form-switch .form-check-input:focus {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='red'/%3e%3c/svg%3e");
       }
   </style>
 </head>
@@ -32,6 +52,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <span id="country_nav_selected" style="height: 100%; border-right: 1px solid white; display: none;"><h5 class="text-white" style="font-weight: bolder; padding-right: 5px; display: inline;"></h5></span>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link active co" aria-current="page" href="index.html">Home</a>
@@ -47,14 +68,25 @@
               <input class="form-control me-2" id="search-field" type="search" placeholder="Search Country" aria-label="Search" autocomplete="off">
               <button class="btn btn-outline-danger" type="button" id="search-cnt">Search</button>
             </form>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="title_search_cb">
-              <label class="form-check-label" for="flexCheckDefault" style="color: whitesmoke">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="title_search_cb">
+              <label class="form-check-label" for="title_search_cb" style="color: whitesmoke">
                 Search Titles
               </label>
             </div>
         </div>
     </nav>
+    <script>
+      /* Prevents form Submit by Enter Key */
+      $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+    </script>
     <script src="js/setupSvg.js" crossorigin="anonymous"></script>
     <script src="js/setupSideDiv.js" crossorigin="anonymous"></script>
     <script src="js/zoomAndPanning.js" crossorigin="anonymous"></script>

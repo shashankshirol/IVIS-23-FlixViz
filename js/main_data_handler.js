@@ -44,7 +44,7 @@ function unhighlightCountry(passedCountry){
     passedCountry
         .lower()
         .style("opacity", .8)
-        .style("stroke", "grey")
+        .style("stroke", "#E4E4E4")
         .style("stroke-width", .5)
 }
 
@@ -111,10 +111,11 @@ function remove_all_connections(){
     d3.selectAll(".link").remove()
 }
 
-var clickedCountryCode = ""
+window.clickedCountryCode_main = ""
 
 function generateCountryDetails(country_code) {
 
+    console.log(country_code)
     // Removing existing SVGs
     d3.select("#clickData").selectAll("svg").remove()
     d3.select("#clickData").selectAll("h1").remove()
@@ -127,6 +128,10 @@ function generateCountryDetails(country_code) {
     //Modify sideDiv Style
     d3.select("#clickData").style("overflow", "auto")
     d3.select("#clickData").attr("class", "d-inline-block")
+
+    //Add country Name to NAV
+    d3.select("#country_nav_selected").style("display", "")
+    d3.select("#country_nav_selected").select("h5").text(getCountryName(country_code))
     
     
     let outer_top_titles = d3.select("#clickData").append("div").attr("id", "top_titles").lower()
@@ -140,38 +145,49 @@ function generateCountryDetails(country_code) {
     // Scatter Plot DOM elements
     let scatter_plot_window = outer_scatter_div.append("div").attr("id", "scatterplotWindow").attr("class", "visualWindow")
     let scatterplot_div = scatter_plot_window.append("div").attr("class", "scatterPlot")
-    scatterplot_div.append("div").attr("id", "svgPlot").style("display", "block").style("margin", "auto")
+    let genre_div = scatterplot_div.append("div").attr("class", "pill-collector").attr("id", "genreFilter")
+    let scatterplot_svg = scatterplot_div.append("div").attr("id", "svgPlot").style("display", "flex")
+
+    // Add Instructions Text
+    let disclaimer_div = scatterplot_div.append("div").attr("class", "d-flex flex-row justify-content-start my-2").style("gap", "7px")
+    disclaimer_div.append("i").attr("class", "bi bi-info-circle")
+    disclaimer_div.append("p").html("Double click anywhere on the Scatter Plot to reset Axes").style("font-weight", "bold")
 
 
-    let scatterplot_filters = scatterplot_div.append("div").attr("class", "filters").attr("id", "filter")
+    let scatterplot_filters = scatterplot_svg.append("div").attr("class", "filters").attr("id", "filter").style("border", "2px dashed").style("border-radius", "20px")
     scatterplot_filters.html(`
+    <div style="display: flex; justify-content: center;"><h4><strong>Filters</strong></h4></div>
+    <div style="display: flex; justify-content: space-evenly" class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+    <label class="form-check-label" for="flexSwitchCheckChecked">Search for titles</label>
+    </div>
     <div class="wrapper d-flex flex-column">
             <div class="search-input">
               <a href="" target="_blank" hidden></a>
-              <input type="text" placeholder="Search for Genres">
+              <input type="text" id="searchBarInput" placeholder="Search for Genres">
               <div class="autocom-box">
               </div>
-                <div class="icon"><i class="fas fa-search"></i></div>
             </div>
             <div class="genreFilter" id="genreFilter"></div>
     </div>
     <div style="text-align: center" id="year"></div>
     <div style="text-align: center" id="votes"></div>
     <div style="text-align: center" id="rating"></div>
-    <button class="pill" id="resetFilters">Reset Filters</button>
+    <div style="text-align: center"><button class="pill" id="resetFilters">Reset Filters</button></div>
+    
     `)
 
 
     // Modal DOM elements
-    outer_modal_div.append("div").attr("class", "modal-content").html(`
+    outer_modal_div.append("div").attr("class", "modal-content").attr("id", "modalContent").html(`
     <div class="modal-header">
         <h2 id="title">Modal Header</h2>
         <span class="close">&times;</span>
     </div>
     <div id="modalBody" class="modal-body">
         <div id="modalBodyInfo"></div>
-        <div class="dfg">
-        <div id="svgPlotForce"></div>
+        <div style="padding-top:10px" class="dfg">
+        <div style="padding-right:20px;" id="svgPlotForce"></div>
         <div id="modalGenres"></div>
     </div>
     `)
@@ -198,7 +214,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         if (!wasDivExpanded) {
             d3.select("#expandCollapeDiv").text("Click to collapse")
             sideDiv.transition().duration(500).style("width", "100%").style("opacity", 1)
-            generateCountryDetails(clickedCountryCode)
+            generateCountryDetails(clickedCountryCode_main)
             wasDivExpanded = true
         } else {
             d3.select("#expandCollapeDiv").text("Click to expand")
@@ -214,6 +230,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select("#myModal").remove() // Clearing the Modal
             d3.select("#movieRow").remove() // Clearing the MovieRow
             d3.select("#movie-header").remove() // Clearing Movie Header
+            d3.select("#country_nav_selected").style("display", "none")
 
             d3.select("#clickData").append("div").attr("id", "dropdown_container").lower()
             d3.select("#dropdown_container").append("div").attr("id", "dropdown_container_title")
@@ -222,7 +239,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             d3.select(".form-check").style("visibility", "visible")
 
             currentSubGroups = []
-            fillSideDivWithBarChart([clickedCountryCode])
+            fillSideDivWithBarChart([clickedCountryCode_main])
             wasDivExpanded = false
         } 
     })
@@ -304,7 +321,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 d3.select(this)
                     .lower()
                     .style("opacity", .8)
-                    .style("stroke", "grey")
+
+                    .style("stroke", "#E4E4E4")
+
                     .style("stroke-width", .5)
             }
         }
@@ -314,8 +333,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
 
     function clicked(d) {
         
-        clickedCountryCode = countriesData[d.id]["alpha-2"]
-        if(countryCodeList.includes(clickedCountryCode)){
+
+        clickedCountryCode_main = countriesData[d.id]["alpha-2"]
+        if(countryCodeList.includes(clickedCountryCode_main)){
 
             tooltip.style("visibility", "hidden")
 
@@ -347,7 +367,9 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
                 countryName = "United Kingdom" //otherwise it will be United Kingdom of Great Britain and Northern Ireland and it will be too long
             }
             currentSubGroups = []
-            fillSideDivWithBarChart([clickedCountryCode])
+
+            fillSideDivWithBarChart([clickedCountryCode_main])
+
         }
     }
     
@@ -377,11 +399,11 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             if(countriesData[d.id] != undefined && countryCodeList.includes(countriesData[d.id]["alpha-2"])){
                     return colorScaler(countriesToOverviewInfo[countriesData[d.id]["alpha-2"]]["tvids"])
             }
-            return "rgb(211, 211, 211)"
+            return "rgb(120, 120, 120)"
         })
         .style("z-index", 0)
         .style("opacity", .8)
-        .style("stroke", "grey")
+        .style("stroke", "#E4E4E4")
         .style("stroke-width", .5)
         .on("click", clicked)
         .on("mouseover", mouseOver )

@@ -83,12 +83,10 @@ getJSON("../Data/CName_to_id.json").then(data => {
 
         $("#title_search_cb").change(function () {
             if ($("#title_search_cb").is(":checked")) {
-                console.log("Checkbox is Checked")
                 $('#search-field').attr('placeholder', 'Search Title');
                 fillDataList(titleList, 'titlelist');
             }
             else {
-                console.log("Unchecked")
                 $('#search-field').attr('placeholder', 'Search Country');
                 fillDataList(countryList, 'countrylist');
             }
@@ -102,7 +100,8 @@ getJSON("../Data/CName_to_id.json").then(data => {
 
                     if (!$("#title_search_cb").is(":checked")) {
                         let id = Cname_id[$("#search-field").val()]
-                        let clickedCountryCode = countriesData[id]["alpha-2"]
+                        let clickedCountryCode = countriesData[id]["alpha-2"];
+                        clickedCountryCode_main = clickedCountryCode;
                         let feature = getCountryobject(country_features, id)
                         const [[x0, y0], [x1, y1]] = path.bounds(feature);
                         svg.transition().duration(750).call(

@@ -1,14 +1,20 @@
 function generate_scatter_plot(code) {
   let margin = { top: 5, right: 30, bottom: 30, left: 60 },
-  width = 1800 - margin.left - margin.right,
+  width = window.innerWidth*0.75 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
+  window.onresize = () => generate_scatter_plot(code)
+  d3.select("#svgPlot").selectAll("svg").remove()
 let svg = d3
   .selectAll("#svgPlot")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom + 20)
+  .style("border", "2px dashed")
+  .style("border-radius", "20px")
+  .style("padding", "4px")
   .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
 
 d3.json("../Data/data_netflix.json")
   .then(function (data) {
@@ -36,15 +42,8 @@ d3.json("../Data/data_netflix.json")
 
     let yAxis = svg.append("g").call(d3.axisLeft(y));
     let yearSlider = slider_snap(1940, 2023, "Release Year", "year");
-    let votesSlider = slider_snap(
-      0,
-      3000,
-      "Number of Votes(" + "K" + ")",
-      "votes"
-    );
+    let votesSlider = slider_snap( 0,3000,"Number of Votes(" + "K" + ")","votes");
     let ratingSlider = slider_snap(0, 10, "Imdb Rating", "rating");
-    let genreFilter = document.getElementById("genreFilter");
-
     svg
       .append("text")
       .attr("text-anchor", "end")
@@ -56,7 +55,7 @@ d3.json("../Data/data_netflix.json")
       .append("text")
       .attr("text-anchor", "end")
       .attr("x", width)
-      .attr("y", height + margin.top + 20)
+      .attr("y", height + margin.top + 30)
       .text(currX[3]);
 
     let clip = svg
@@ -91,8 +90,8 @@ d3.json("../Data/data_netflix.json")
           d.votes +
           "]"
       )
-        .style("left", d3.mouse(this)[0] + 70 + "px")
-        .style("top", d3.mouse(this)[1] + "px");
+        .style("left", d3.mouse(this)[0] + 100 + "px")
+        .style("top", d3.mouse(this)[1] + 100 + "px");
     }
     function mouseClick(d) {
       displayModal(d, data);
@@ -106,7 +105,8 @@ d3.json("../Data/data_netflix.json")
       .style("border", "solid")
       .style("border-width", "2px")
       .style("border-radius", "5px")
-      .style("padding", "5px");
+      .style("padding", "5px")
+      .style("pointer-events", "none")
     let brush = d3
       .brush() // Add the brush feature using the d3.brush function
       .extent([
@@ -189,22 +189,16 @@ d3.json("../Data/data_netflix.json")
       document.getElementById("genreFilter").innerHTML = ""
       applyFilters()
     }
-    function setFilters(s) {
-      votesSlider.setRange([s[1][1], s[0][1]].map(y.invert, y));
-      ratingSlider.setRange([s[0][0], s[1][0]].map(x.invert, x));
-    }
     document.getElementById("resetFilters").onclick = () => resetFilters();
     function updateChart(s = d3.event.selection) {
-      console.log(s);
-      let newData = data;
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if (!s) {
         if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
-        x.domain([currX[1], currX[2]]);
-        y.domain([currY[1], currY[2]]);
+        let rangex = ratingSlider.getRange()
+        let rangey = votesSlider.getRange()
+        x.domain([rangex[0], rangex[1]]);
+        y.domain([rangey[0]*1000, rangey[1]*1000]);
       } else {
-        console.log([s[0][0], s[0][1]]);
-        console.log([s[1][0], s[1][1]]);
         newData = data.filter((d) => {
           let xVals = [s[0][0], s[1][0]].map(x.invert, x);
           let yVals = [s[1][1], s[0][1]].map(y.invert, y);
@@ -250,7 +244,6 @@ d3.json("../Data/data_netflix.json")
       selectedGenres.map(genre => {
         newData = newData.filter(x => x.genre.split(" | ").includes(genre))
       })
-      console.log(newData.length)
       updateFilters(newData);
       createMovieRow(newData);
       x.domain([ratingRange[0], ratingRange[1]]);
@@ -267,36 +260,55 @@ d3.json("../Data/data_netflix.json")
       applyFilters()
     });
     //GENRE FILTER
+
+
+    
     d3.json("../Data/countryToGenre.json")
       .then(function (genres) {
-        let suggestions = Object.entries(genres.JP);
-        console.log(suggestions)
+        let suggestions = Object.entries(genres[code]);
+        handleSearch(suggestions)
+        $("#flexSwitchCheckChecked").change(function () {
+        if($("#flexSwitchCheckChecked").is(":checked")){
+          document.getElementById("searchBarInput").placeholder = "Search for Titles"
+          suggestions = countryData;
+        }else{
+          document.getElementById("searchBarInput").placeholder = "Search for Genres"
+          suggestions = Object.entries(genres[code])
+        }   
+        handleSearch(suggestions)
+      })
+        function handleSearch(suggestions){
         // getting all required elements
         const searchWrapper = document.querySelector(".search-input");
         const inputBox = searchWrapper.querySelector("input");
-        const suggBox = searchWrapper.querySelector(".autocom-box");
-        const icon = searchWrapper.querySelector(".icon");
-        let linkTag = searchWrapper.querySelector("a");
-        let webLink;
+        const suggBox = searchWrapper.querySelector(".autocom-box");  
+
         // if user press any key and release
         inputBox.onkeyup = (e) => {
           let userData = e.target.value; //user enetered data
           let emptyArray = [];
           if (userData) {
-            icon.onclick = () => {
-              webLink = `https://www.google.com/search?q=${userData}`;
-              linkTag.setAttribute("href", webLink);
-              linkTag.click();
-            };
             emptyArray = suggestions.filter((data) => {
               //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
-              return data[0]
+              let currData;
+              if($("#flexSwitchCheckChecked").is(":checked")){
+                currData = data.title
+              }else{
+                currData = data[0]
+              }   
+              return currData
                 .toLocaleLowerCase()
                 .startsWith(userData.toLocaleLowerCase());
             });
             emptyArray = emptyArray.map((data) => {
+              let currData;
+              if($("#flexSwitchCheckChecked").is(":checked")){
+                currData = data.title
+              }else{
+                currData = data[0]
+              }   
               // passing return data inside li tag
-              return (data = `<li>${data[0]}</li>`);
+              return (data = `<li>${currData}</li>`);
             });
             searchWrapper.classList.add("active"); //show autocomplete box
             showSuggestions(emptyArray);
@@ -310,13 +322,20 @@ d3.json("../Data/data_netflix.json")
           }
         };
         function removeGenre(d, genre) {
-          console.log(d)
           let genres = document.getElementById("genreFilter")
           genres.removeChild(d)
           selectedGenres.splice(selectedGenres.indexOf(genre), 1)
           applyFilters()
+
         }
         function select(element) {
+          if($("#flexSwitchCheckChecked").is(":checked")){
+            let movieObj = countryData.filter(x=> x.title == element.target.outerText)
+            inputBox.value = "";
+            searchWrapper.classList.remove("active");
+            displayModal(movieObj[0], countryData)
+          }else{
+
           let genre = element.target.outerText;
           inputBox.value = "";
           searchWrapper.classList.remove("active");
@@ -325,11 +344,13 @@ d3.json("../Data/data_netflix.json")
           pill.innerHTML = `
     <button id = ${genre.split(",")[0]} class="pill selected" type="button">${genre}</button>
     `;
-
+          
           pill.onclick = () => removeGenre(pill, genre.split(",")[0]);
           parent.append(pill);
+
           selectedGenres.push(genre.split(",")[0])
           applyFilters()
+          }
         }
         function showSuggestions(list) {
           let listData;
@@ -341,10 +362,14 @@ d3.json("../Data/data_netflix.json")
           }
           suggBox.innerHTML = listData;
         }
+      }
+    
       })
       .catch(function (error) {
         console.error(error);
       });
+    
+      resetFilters()
   })
 
   .catch(function (error) {
