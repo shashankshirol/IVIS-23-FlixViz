@@ -26,6 +26,18 @@ body{
     stroke: #999;
 }
 
+#tooltipTitle {
+    font-size: 21px;
+}
+
+.tooltip > svg:nth-child(5) > g:nth-child(1) > g:nth-child(2){
+    font-size: 15px;
+}
+
+.tooltip > svg:nth-child(5) > g:nth-child(1) > g:nth-child(3){
+    font-size: 15px;
+}
+
 .logo{
     background-image: url("res/imgs/logo.png");
     position: absolute;

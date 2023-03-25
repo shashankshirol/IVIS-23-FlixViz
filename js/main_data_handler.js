@@ -298,13 +298,13 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
             .style("opacity", 0.8)
             .style("visibility", currentCountry == undefined ? "visible" : "hidden")
 
-        d3.select("#nation").text(countryName).style("font-size", "18px").style("font-weight", "bold")
+        d3.select("#nation").text(countryName).style("font-size", "30px").style("font-weight", "bold")
         d3.select("#hoveredCountryLegendScatter").text(countryName)
         if (country_total_tiles != "No data available") {
-            d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix")
+            d3.select("#totalTitles").text(countryName + " has "+country_total_tiles + " available on Netflix").style("font-size", "18px")
         }
         else {
-            d3.select("#totalTitles").text(country_total_tiles)
+            d3.select("#totalTitles").text(country_total_tiles).style("font-size", "18px")
         }
         alreadyOver = true
     }
@@ -387,7 +387,7 @@ function main_handler(neighbouringCountriesData, countriesToOverviewInfo, countr
         .range(range);
     
 
-    createLegendForColorScale("#FFCCCB", "#E50914",300, 25)
+    createLegendForColorScale("#FFCCCB", "#E50914",450, 50)
 
     g.selectAll("path")
         .data(countries.features)

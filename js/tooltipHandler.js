@@ -63,9 +63,9 @@ function moveTooltip(d) {
 function generateScatterChartInElement(data, x, y, element) {
     // Step 1
         console.log(element)
-        let margin = {top: 10, right: 100, bottom: 30, left: 60}
-        let scatterWidth = 400 - margin.left - margin.right
-        let scatterHeight = 150 - margin.top - margin.bottom
+        let margin = {top: 10, right: 120, bottom: 30, left: 60}
+        let scatterWidth = 600 - margin.left - margin.right
+        let scatterHeight = 250 - margin.top - margin.bottom
 
         // Step 3
         let scatterSvg = element.append("svg")
@@ -101,9 +101,10 @@ function generateScatterChartInElement(data, x, y, element) {
         //X axis label:
         scatterSvg.append("text")
             .attr("text-anchor", "end")
-            .attr("x", scatterWidth/4 + margin.left)
+            .attr("x", scatterWidth/2 + margin.left/2)
             .attr("y", scatterHeight + margin.top + 20)
-            .text("Series");
+            .text("Series")
+            .style("font-size", "22px")
 
         // Y axis label:
         scatterSvg.append("text")
@@ -112,6 +113,7 @@ function generateScatterChartInElement(data, x, y, element) {
             .attr("y", -margin.left + 20)
             .attr("x", -margin.top - scatterHeight/2 + 20)
             .text("Movies")
+            .style("font-size", "22px")
           
         scatterSvg.append('g')
         .selectAll("dot")
@@ -160,10 +162,10 @@ function generateScatterChartInElement(data, x, y, element) {
                 .attr('x', scatterWidth+17)
                 .attr('y', (d,i) => 30+i*20)
                 .attr("id", function(d){ if(d[0] == "Hovered country"){return "hoveredCountryLegendScatter"}else{return "otherCountries"}})
-                .style("font-weight", "bold")
+                //.style("font-weight", "bold")
                 .text(d => d[0])
                 .style("fill", d => d[1])
-                .style("font-size", 11)
+                .style("font-size", "17px")
 
         scatterSvg.append('g')
             .selectAll("legendDot")
